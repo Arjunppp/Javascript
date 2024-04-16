@@ -1,0 +1,75 @@
+:root
+{
+    --color:white;
+    --primary-font:""
+}
+
+body
+{
+    color: var(--color);
+}
+
+.bi {
+    vertical-align: -.125em;
+    fill: currentColor;
+  }
+/* side bar custom styles */
+ .side-bar
+ {
+    background: linear-gradient(149.96deg, #301F81 12.51%, #0F0441 89.53%);
+    
+ }
+ 
+ .side-bar-clr
+ {
+    color: #FFFFFFB2 !important;
+    
+ }
+
+ /* main page custom styling */
+
+ .main-page
+ {
+    background: #707EAE;
+ }
+
+ .edit 
+ {
+    position: relative;
+ }
+
+ .edit-details
+{
+    display: none;
+    position: absolute;
+    top: 31px;
+    right: 0px;
+    height: 105px;
+    width: 168px;
+    z-index: 1;
+    background-color: #fff;
+}
+
+ul
+{
+    list-style: none;
+}
+
+.edit-details button
+{
+    background: transparent;
+    border: none;
+}
+
+.delete
+{
+    position: absolute;
+    display: none;
+    top: 50%;
+    left: 50%;
+    width: 250px;
+    height: 250px;
+    background-color: #fff;
+    color: black;
+}
+
