@@ -25,14 +25,91 @@ body
     color: #FFFFFFB2 !important;
     
  }
+.nav-link
+{
+    position: relative !important;
+}
+.nav-link::before
+{   --border-color:#FFFFFF21;
+    --border-size:1px;
+    border-radius: 20px;
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background :#FFFFFF21;
 
+
+    border: var(--border-size) solid var(--border-color);
+    z-index: -1;
+    transition: all 100ms ease-in-out;
+
+}
+.nav-link:hover::before, .nav-link:focus::before
+{
+    z-index: 1;
+    top: calc(var(--border-size) * -2);
+    left: calc(var(--border-size) * -2);
+    bottom: calc(var(--border-size) * -2);
+    right: calc(var(--border-size) * -2);
+
+}
  /* main page custom styling */
 
  .main-page
  {
-    background: #707EAE;
+    background:#212225;
+    ;
  }
 
+ .searh-bar
+ {
+    border-radius: 20px;
+    background: #fff;
+    flex: 0 0 38% !important;
+    height: 50px;
+ }
+ #sub-search
+ {
+    border: none;
+    background-color: transparent;
+ }
+ #sub-search:focus 
+ {
+    outline: none;
+ }
+
+ .sub-search
+ {
+    width: 187px;
+    height: 28px;
+    background-color:#F4F7FE;
+    border-radius: 20px;
+ } 
+
+ th::after
+ {
+    font-family: "Material Symbols Outlined";;
+    content: "\e5cf";
+    font-size: 20px;
+    ;
+ }
+ .sub-search label span
+ {
+    color:  #2B3674
+ }
+ 
+ .material-symbols-outlined.bell-icn
+ {
+    color:  #A3AED0;
+ }
+ 
+ #add_employee
+ {
+    border-radius: 15px;
+ }
  .edit 
  {
     position: relative;
@@ -71,5 +148,121 @@ ul
     height: 250px;
     background-color: #fff;
     color: black;
+}
+
+.card
+{
+    position: absolute;
+    display: none;
+    top: 20%;
+    left: 15%;
+    
+
+}
+
+.table-main
+{
+    border-radius: 20px;
+    overflow-x: scroll;
+}
+
+
+
+/*  Bootstrap styling */
+
+.material-symbols-outlined.icn-fnt-32
+{
+    font-size: 32px;
+}
+
+.h3-style {
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 32px;
+    color: var(--text-color) !important;
+}
+
+.h5-style {
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 32px;
+    margin: 0px;
+}
+
+.h6-style {
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 15px;
+    color: #8F9BBA;
+    margin: 0px;
+
+}
+.sal-width
+{
+    flex: 0 0 22%;
+}
+
+.lbl-brdr {
+    border: 2px dashed #B2BAD0;
+    border-radius: 15px;
+}
+
+.lbl-style {
+
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    color: var(--text-color) !important;
+}
+.chck-custom
+{
+    width: 14px;
+    height: 14px;
+}
+.lbl-style.lbl-style-m-0
+{
+    margin-bottom: 0rem;
+}
+.text-clr
+{
+    color: #4318FF;
+}
+
+.lbl-astrck::after {
+    content: '*';
+    color: red;
+    margin-left: 2px;
+}
+
+
+ input::placeholder ,textarea::placeholder {
+    font-size: 12px;
+    line-height: 14px;
+    font-weight: 400;
+}
+.card-header
+{
+    background: transparent !important;
+    border-bottom: none;
+   
+}
+.alert
+{
+    border-radius: 15px;
+}
+.upld-pdng
+{
+    padding-right: 11px;
+    padding-left: 11px;
+}
+.card-body
+{
+    padding-top: 0.5rem;
+}
+.btn
+{
+    border-radius: 11px;
+    padding-top: 0.9rem;
+    padding-bottom: 0.9rem;
 }
 
