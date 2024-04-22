@@ -4,6 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,1,0" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -11,6 +16,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
         integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="./CSS/styles.css">
     <title>Employee List</title>
 </head>
@@ -69,16 +79,16 @@
             <div class="col-9 p-0 main-page">
                 <div class="row p-3 m-0">
                     <div class="col ">
-                        <h4 class="row">
+                        <h4 class="row" id="page-title">
                             Dashboard/Employees
                         </h4>
-                        <h2 class="row">
+                        <h2 class="row" id="page-subtitle">
                             Employees
                         </h2>
                     </div>
-                    <div class="col d-flex  justify-content-center align-items-center gap-3 searh-bar p-0">
+                    <div class="col d-flex  justify-content-between align-items-center gap-3 searh-bar p-2">
 
-                        <div class="sub-search d-flex">
+                        <div class="sub-search d-flex p-2">
                             <label for="sub-search"><span class="material-symbols-outlined">
                                     search
                                 </span></label>
@@ -92,10 +102,10 @@
                     </div>
                 </div>
 
-                <div class="row p-3 m-0">
-                    <div class="col-12 bg-transparent">
+                <div class="row p-2 m-0">
+                    <div class="col-12 bg-transparent p-0">
                         <div class="table-main p-3 bg-white ">
-                            <div class="row p-3 m-0 flex-row-reverse">
+                            <div class="row p-3 m-0 flex-row-reverse add_emplyee_div">
                                 <button class="col-2 btn btn-primary p-3 " id="add_employee">Add Employee</button>
                             </div>
                             <table class="table">
@@ -117,18 +127,90 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="details">
-
-                        </div>
+                        
 
                     </div>
                 </div>
+                <div class=" row details p-2 m-0">
+                   <div class="row">
+                    <div class="col-12 div">
+                        <img src="image/Background.png" alt="">  
+                      </div>
+                   </div>
+                   <div class="row">
+                     <div class="col-12 full_name">
 
+                     </div>
+                   </div>
+                   <div class="row">
+                    <div class="col-12 usr-email">
+
+                    </div>
+                   </div>
+                   <div class="row">
+                    <div class="col-4 usr-gndr">
+
+                    </div>
+                    <div class="col-4 usr-age">
+
+                    </div>
+                    <div class="col-4 usr-dob">
+
+                    </div>
+                   </div>
+                   <div class="row">
+                    <div class="col-6 usr-mob">
+
+                    </div>
+                    <div class="col-6 usr-qualifctn">
+
+                    </div>
+
+                   </div>
+                   <div class="row">
+                    <div class="col-6 usr-addrs">
+
+                    </div>
+                    <div class="col-6 usr-usrname">
+
+                    </div>
+                   </div>
+                   
+
+
+                </div>
+                <div class="row p-2 m-0 bg-transparent">
+                    <footer class="bg-transparent d-flex align-items-center justify-content-between">
+                        <h5 class="d-flex align-items-center gap-2">
+                            <span >
+                                <i class="fa-regular fa-copyright"></i>
+                            </span>
+                            <span id="present-year">
+
+                            </span>
+                            <span>
+                                All Rights Reserved.
+                            </span>
+                            <span>
+                                Stackup
+                            </span>
+                        </h5>
+                        <h6 class="d-flex gap-2">
+                            <span>
+                                Terms of Use
+                            </span>
+                            <span>
+                                Privacy Policy
+                            </span>
+                        </h6>
+                    </footer>
+
+                </div>
             </div>
         </div>
 
     </div>
-    <div class="div delete">
+    <div class="div delete p-3">
     </div>
     <form id="form">
         <div class="card col-8 brdr-rds-20 py-2 ">
@@ -156,42 +238,42 @@
                     <div class="sal-width col">
                         <label for="salutation" class="form-label lbl-style lbl-astrck">Salutation</label>
                         <select id="salutation" class="form-select  custom-select ">
-                            <option selected="">select</option>
+                            <option selected=""></option>
                             <option value="Mr.">Mr.</option>
                             <option value="Ms.">Ms.</option>
                             <option value="Mrs.">Mrs.</option>
                             <option value="Mx.">Mx.</option>
                         </select>
-
+                        <p id="salutation_err" class="err"></p>
                     </div>
                     <div class="col">
                         <label for="first_name" class="form-label lbl-style lbl-astrck">First Name</label>
                         <input type="text" id="first_name" class="form-control" placeholder="john">
-
+                        <p id="firstName_err" class="err"></p>
                     </div>
                     <div class="col">
                         <label for="last_name" class="form-label lbl-style lbl-astrck">Last Name</label>
                         <input type="text" id="last_name" class="form-control" placeholder="doe">
-
+                        <p id="lastName_err" class="err"></p>
                     </div>
                 </div>
                 <div class="row mb-3">
                     <div class="col-md-6 col">
                         <label for="email" class="form-label lbl-style lbl-astrck">Email Address</label>
                         <input type="email" id="email" class="form-control " placeholder="mail@simmple.com">
-
+                        <p id="email_err" class="err"></p>
                     </div>
                     <div class="col-md-6 col">
                         <label for="mobile_number" class="form-label lbl-style lbl-astrck">Mobile Number</label>
                         <input type="tel" id="mobile_number" class="form-control" placeholder="enter mobile number">
-
+                        <p id="phone_err" class="err"></p>
                     </div>
                 </div>
                 <div class="row mb-3 nme-row">
                     <div class="col col-md-6">
                         <label for="date_of_birth" class="form-label lbl-style lbl-astrck">Date of Birth</label>
-                        <input type="date" id="date_of_birth" aria-label="Date of Birth" class="form-control"
-                            required="">
+                        <input type="date" id="date_of_birth" aria-label="Date of Birth" class="form-control">
+                        <p id="dob_err" class="err"></p>
                     </div>
                     <div class="col col-md-6">
                         <div class="d-flex flex-column gap-2">
@@ -208,6 +290,7 @@
                                     <label for="female" class="lbl-style">Female</label>
                                 </div>
                             </div>
+                            <p id="gender_err" class="err"></p>
                         </div>
                     </div>
 
@@ -216,50 +299,55 @@
                     <div class="col">
                         <label for="address" class="form-label lbl-astrck lbl-style">Address</label>
                         <input type="text" id="address" placeholder="enter address" class="form-control">
+                        <p id="address_err" class="err"></p>
                     </div>
                 </div>
                 <div class="row mb-3">
                     <div class="col col-md-6">
                         <label for="country" class="form-label lbl-astrck lbl-style">Country</label>
                         <select id="country" class="form-select custom-select">
-                            <option selected="">select country</option>
+                            <option selected=""></option>
                             <option value="India">India</option>
                             <option value="Japan">Japan</option>
                             <option value="China">China</option>
                             <option value="USA">USA</option>
                         </select>
-
+                        <p id="country_err" class="err"></p>
                     </div>
                     <div class="col col-md-6">
                         <label for="state" class="form-label lbl-astrck lbl-style">State</label>
                         <select id="state" class="form-select custom-select">
-                            <option selected="">select state</option>
+                            <option selected=""></option>
                             <option value="Kerala">Kerala</option>
                             <option value="Tamil Nadu">Tamil Nadu</option>
                             <option value="Karnataka">Karnataka</option>
                             <option value="Gujarat">Gujarat</option>
                         </select>
-
+                        <p id="state_err" class="err"></p>
                     </div>
                 </div>
                 <div class="row mb-3">
                     <div class="col col-md-6">
                         <label for="city" class="form-label lbl-astrck lbl-style">City</label>
                         <input type="text" id="city" class="form-control" placeholder="enter city">
+                        <p id="city_err" class="err"></p>
                     </div>
                     <div class="col col-md-6">
-                        <label for="zip" class="form-label lbl-astrck lbl-style">Pin/Zip</label>
-                        <input type="text" id="zip" class="form-control" placeholder="enter zip/pin">
+                        <label for="qualification" class="form-label lbl-astrck lbl-style">Qualification</label>
+                        <input type="text" id="qualification" class="form-control" placeholder="enter qualification">
+                        <p id="qualifications_err" class="err"></p>
                     </div>
                 </div>
                 <div class="row mb-3">
                     <div class="col col-md-6">
                         <label for="username" class="form-label lbl-astrck lbl-style">Username</label>
                         <input type="text" id="username" class="form-control" placeholder="Enter username">
+                        <p id="username_err" class="err"></p>
                     </div>
                     <div class="col col-md-6">
                         <label for="password" class="form-label lbl-astrck lbl-style">Password</label>
                         <input type="password" id="password" class="form-control" placeholder="enter password">
+                        <p id="password_err" class="err"></p>
                     </div>
                 </div>
                 <div class="row mb-3 gap-3">

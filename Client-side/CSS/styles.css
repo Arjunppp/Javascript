@@ -1,12 +1,14 @@
 :root
 {
     --color:white;
-    --primary-font:""
+    --primary-font:"DM Sans", sans-serif;
+    --sidebar-font:"Poppins", sans-serif;
 }
 
 body
 {
     color: var(--color);
+    font-family: var(--primary-font);
 }
 
 .bi {
@@ -17,7 +19,7 @@ body
  .side-bar
  {
     background: linear-gradient(149.96deg, #301F81 12.51%, #0F0441 89.53%);
-    
+    font-family: var(--sidebar-font);
  }
  
  .side-bar-clr
@@ -60,10 +62,14 @@ body
 
  .main-page
  {
-    background:#212225;
-    ;
+    background:#edeff4;
+    
  }
 
+ #page-title ,footer *
+ {
+    color: #707EAE !important;
+ }
  .searh-bar
  {
     border-radius: 20px;
@@ -84,21 +90,37 @@ body
  .sub-search
  {
     width: 187px;
-    height: 28px;
+    height: 35px;
     background-color:#F4F7FE;
     border-radius: 20px;
  } 
+
+th
+{
+    color: #8B95B7 !important; 
+    font-weight: normal !important;
+    font-size: 16px;
+}
+
+td
+{
+    font-size: 14px !important;
+}
 
  th::after
  {
     font-family: "Material Symbols Outlined";;
     content: "\e5cf";
-    font-size: 20px;
-    ;
+    font-size: 25px;
+    margin-left: 10px;
+    vertical-align: middle;
+    color: #8B95B7;
+   
+    
  }
- .sub-search label span
+ .sub-search label span ,td ,#page-subtitle
  {
-    color:  #2B3674
+    color:  #2B3674 !important;
  }
  
  .material-symbols-outlined.bell-icn
@@ -109,6 +131,7 @@ body
  #add_employee
  {
     border-radius: 15px;
+    width: 154px;
  }
  .edit 
  {
@@ -121,16 +144,34 @@ body
     position: absolute;
     top: 31px;
     right: 0px;
-    height: 105px;
-    width: 168px;
+    height: 130px;
+    width: 150px;
     z-index: 1;
     background-color: #fff;
-}
+    border: 0.5px solid #D3D8E2;
+    box-shadow: 0px 1px 4px 0px #1010311F;
+    padding-top: 20px;
+    border-radius: 20px;
 
+}
+.select-dots
+{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    color:  #4318FF;
+    height: 35px;
+    width: 35px;
+    background-color:#EBEFF8;
+
+}
 ul
 {
     list-style: none;
 }
+
+
 
 .edit-details button
 {
@@ -141,15 +182,23 @@ ul
 .delete
 {
     position: absolute;
+    flex-direction: column;
+    justify-content: space-between;
     display: none;
     top: 50%;
-    left: 50%;
-    width: 250px;
+    left: 30%;
+    width: 690px;
     height: 250px;
-    background-color: #fff;
-    color: black;
+    border-radius: 22px !important  ;
+    background-color: #988a8a;
+    color:#2B3674;
+    z-index: 1;
 }
-
+.err
+{
+    color: red;
+    font-size: 12px;
+}
 .card
 {
     position: absolute;
@@ -167,6 +216,12 @@ ul
 }
 
 
+.details
+{
+    background-color: #fff;
+    color:#2B3674;
+    display: none;
+}
 
 /*  Bootstrap styling */
 

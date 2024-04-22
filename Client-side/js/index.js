@@ -2,111 +2,372 @@
 let server_url = 'http://localhost:3000/employees';
 
 //Function to add event listner to add EMployee button
- function addingEmployee() 
- {
+function addingEmployee() {
     document.getElementById('add_employee').addEventListener('click', async () => {
         document.getElementsByClassName('card')[0].style.display = 'block';
-        document.getElementsByClassName('btn-save-chnge')[0].style.display ='none';
-        await form_submission(0 , 0 , 'POST');
+        document.getElementsByClassName('btn-save-chnge')[0].style.display = 'none';
+        await form_submission(0, 0, 'POST');
     });
 }
 //Function to add Event listner to cancel the adding
- function cancelAdding() 
-{
+function cancelAdding() {
     document.getElementsByClassName('btn-cncl')[0].addEventListener('click', () => {
         document.getElementsByClassName('card')[0].style.display = 'none';
     });
 }
- 
+
+async function validate_form (value)
+{
+    let error_data= {address:'',
+    city:'',
+    country:'',
+    dob:'',
+    email:'',
+    firstName:'',
+    gender:'',
+    lastName:'',
+    password:'',
+    phone:'',
+    qualifications:'',
+    salutation:'',
+    state:'',
+    username:''};
+    let err_flg =0;
+    let form_data = value;
+    console.log(form_data);
+    for(let eachdata in form_data) //eachdata represents key
+    {
+          
+        if(eachdata == 'address')
+        {
+            if(form_data[eachdata] == '')
+            {
+                err_flg=1;
+               error_data[eachdata] ='Enetr address';
+               
+            }
+           
+        }
+        if(eachdata == 'city')
+        {
+            if(form_data[eachdata] == '')
+            {
+                err_flg=1;
+               error_data[eachdata] ='Enetr city';
+               
+            }
+           
+        }
+        if(eachdata == 'country')
+        {
+            if(form_data[eachdata] == '')
+            {
+                err_flg=1;
+               error_data[eachdata] ='Enetr country';
+               
+            }
+           
+        }
+        if(eachdata == 'dob')
+        {
+            if(form_data[eachdata] == '' || form_data[eachdata] == 'dd-mm-yyyy' )
+            {
+                err_flg=1;
+               error_data[eachdata] ='Enetr dob';
+               
+            }
+           
+        }
+        if(eachdata === 'email')
+        {
+            let emailRegex = /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/;
+            if(form_data[eachdata] == '' )
+            {
+                err_flg=1;
+               error_data[eachdata] ='Enetr email';
+              
+               
+            }
+              else if(!emailRegex.test(form_data[eachdata]))   
+              {
+                
+                  err_flg=1;
+                error_data[eachdata] ='Enetr valid email';
+              }
+           
+           
+        }
+        if(eachdata == 'firstName')
+        {
+            if(form_data[eachdata] == '')
+            {
+                err_flg=1;
+               error_data[eachdata] ='Enetr firstName';
+               
+            }
+           
+        }
+        if(eachdata == 'gender')
+        {
+            if(form_data[eachdata] == '')
+            {
+                err_flg=1;
+               error_data[eachdata] ='Enetr gender';
+               
+            }
+           
+        }
+        if(eachdata == 'lastName')
+        {
+            if(form_data[eachdata] == '')
+            {
+                err_flg=1;
+               error_data[eachdata] ='Enetr lastName';
+               
+            }
+           
+        }
+        if(eachdata == 'password')
+        {
+            if(form_data[eachdata] == '')
+            {
+                err_flg=1;
+               error_data[eachdata] ='Enetr password';
+               
+            }
+           
+        }
+        if(eachdata == 'phone')
+        { 
+            let mob_regex = /[A-Z][a-z]/;
+            if(form_data[eachdata] == '')
+            {
+                err_flg=1;
+               error_data[eachdata] ='Enetr phone';
+               
+            }
+            else if(!mob_regex.test(form_data[eachdata]))
+            {
+                err_flg=1;
+                error_data[eachdata] ='Enter valid phone number';
+            }
+           
+        }
+        if(eachdata == 'qualifications')
+        {
+            if(form_data[eachdata] == '')
+            {
+                err_flg=1;
+               error_data[eachdata] ='Enetr qualifications';
+               
+            }
+           
+        }
+        if(eachdata == 'salutation')
+        {
+            if(form_data[eachdata] == '')
+            {
+                err_flg=1;
+               error_data[eachdata] ='Enetr salutation';
+               
+            }
+           
+        }
+        if(eachdata == 'state')
+        {
+            if(form_data[eachdata] == '')
+            {
+                err_flg=1;
+               error_data[eachdata] ='Enetr state';
+               
+            }
+           
+        }
+        if(eachdata == 'username')
+        {
+            if(form_data[eachdata] == '')
+            {
+                err_flg=1;
+               error_data[eachdata] ='Enetr username';
+               
+            }
+           
+        }
+
+       
+        
+    };
+    return [error_data , err_flg];
+    
+}
 // submiting form
-async function form_submission(a , value ,http_method)
-{ 
-   
-     if(a === 0)
-     {
-        document.getElementsByClassName('btn-save-chnge')[0].type ='button';
-        document.getElementsByClassName('btn-add')[0].type ='submit';
-        document.getElementById('form').addEventListener('submit', (event) => {
+async function form_submission(a, value, http_method) {
+
+    if (a === 0) {
+        document.getElementsByClassName('btn-save-chnge')[0].type = 'button';
+        document.getElementsByClassName('btn-add')[0].type = 'submit';
+        document.getElementById('form').addEventListener('submit', async(event) => {
+           
+            let dob = document.getElementById('date_of_birth').value;
+
+            let crctdDob = dob.slice(8, 10) + '-' + dob.slice(5, 7) + '-' + dob.slice(0, 4);
+             let value = {
+                "salutation": `${document.getElementById('salutation').value}`,
+                "firstName": `${document.getElementById('first_name').value}`,
+                "lastName": `${document.getElementById('last_name').value}`,
+                "email": `${document.getElementById('email').value}`,
+                "phone": `${document.getElementById('mobile_number').value}`,
+                "dob": crctdDob,
+                "gender": `${document.querySelector('input[name="gender"]:checked').id}`,
+                "qualifications": `${document.getElementById('salutation').value}`,
+                "address": `${document.getElementById('address').value}`,
+                "city": `${document.getElementById('city').value}`,
+                "state": `${document.getElementById('state').value}`,
+                "country": `${document.getElementById('country').value}`,
+                "username": `${document.getElementById('username').value}`,
+                "password": `${document.getElementById('password').value}`
+
+            };
+           
+           
+            let validate_result = await validate_form(value);
+            console.log(validate_result[1]);   
+            
+            if(validate_result[1] == 1)
+            {
+                event.preventDefault();
+               let error_messages = validate_result[0];
+               console.log(error_messages);
+               if(error_messages['salutation'] != '')
+               {
+                document.getElementById('salutation_err').innerHTML =error_messages['salutation'];  
+
+               }
+               if(error_messages['firstName'] != '')
+               {
+                document.getElementById('firstName_err').innerHTML =error_messages['firstName'];  
+
+               }
+               if(error_messages['lastName'] != '')
+               {
+                document.getElementById('lastName_err').innerHTML =error_messages['lastName'];  
+
+               }
+               if(error_messages['email'] != '')
+               {
+                document.getElementById('email_err').innerHTML =error_messages['email'];  
+
+               }
+               if(error_messages['phone'] != '')
+               {
+                document.getElementById('phone_err').innerHTML =error_messages['phone'];  
+
+               }
+               if(error_messages['dob'] != '')
+               {
+                document.getElementById('dob_err').innerHTML =error_messages['dob'];  
+
+               }
+               if(error_messages['gender'] != '')
+               {
+                document.getElementById('gender_err').innerHTML =error_messages['gender'];  
+
+               }
+               if(error_messages['address'] != '')
+               {
+                document.getElementById('address_err').innerHTML =error_messages['address'];  
+
+               }
+               if(error_messages['country'] != '')
+               {
+                document.getElementById('country_err').innerHTML =error_messages['country'];  
+
+               }
+               if(error_messages['state'] != '')
+               {
+                document.getElementById('state_err').innerHTML =error_messages['state'];  
+
+               }
+               if(error_messages['city'] != '')
+               {
+                document.getElementById('city_err').innerHTML =error_messages['city'];  
+
+               }
+               if(error_messages['username'] != '')
+               {
+                document.getElementById('username_err').innerHTML =error_messages['username'];  
+
+               }
+               if(error_messages['password'] != '')
+               {
+                document.getElementById('password_err').innerHTML =error_messages['password'];  
+
+               }
+              
+
+            }
+            else
+            {
+                fetch(server_url, {
+                    method: `${http_method}`, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(value)
+                }).then((response) => {
+    
+                    if (!response.ok) {
+                        throw new Error('Check the URL please');
+                    }
+                    else {
+                        return response.json();
+                    }
+    
+                }).then((data) => {
+    
+                    console.log(data);
+    
+                    return data;
+    
+                }).catch((error) => {
+                    console.log(error);
+                })
+            }
+            
+           
+        });
+
+    }
+    else {
+
+        let data = await fetchUser(value);
+        document.getElementsByClassName('card')[0].style.display = 'block';
+        document.getElementsByClassName("label_upld")[0].style.display = 'none';
+        document.getElementsByClassName("btn-add")[0].style.display = 'none';
+
+        document.getElementById('first_name').value = data.firstName;
+        document.getElementById('last_name').value = data.lastName;
+        document.getElementById('email').value = data.email;
+        document.getElementById('mobile_number').value = data.phone;
+        document.getElementById('date_of_birth').value = data.dob;
+
+        document.getElementById('address').value = data.address;
+        document.getElementById('city').value = data.city;
+        document.getElementById('username').value = data.username;
+        document.getElementById('password').value = data.password;
+
+
+        document.getElementsByClassName('btn-save-chnge')[0].type = 'submit';
+        document.getElementsByClassName('btn-add')[0].type = 'button';
+
+
+        document.getElementById('form').addEventListener('submit', async (event) => {
+
             event.preventDefault();
             let dob = document.getElementById('date_of_birth').value;
-                          
-                           let crctdDob = dob.slice(8,10) + '-' + dob.slice(5,7) + '-' + dob.slice(0,4) ; 
-    
-            fetch(server_url, {
-                method: `${http_method}`, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({
-                    "salutation": `${document.getElementById('salutation').value}`,
-                    "firstName": `${document.getElementById('first_name').value}`,
-                    "lastName": `${document.getElementById('last_name').value}`,
-                    "email": `${document.getElementById('email').value}`,
-                    "phone": `${document.getElementById('mobile_number').value}`,
-                    "dob": crctdDob,
-                    "gender": `${document.querySelector('input[name="gender"]:checked').id}`,
-                    "qualifications": `${document.getElementById('salutation').value}`,
-                    "address": `${document.getElementById('address').value}`,
-                    "city": `${document.getElementById('city').value}`,
-                    "state": `${document.getElementById('state').value}`,
-                    "country": `${document.getElementById('country').value}`,
-                    "username": `${document.getElementById('username').value}`,
-                    "password": `${document.getElementById('password').value}`
-        
-                })
-            }).then((response) => {
-        
-                if (!response.ok) {
-                    throw new Error('Check the URL please');
-                }
-                else {
-                    return response.json();
-                }
-        
-            }).then((data) => {
-        
-                console.log(data);
-               
-                return data;
-        
-            }).catch((error) => {
-                console.log(error);
-            })
-        });
-       
-     }
-     else 
-     {
-        
-        let data = await fetchUser(value);
-                 document.getElementsByClassName('card')[0].style.display = 'block';
-                document.getElementsByClassName("label_upld")[0].style.display='none';
-                document.getElementsByClassName("btn-add")[0].style.display='none';
 
-                document.getElementById('first_name').value = data.firstName;
-                document.getElementById('last_name').value = data.lastName;
-                document.getElementById('email').value = data.email;
-                document.getElementById('mobile_number').value = data.phone;
-                document.getElementById('date_of_birth').value = data.dob;
-              
-                document.getElementById('address').value = data.address;
-                document.getElementById('city').value = data.city;
-                document.getElementById('username').value = data.username;
-                document.getElementById('password').value = data.password;
+            let crctdDob = dob.slice(8, 10) + '-' + dob.slice(5, 7) + '-' + dob.slice(0, 4);
 
 
-                document.getElementsByClassName('btn-save-chnge')[0].type ='submit';
-                document.getElementsByClassName('btn-add')[0].type ='button';
-               
-               
-                document.getElementById('form').addEventListener('submit' , async (event) => 
-            {
-                
-                           event.preventDefault();
-                           let dob = document.getElementById('date_of_birth').value;
-                          
-                           let crctdDob = dob.slice(8,10) + '-' + dob.slice(5,7) + '-' + dob.slice(0,4) ; 
-                              
-                 
-    
+
             fetch(server_url + '/' + value, {
-               
+
                 method: `${http_method}`, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({
                     "salutation": `${document.getElementById('salutation').value}`,
                     "firstName": `${document.getElementById('first_name').value}`,
@@ -122,41 +383,40 @@ async function form_submission(a , value ,http_method)
                     "country": `${document.getElementById('country').value}`,
                     "username": `${document.getElementById('username').value}`,
                     "password": `${document.getElementById('password').value}`
-        
+
                 })
             }).then((response) => {
-        
+
                 if (!response.ok) {
                     throw new Error('Check the URL please');
                 }
                 else {
                     return response.json();
                 }
-        
+
             }).then((data) => {
-        
+
                 console.log(data);
-               
+
                 return data;
-        
+
             }).catch((error) => {
                 console.log(error);
             })
         });
-            
-
-        
 
 
-     }
-   
+
+
+
+    }
+
 
 }
-async function addEmployee ()
-{
-     addingEmployee();
-     cancelAdding() ;
- 
+async function addEmployee() {
+    addingEmployee();
+    cancelAdding();
+
 }
 
 addEmployee();
@@ -189,13 +449,13 @@ async function populateData() {
     let count = 1;
     users.forEach((user) => {
         eachrows += `<tr scope='row'>
-             <td scope='col' >#0${count++}</td>
-             <td scope='col' >${user.firstName}</td>
-             <td scope='col' >${user.email}</td>
-             <td scope='col' >${user.phone}</td>
-             <td scope='col' >${user.gender}</td>
-             <td scope='col' >${user.dob}</td>
-             <td scope='col' >${user.country}</td>
+             <td scope='col' class='fw-bold' >#0${count++}</td>
+             <td scope='col' class='fw-bold' >${user.firstName}</td>
+             <td scope='col' class='fw-bold' >${user.email}</td>
+             <td scope='col' class='fw-bold' >${user.phone}</td>
+             <td scope='col' class='fw-bold' >${user.gender}</td>
+             <td scope='col' class='fw-bold' >${user.dob}</td>
+             <td scope='col' class='fw-bold' >${user.country}</td>
              <td scope='col' class="edit"><span class="material-symbols-outlined select-dots">
              more_horiz
              </span>
@@ -224,11 +484,14 @@ function addCLickEvent() {
     Array.from(selectDotsElements).forEach((each_dot, index) => {
 
         each_dot.addEventListener('click', () => {
-            if (document.getElementsByClassName('edit-details')[index].style.display === 'block') {
+            if (document.getElementsByClassName('edit-details')[index].style.display === 'flex') {
                 document.getElementsByClassName('edit-details')[index].style.display = 'none';
             }
             else {
-                document.getElementsByClassName('edit-details')[index].style.display = 'block'
+                document.getElementsByClassName('edit-details')[index].style.display = 'flex';
+                document.getElementsByClassName('edit-details')[index].style.flexDirection = 'column';
+                document.getElementsByClassName('edit-details')[index].style.padding = '15px';
+                document.getElementsByClassName('edit-details')[index].style.gap = '10px';
             }
         })
     });
@@ -242,7 +505,8 @@ function editemployees() {
     Array.from(btns).forEach((btn) => {
         if (btn.className === 'view_btn') {
             btn.addEventListener('click', () => {
-
+                document.getElementsByClassName('details')[0].style.display = 'flex';
+                document.getElementsByClassName('table-main')[0].style.display = 'none';
                 document.getElementsByClassName('table')[0].style.display = 'none';
                 console.log(server_url + '/' + btn.value);
                 fetch(server_url + '/' + btn.value).then((res) => {
@@ -254,45 +518,51 @@ function editemployees() {
                     }
                 }).then((data) => {
 
-                   
+                    console.log(data);
                     let currentyear = new Date().getFullYear();
-                   
-                    let age = currentyear - data.dob.slice(6,10) ;
+
+                    let age = currentyear - data.dob.slice(6, 10);
+
                     
-                    let view_data = `
-                           <h5>${data.salutation + " " + data.firstName + " " + data.lastName}</h5>
-                           <p>${data.email}<p>
-                           <p>${data.gender}</p>
-                           <p>${data.age}</p>
-                           <p>${age}</p>
-                           <p>${data.phone}</p>
-                           <p>${data.qualifications}</p>
-                           <p>${data.adress}</p>
-                           <p>${data.username}</p>  
-                    
-                          `;
-                    document.getElementsByClassName('details')[0].innerHTML = view_data;
+
+                    document.getElementsByClassName('full_name')[0].innerHTML = `<h5>${data.salutation} ${data.firstName} ${data.lastName}</h5>`;
+                    document.getElementsByClassName('usr-email')[0].innerHTML =`<h5>${data.email}</h5>`;
+                    document.getElementsByClassName('usr-gndr')[0].innerHTML = `<h5>${data.gender}</h5>`;
+                    document.getElementsByClassName('usr-age')[0].innerHTML = `<h5>${age}</h5>`;
+                    document.getElementsByClassName('usr-dob')[0].innerHTML = `<h5>${data.dob}</h5>`;
+                    document.getElementsByClassName('usr-mob')[0].innerHTML = `<h5>${data.phone}</h5>`;
+                    document.getElementsByClassName('usr-qualifctn')[0].innerHTML = `<h5>${data.qualifications}</h5>`;
+                    document.getElementsByClassName('usr-addrs')[0].innerHTML =`<h5>${data.address}</h5>`;
+                    document.getElementsByClassName('usr-usrname')[0].innerHTML =`<h5>${data.username}</h5>`;
+
 
                 })
-            })
+            });
+
+
+
+
+
         }
 
         if (btn.className === 'edit_btn') {
             btn.addEventListener('click', async () => {
-                await form_submission(1 , btn.value , 'PUT');
+                await form_submission(1, btn.value, 'PUT');
                 console.log(1);
-                
+
             });
         }
         if (btn.className === 'dlte_btn') {
 
             btn.addEventListener('click', () => {
                 console.log('haiii');
-                document.getElementsByClassName('delete')[0].style.display = 'block';
+                document.getElementsByClassName('delete')[0].style.display = 'flex';
                 let delete_items = `<h4>Delete Employees</h4>
                        <p>Are you sure you wanna delete this employee</p>
+                       <div class='delete_btns'>
                        <button>Cancel</button>
-                       <button value=${btn.value}>Delete</button>`;
+                       <button value=${btn.value}>Delete</button>
+                       </div>`;
                 document.getElementsByClassName('delete')[0].innerHTML = delete_items;
 
                 let cncl_dlt = document.querySelectorAll('.delete button');
@@ -340,6 +610,14 @@ async function employeeFunction() {
 
 employeeFunction();
 
+
+
+
+//footer dynamic year
+
+
+
+document.getElementById('present-year').innerHTML = new Date().getFullYear();
 
 
 
