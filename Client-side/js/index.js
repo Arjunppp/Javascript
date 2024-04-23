@@ -5,15 +5,369 @@ let server_url = 'http://localhost:3000/employees';
 function addingEmployee() {
     document.getElementById('add_employee').addEventListener('click', async () => {
         document.getElementsByClassName('card')[0].style.display = 'block';
+        document.getElementsByClassName("btn-add")[0].style.display = 'block';
         document.getElementsByClassName('btn-save-chnge')[0].style.display = 'none';
         await form_submission(0, 0, 'POST');
     });
 }
-//Function to add Event listner to cancel the adding
-function cancelAdding() {
-    document.getElementsByClassName('btn-cncl')[0].addEventListener('click', () => {
-        document.getElementsByClassName('card')[0].style.display = 'none';
-    });
+
+
+// submiting form
+async function form_submission(a, value, http_method) {
+
+    if (a === 0) {
+        document.getElementsByClassName('btn-save-chnge')[0].type = 'button';
+        document.getElementsByClassName('btn-add')[0].type = 'submit';
+        document.getElementById('form').addEventListener('submit', async(event) => {
+          
+            let dob = document.getElementById('date_of_birth').value;
+        
+            let crctdDob = dob.slice(8, 10) + '-' + dob.slice(5, 7) + '-' + dob.slice(0, 4);
+             let value = {
+                "salutation": `${document.getElementById('salutation').value}`,
+                "firstName": `${document.getElementById('first_name').value}`,
+                "lastName": `${document.getElementById('last_name').value}`,
+                "email": `${document.getElementById('email').value}`,
+                "phone": `${document.getElementById('mobile_number').value}`,
+                "dob": crctdDob,
+                "gender": `${document.querySelector('input[name="gender"]:checked').value}`,
+                "qualifications": `${document.getElementById('salutation').value}`,
+                "address": `${document.getElementById('address').value}`,
+                "city": `${document.getElementById('city').value}`,
+                "state": `${document.getElementById('state').value}`,
+                "country": `${document.getElementById('country').value}`,
+                "username": `${document.getElementById('username').value}`,
+                "password": `${document.getElementById('password').value}`
+
+            };
+           
+           
+            console.log(value);
+            let validate_result = await validate_form(value);
+            if(validate_result[1] == 1)
+            {
+                event.preventDefault();
+               let error_messages = validate_result[0];
+               console.log(error_messages);
+               
+                document.getElementById('salutation_err').innerHTML =error_messages['salutation'];  
+
+           
+             
+                document.getElementById('firstName_err').innerHTML =error_messages['firstName'];  
+
+              
+              
+                document.getElementById('lastName_err').innerHTML =error_messages['lastName'];  
+
+             
+              
+                document.getElementById('email_err').innerHTML =error_messages['email'];  
+
+             
+              
+                document.getElementById('phone_err').innerHTML =error_messages['phone'];  
+
+             
+              
+                document.getElementById('dob_err').innerHTML =error_messages['dob'];  
+
+              
+              
+                document.getElementById('gender_err').innerHTML =error_messages['gender'];  
+
+              
+             
+                document.getElementById('address_err').innerHTML =error_messages['address'];  
+
+               
+                document.getElementById('country_err').innerHTML =error_messages['country'];  
+
+             
+                document.getElementById('state_err').innerHTML =error_messages['state'];  
+
+                document.getElementById('city_err').innerHTML =error_messages['city'];  
+             
+                document.getElementById('username_err').innerHTML =error_messages['username'];  
+             
+                document.getElementById('password_err').innerHTML =error_messages['password'];  
+
+              
+              
+
+            }  
+            else
+            {
+                event.preventDefault();
+                let error_messages = validate_result[0];
+               console.log(error_messages);
+               
+                document.getElementById('salutation_err').innerHTML =error_messages['salutation'];  
+
+           
+             
+                document.getElementById('firstName_err').innerHTML =error_messages['firstName'];  
+
+              
+              
+                document.getElementById('lastName_err').innerHTML =error_messages['lastName'];  
+
+             
+              
+                document.getElementById('email_err').innerHTML =error_messages['email'];  
+
+             
+              
+                document.getElementById('phone_err').innerHTML =error_messages['phone'];  
+
+             
+              
+                document.getElementById('dob_err').innerHTML =error_messages['dob'];  
+
+              
+              
+                document.getElementById('gender_err').innerHTML =error_messages['gender'];  
+
+              
+             
+                document.getElementById('address_err').innerHTML =error_messages['address'];  
+
+               
+                document.getElementById('country_err').innerHTML =error_messages['country'];  
+
+             
+                document.getElementById('state_err').innerHTML =error_messages['state'];  
+
+                document.getElementById('city_err').innerHTML =error_messages['city'];  
+             
+                document.getElementById('username_err').innerHTML =error_messages['username'];  
+             
+                document.getElementById('password_err').innerHTML =error_messages['password'];  
+
+                fetch(server_url, {
+                    method: `${http_method}`, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(value)
+                }).then((response) => {
+    
+                    if (!response.ok) {
+                        throw new Error('Check the URL please');
+                    }
+                    else {
+                        return response.json();
+                    }
+    
+                }).then((data) => {
+    
+                    console.log(data);
+    
+                    return data;
+    
+                }).catch((error) => {
+                    console.log(error);
+                })
+            }
+            
+            
+            
+           
+        });
+
+    }
+    else {
+
+        let data = await fetchUser(value);
+  
+       let date = data.dob.split('-').reverse().join('-');
+        document.getElementsByClassName('card')[0].style.display = 'block';
+        document.getElementsByClassName("label_upld")[0].style.display = 'none';
+        document.getElementsByClassName("btn-add")[0].style.display = 'none';
+        document.getElementsByClassName("btn-save-chnge")[0].style.display = 'block';
+        
+
+        if(data.gender == 'male')
+        {
+            document.getElementById('male').checked = true;
+        }
+
+
+        document.getElementById('salutation').value = data.salutation;
+        document.getElementById('first_name').value = data.firstName;
+        document.getElementById('last_name').value = data.lastName;
+        document.getElementById('email').value = data.email;
+        document.getElementById('mobile_number').value = data.phone;
+        document.getElementById('country').value = data.country;
+        document.getElementById('state').value = data.state;
+        document.getElementById('date_of_birth').value = date;
+
+        document.getElementById('address').value = data.address;
+        document.getElementById('city').value = data.city;
+        document.getElementById('username').value = data.username;
+        document.getElementById('password').value = data.password;
+
+
+        document.getElementsByClassName('btn-save-chnge')[0].type = 'submit';
+        document.getElementsByClassName('btn-add')[0].type = 'button';
+
+
+        document.getElementById('form').addEventListener('submit', async (event) => {
+
+            
+            let dob = document.getElementById('date_of_birth').value;
+
+            let crctdDob = dob.slice(8, 10) + '-' + dob.slice(5, 7) + '-' + dob.slice(0, 4);
+
+            let from_data = {
+                "salutation": `${document.getElementById('salutation').value}`,
+                "firstName": `${document.getElementById('first_name').value}`,
+                "lastName": `${document.getElementById('last_name').value}`,
+                "email": `${document.getElementById('email').value}`,
+                "phone": `${document.getElementById('mobile_number').value}`,
+                "dob": crctdDob,
+                "gender": `${document.querySelector('input[name="gender"]:checked').id}`,
+                "qualifications": `${document.getElementById('salutation').value}`,
+                "address": `${document.getElementById('address').value}`,
+                "city": `${document.getElementById('city').value}`,
+                "state": `${document.getElementById('state').value}`,
+                "country": `${document.getElementById('country').value}`,
+                "username": `${document.getElementById('username').value}`,
+                "password": `${document.getElementById('password').value}`
+
+            };
+           
+            let validate_result = await validate_form(from_data);
+            if(validate_result[1] == 1)
+            {
+                event.preventDefault();
+               let error_messages = validate_result[0];
+               console.log(error_messages);
+               
+                document.getElementById('salutation_err').innerHTML =error_messages['salutation'];  
+
+           
+             
+                document.getElementById('firstName_err').innerHTML =error_messages['firstName'];  
+
+              
+              
+                document.getElementById('lastName_err').innerHTML =error_messages['lastName'];  
+
+             
+              
+                document.getElementById('email_err').innerHTML =error_messages['email'];  
+
+             
+              
+                document.getElementById('phone_err').innerHTML =error_messages['phone'];  
+
+             
+              
+                document.getElementById('dob_err').innerHTML =error_messages['dob'];  
+
+              
+              
+                document.getElementById('gender_err').innerHTML =error_messages['gender'];  
+
+              
+             
+                document.getElementById('address_err').innerHTML =error_messages['address'];  
+
+               
+                document.getElementById('country_err').innerHTML =error_messages['country'];  
+
+             
+                document.getElementById('state_err').innerHTML =error_messages['state'];  
+
+                document.getElementById('city_err').innerHTML =error_messages['city'];  
+             
+                document.getElementById('username_err').innerHTML =error_messages['username'];  
+             
+                document.getElementById('password_err').innerHTML =error_messages['password'];  
+
+              
+              
+
+            } 
+            
+            else{
+
+                event.preventDefault();
+                let error_messages = validate_result[0];
+                document.getElementById('salutation_err').innerHTML =error_messages['salutation'];  
+
+           
+             
+                document.getElementById('firstName_err').innerHTML =error_messages['firstName'];  
+
+              
+              
+                document.getElementById('lastName_err').innerHTML =error_messages['lastName'];  
+
+             
+              
+                document.getElementById('email_err').innerHTML =error_messages['email'];  
+
+             
+              
+                document.getElementById('phone_err').innerHTML =error_messages['phone'];  
+
+             
+              
+                document.getElementById('dob_err').innerHTML =error_messages['dob'];  
+
+              
+              
+                document.getElementById('gender_err').innerHTML =error_messages['gender'];  
+
+              
+             
+                document.getElementById('address_err').innerHTML =error_messages['address'];  
+
+               
+                document.getElementById('country_err').innerHTML =error_messages['country'];  
+
+             
+                document.getElementById('state_err').innerHTML =error_messages['state'];  
+
+                document.getElementById('city_err').innerHTML =error_messages['city'];  
+             
+                document.getElementById('username_err').innerHTML =error_messages['username'];  
+             
+                document.getElementById('password_err').innerHTML =error_messages['password'];  
+
+              
+              
+
+                fetch(server_url + '/' + value, {
+
+                    method: `${http_method}`, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(from_data)
+                }).then((response) => {
+    
+                    if (!response.ok) {
+                        throw new Error('Check the URL please');
+                    }
+                    else {
+                        return response.json();
+                    }
+    
+                }).then((data) => {
+    
+                    console.log(data);
+    
+                    return data;
+    
+                }).catch((error) => {
+                    console.log(error);
+                })
+            }
+          
+        });
+
+
+
+
+
+    }
+
+
 }
 
 async function validate_form (value)
@@ -70,7 +424,7 @@ async function validate_form (value)
         }
         if(eachdata == 'dob')
         {
-            if(form_data[eachdata] == '' || form_data[eachdata] == 'dd-mm-yyyy' )
+            if(form_data[eachdata] == '--' || form_data[eachdata] == '' )
             {
                 err_flg=1;
                error_data[eachdata] ='Enetr dob';
@@ -139,7 +493,7 @@ async function validate_form (value)
         }
         if(eachdata == 'phone')
         { 
-            let mob_regex = /[A-Z][a-z]/;
+            let mob_regex = /\d{10}/;
             if(form_data[eachdata] == '')
             {
                 err_flg=1;
@@ -200,219 +554,18 @@ async function validate_form (value)
     return [error_data , err_flg];
     
 }
-// submiting form
-async function form_submission(a, value, http_method) {
-
-    if (a === 0) {
-        document.getElementsByClassName('btn-save-chnge')[0].type = 'button';
-        document.getElementsByClassName('btn-add')[0].type = 'submit';
-        document.getElementById('form').addEventListener('submit', async(event) => {
-           
-            let dob = document.getElementById('date_of_birth').value;
-
-            let crctdDob = dob.slice(8, 10) + '-' + dob.slice(5, 7) + '-' + dob.slice(0, 4);
-             let value = {
-                "salutation": `${document.getElementById('salutation').value}`,
-                "firstName": `${document.getElementById('first_name').value}`,
-                "lastName": `${document.getElementById('last_name').value}`,
-                "email": `${document.getElementById('email').value}`,
-                "phone": `${document.getElementById('mobile_number').value}`,
-                "dob": crctdDob,
-                "gender": `${document.querySelector('input[name="gender"]:checked').id}`,
-                "qualifications": `${document.getElementById('salutation').value}`,
-                "address": `${document.getElementById('address').value}`,
-                "city": `${document.getElementById('city').value}`,
-                "state": `${document.getElementById('state').value}`,
-                "country": `${document.getElementById('country').value}`,
-                "username": `${document.getElementById('username').value}`,
-                "password": `${document.getElementById('password').value}`
-
-            };
-           
-           
-            let validate_result = await validate_form(value);
-            console.log(validate_result[1]);   
-            
-            if(validate_result[1] == 1)
-            {
-                event.preventDefault();
-               let error_messages = validate_result[0];
-               console.log(error_messages);
-               if(error_messages['salutation'] != '')
-               {
-                document.getElementById('salutation_err').innerHTML =error_messages['salutation'];  
-
-               }
-               if(error_messages['firstName'] != '')
-               {
-                document.getElementById('firstName_err').innerHTML =error_messages['firstName'];  
-
-               }
-               if(error_messages['lastName'] != '')
-               {
-                document.getElementById('lastName_err').innerHTML =error_messages['lastName'];  
-
-               }
-               if(error_messages['email'] != '')
-               {
-                document.getElementById('email_err').innerHTML =error_messages['email'];  
-
-               }
-               if(error_messages['phone'] != '')
-               {
-                document.getElementById('phone_err').innerHTML =error_messages['phone'];  
-
-               }
-               if(error_messages['dob'] != '')
-               {
-                document.getElementById('dob_err').innerHTML =error_messages['dob'];  
-
-               }
-               if(error_messages['gender'] != '')
-               {
-                document.getElementById('gender_err').innerHTML =error_messages['gender'];  
-
-               }
-               if(error_messages['address'] != '')
-               {
-                document.getElementById('address_err').innerHTML =error_messages['address'];  
-
-               }
-               if(error_messages['country'] != '')
-               {
-                document.getElementById('country_err').innerHTML =error_messages['country'];  
-
-               }
-               if(error_messages['state'] != '')
-               {
-                document.getElementById('state_err').innerHTML =error_messages['state'];  
-
-               }
-               if(error_messages['city'] != '')
-               {
-                document.getElementById('city_err').innerHTML =error_messages['city'];  
-
-               }
-               if(error_messages['username'] != '')
-               {
-                document.getElementById('username_err').innerHTML =error_messages['username'];  
-
-               }
-               if(error_messages['password'] != '')
-               {
-                document.getElementById('password_err').innerHTML =error_messages['password'];  
-
-               }
-              
-
-            }
-            else
-            {
-                fetch(server_url, {
-                    method: `${http_method}`, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(value)
-                }).then((response) => {
-    
-                    if (!response.ok) {
-                        throw new Error('Check the URL please');
-                    }
-                    else {
-                        return response.json();
-                    }
-    
-                }).then((data) => {
-    
-                    console.log(data);
-    
-                    return data;
-    
-                }).catch((error) => {
-                    console.log(error);
-                })
-            }
-            
-           
-        });
-
-    }
-    else {
-
-        let data = await fetchUser(value);
-        document.getElementsByClassName('card')[0].style.display = 'block';
-        document.getElementsByClassName("label_upld")[0].style.display = 'none';
-        document.getElementsByClassName("btn-add")[0].style.display = 'none';
-
-        document.getElementById('first_name').value = data.firstName;
-        document.getElementById('last_name').value = data.lastName;
-        document.getElementById('email').value = data.email;
-        document.getElementById('mobile_number').value = data.phone;
-        document.getElementById('date_of_birth').value = data.dob;
-
-        document.getElementById('address').value = data.address;
-        document.getElementById('city').value = data.city;
-        document.getElementById('username').value = data.username;
-        document.getElementById('password').value = data.password;
-
-
-        document.getElementsByClassName('btn-save-chnge')[0].type = 'submit';
-        document.getElementsByClassName('btn-add')[0].type = 'button';
-
-
-        document.getElementById('form').addEventListener('submit', async (event) => {
-
-            event.preventDefault();
-            let dob = document.getElementById('date_of_birth').value;
-
-            let crctdDob = dob.slice(8, 10) + '-' + dob.slice(5, 7) + '-' + dob.slice(0, 4);
 
 
 
-            fetch(server_url + '/' + value, {
-
-                method: `${http_method}`, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({
-                    "salutation": `${document.getElementById('salutation').value}`,
-                    "firstName": `${document.getElementById('first_name').value}`,
-                    "lastName": `${document.getElementById('last_name').value}`,
-                    "email": `${document.getElementById('email').value}`,
-                    "phone": `${document.getElementById('mobile_number').value}`,
-                    "dob": crctdDob,
-                    "gender": `${document.querySelector('input[name="gender"]:checked').id}`,
-                    "qualifications": `${document.getElementById('salutation').value}`,
-                    "address": `${document.getElementById('address').value}`,
-                    "city": `${document.getElementById('city').value}`,
-                    "state": `${document.getElementById('state').value}`,
-                    "country": `${document.getElementById('country').value}`,
-                    "username": `${document.getElementById('username').value}`,
-                    "password": `${document.getElementById('password').value}`
-
-                })
-            }).then((response) => {
-
-                if (!response.ok) {
-                    throw new Error('Check the URL please');
-                }
-                else {
-                    return response.json();
-                }
-
-            }).then((data) => {
-
-                console.log(data);
-
-                return data;
-
-            }).catch((error) => {
-                console.log(error);
-            })
-        });
-
-
-
-
-
-    }
-
-
+//Function to add Event listner to cancel the adding
+function cancelAdding() {
+    document.getElementsByClassName('btn-cncl')[0].addEventListener('click', () => {
+        document.getElementsByClassName('card')[0].style.display = 'none';
+        window.location.reload();
+    });
 }
+
+
 async function addEmployee() {
     addingEmployee();
     cancelAdding();
@@ -476,6 +629,12 @@ async function populateData() {
     });
     document.getElementById("table-body").innerHTML = eachrows;
 }
+
+
+
+
+
+
 
 //Adding Click events to each of the user
 function addCLickEvent() {
@@ -548,7 +707,7 @@ function editemployees() {
         if (btn.className === 'edit_btn') {
             btn.addEventListener('click', async () => {
                 await form_submission(1, btn.value, 'PUT');
-                console.log(1);
+               
 
             });
         }
@@ -614,11 +773,7 @@ employeeFunction();
 
 
 //footer dynamic year
-
-
-
 document.getElementById('present-year').innerHTML = new Date().getFullYear();
-
 
 
 
