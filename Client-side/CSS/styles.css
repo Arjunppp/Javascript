@@ -379,3 +379,7 @@ ul
     width: 75px;
     border-radius: 50%;
 }
+#edit_image
+{
+    display: none;
+}

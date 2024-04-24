@@ -164,7 +164,7 @@ async function form_submission(a, value, http_method) {
     
                 }).then((data) => {
     
-                    console.log(data.id);
+                     console.log(data.id);
                     let image = document.getElementById('file').files[0];
                     let image_object =new FormData();
                     image_object.append('avatar', image);
@@ -209,7 +209,7 @@ async function form_submission(a, value, http_method) {
             document.getElementById('male').checked = true;
         }
 
-
+        document.getElementsByClassName('edit-image')[0].src = `${server_url + '/' +value+ '/avatar'}`
         document.getElementById('salutation').value = data.salutation;
         document.getElementById('first_name').value = data.firstName;
         document.getElementById('last_name').value = data.lastName;
@@ -371,9 +371,27 @@ async function form_submission(a, value, http_method) {
     
                 }).then((data) => {
     
-                    console.log(data);
+                    let image = document.getElementById('edit_image').files[0];
+                    if(image)
+                    {
+                        let image_object =new FormData();
+                        image_object.append('avatar', image);
+                        console.log(server_url + '/' + value + '/avatar');
     
-                    return data;
+                        fetch(`${server_url}/${value}/avatar`, {method:'POST' ,body:image_object, }).then((response) => {
+        
+                            if (!response.ok) {
+                                throw new Error('Check the URL please');
+                            }
+                            else {
+                                return response.json();
+                            }
+            
+                        }).then((data) => {
+                        return data; });
+
+                    }
+                   
     
                 }).catch((error) => {
                     console.log(error);
@@ -816,6 +834,21 @@ window.addEventListener("load", () => {
 
 });
 
+
+//to change the src when image is added in edit form
+
+document.getElementById('edit_image').addEventListener('change', () => {
+    
+    const file = document.getElementById('edit_image').files[0];
+    
+  
+    document.getElementsByClassName('edit-image')[0].src = URL.createObjectURL(file);
+   
+     
+      
+      }
+  
+);
 
 
 
