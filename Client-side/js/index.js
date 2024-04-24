@@ -2,17 +2,17 @@
 let server_url = 'http://localhost:3000/employees';
 
 //Function to add event listner to add EMployee button
- async function addingEmployee() {
+async function addingEmployee() {
     document.getElementById('add_employee').addEventListener('click', async () => {
         document.getElementsByClassName('card')[0].style.display = 'block';
         document.getElementsByClassName("btn-add")[0].style.display = 'block';
         document.getElementsByClassName('btn-save-chnge')[0].style.display = 'none';
-    await form_submission(0, 0, 'POST');
-  
-  
-  
-  
-        
+        await form_submission(0, 0, 'POST');
+
+
+
+
+
     });
 
 }
@@ -24,13 +24,13 @@ async function form_submission(a, value, http_method) {
     if (a === 0) {
         document.getElementsByClassName('btn-save-chnge')[0].type = 'button';
         document.getElementsByClassName('btn-add')[0].type = 'submit';
-        document.getElementById('form').addEventListener('submit', async(event) => {
-           event.preventDefault();
+        document.getElementById('form').addEventListener('submit', async (event) => {
+            event.preventDefault();
             let dob = document.getElementById('date_of_birth').value;
-        
+
             let crctdDob = dob.slice(8, 10) + '-' + dob.slice(5, 7) + '-' + dob.slice(0, 4);
-             let value = {
-                
+            let value = {
+
                 "salutation": `${document.getElementById('salutation').value}`,
                 "firstName": `${document.getElementById('first_name').value}`,
                 "lastName": `${document.getElementById('last_name').value}`,
@@ -47,169 +47,167 @@ async function form_submission(a, value, http_method) {
                 "password": `${document.getElementById('password').value}`
 
             };
-           
-           
+
+
             console.log(value);
             let validate_result = await validate_form(value);
-            if(validate_result[1] == 1)
-            {
-                event.preventDefault();
-               let error_messages = validate_result[0];
-               console.log(error_messages);
-               
-                document.getElementById('salutation_err').innerHTML =error_messages['salutation'];  
-
-           
-             
-                document.getElementById('firstName_err').innerHTML =error_messages['firstName'];  
-
-              
-              
-                document.getElementById('lastName_err').innerHTML =error_messages['lastName'];  
-
-             
-              
-                document.getElementById('email_err').innerHTML =error_messages['email'];  
-
-             
-              
-                document.getElementById('phone_err').innerHTML =error_messages['phone'];  
-
-             
-              
-                document.getElementById('dob_err').innerHTML =error_messages['dob'];  
-
-              
-              
-                document.getElementById('gender_err').innerHTML =error_messages['gender'];  
-
-              
-             
-                document.getElementById('address_err').innerHTML =error_messages['address'];  
-
-               
-                document.getElementById('country_err').innerHTML =error_messages['country'];  
-
-             
-                document.getElementById('state_err').innerHTML =error_messages['state'];  
-
-                document.getElementById('city_err').innerHTML =error_messages['city'];  
-             
-                document.getElementById('username_err').innerHTML =error_messages['username'];  
-             
-                document.getElementById('password_err').innerHTML =error_messages['password'];  
-
-              
-              
-
-            }  
-            else
-            {
+            if (validate_result[1] == 1) {
                 event.preventDefault();
                 let error_messages = validate_result[0];
-               console.log(error_messages);
-               
-                document.getElementById('salutation_err').innerHTML =error_messages['salutation'];  
+                console.log(error_messages);
 
-           
-             
-                document.getElementById('firstName_err').innerHTML =error_messages['firstName'];  
+                document.getElementById('salutation_err').innerHTML = error_messages['salutation'];
 
-              
-              
-                document.getElementById('lastName_err').innerHTML =error_messages['lastName'];  
 
-             
-              
-                document.getElementById('email_err').innerHTML =error_messages['email'];  
 
-             
-              
-                document.getElementById('phone_err').innerHTML =error_messages['phone'];  
+                document.getElementById('firstName_err').innerHTML = error_messages['firstName'];
 
-             
-              
-                document.getElementById('dob_err').innerHTML =error_messages['dob'];  
 
-              
-              
-                document.getElementById('gender_err').innerHTML =error_messages['gender'];  
 
-              
-             
-                document.getElementById('address_err').innerHTML =error_messages['address'];  
+                document.getElementById('lastName_err').innerHTML = error_messages['lastName'];
 
-               
-                document.getElementById('country_err').innerHTML =error_messages['country'];  
 
-             
-                document.getElementById('state_err').innerHTML =error_messages['state'];  
 
-                document.getElementById('city_err').innerHTML =error_messages['city'];  
-             
-                document.getElementById('username_err').innerHTML =error_messages['username'];  
-             
-                document.getElementById('password_err').innerHTML =error_messages['password'];  
+                document.getElementById('email_err').innerHTML = error_messages['email'];
+
+
+
+                document.getElementById('phone_err').innerHTML = error_messages['phone'];
+
+
+
+                document.getElementById('dob_err').innerHTML = error_messages['dob'];
+
+
+
+                document.getElementById('gender_err').innerHTML = error_messages['gender'];
+
+
+
+                document.getElementById('address_err').innerHTML = error_messages['address'];
+
+
+                document.getElementById('country_err').innerHTML = error_messages['country'];
+
+
+                document.getElementById('state_err').innerHTML = error_messages['state'];
+
+                document.getElementById('city_err').innerHTML = error_messages['city'];
+
+                document.getElementById('username_err').innerHTML = error_messages['username'];
+
+                document.getElementById('password_err').innerHTML = error_messages['password'];
+
+
+
+
+            }
+            else {
+                event.preventDefault();
+                let error_messages = validate_result[0];
+                console.log(error_messages);
+
+                document.getElementById('salutation_err').innerHTML = error_messages['salutation'];
+
+
+
+                document.getElementById('firstName_err').innerHTML = error_messages['firstName'];
+
+
+
+                document.getElementById('lastName_err').innerHTML = error_messages['lastName'];
+
+
+
+                document.getElementById('email_err').innerHTML = error_messages['email'];
+
+
+
+                document.getElementById('phone_err').innerHTML = error_messages['phone'];
+
+
+
+                document.getElementById('dob_err').innerHTML = error_messages['dob'];
+
+
+
+                document.getElementById('gender_err').innerHTML = error_messages['gender'];
+
+
+
+                document.getElementById('address_err').innerHTML = error_messages['address'];
+
+
+                document.getElementById('country_err').innerHTML = error_messages['country'];
+
+
+                document.getElementById('state_err').innerHTML = error_messages['state'];
+
+                document.getElementById('city_err').innerHTML = error_messages['city'];
+
+                document.getElementById('username_err').innerHTML = error_messages['username'];
+
+                document.getElementById('password_err').innerHTML = error_messages['password'];
 
                 fetch(server_url, {
                     method: `${http_method}`, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(value)
                 }).then((response) => {
-    
+
                     if (!response.ok) {
                         throw new Error('Check the URL please');
                     }
                     else {
                         return response.json();
                     }
-    
+
                 }).then((data) => {
-    
-                     console.log(data.id);
+
+                    console.log(data.id);
                     let image = document.getElementById('file').files[0];
-                    let image_object =new FormData();
+                    let image_object = new FormData();
                     image_object.append('avatar', image);
                     console.log(server_url + '/' + data.id + '/avatar');
 
-                    fetch(`${server_url}/${data.id}/avatar`, {method:'POST' ,body:image_object, }).then((response) => {
-    
+                    fetch(`${server_url}/${data.id}/avatar`, { method: 'POST', body: image_object, }).then((response) => {
+
                         if (!response.ok) {
                             throw new Error('Check the URL please');
                         }
                         else {
                             return response.json();
                         }
-        
+
                     }).then((data) => {
-                    return data; });
-    
+                        return data;
+                    });
+
                 }).catch((error) => {
                     console.log(error);
                 })
             }
-            
-            
-            
-           
+
+
+
+
         });
 
     }
     else {
 
         let data = await fetchUser(value);
-  
-       let date = data.dob.split('-').reverse().join('-');
+
+        let date = data.dob.split('-').reverse().join('-');
         document.getElementsByClassName('card')[0].style.display = 'block';
         document.getElementsByClassName("label_upld")[0].style.display = 'none';
         document.getElementsByClassName("btn-add")[0].style.display = 'none';
         document.getElementsByClassName("btn-save-chnge")[0].style.display = 'block';
-        
 
-        if(data.gender == 'male')
-        {
+
+        if (data.gender == 'male') {
             document.getElementById('male').checked = true;
         }
 
-        document.getElementsByClassName('edit-image')[0].src = `${server_url + '/' +value+ '/avatar'}`
+        document.getElementsByClassName('edit-image')[0].src = `${server_url + '/' + value + '/avatar'}`
         document.getElementById('salutation').value = data.salutation;
         document.getElementById('first_name').value = data.firstName;
         document.getElementById('last_name').value = data.lastName;
@@ -231,7 +229,7 @@ async function form_submission(a, value, http_method) {
 
         document.getElementById('form').addEventListener('submit', async (event) => {
 
-            
+
             let dob = document.getElementById('date_of_birth').value;
 
             let crctdDob = dob.slice(8, 10) + '-' + dob.slice(5, 7) + '-' + dob.slice(0, 4);
@@ -253,151 +251,150 @@ async function form_submission(a, value, http_method) {
                 "password": `${document.getElementById('password').value}`
 
             };
-           
+
             let validate_result = await validate_form(from_data);
-            if(validate_result[1] == 1)
-            {
+            if (validate_result[1] == 1) {
                 event.preventDefault();
-               let error_messages = validate_result[0];
-               console.log(error_messages);
-               
-                document.getElementById('salutation_err').innerHTML =error_messages['salutation'];  
+                let error_messages = validate_result[0];
+                console.log(error_messages);
 
-           
-             
-                document.getElementById('firstName_err').innerHTML =error_messages['firstName'];  
+                document.getElementById('salutation_err').innerHTML = error_messages['salutation'];
 
-              
-              
-                document.getElementById('lastName_err').innerHTML =error_messages['lastName'];  
 
-             
-              
-                document.getElementById('email_err').innerHTML =error_messages['email'];  
 
-             
-              
-                document.getElementById('phone_err').innerHTML =error_messages['phone'];  
+                document.getElementById('firstName_err').innerHTML = error_messages['firstName'];
 
-             
-              
-                document.getElementById('dob_err').innerHTML =error_messages['dob'];  
 
-              
-              
-                document.getElementById('gender_err').innerHTML =error_messages['gender'];  
 
-              
-             
-                document.getElementById('address_err').innerHTML =error_messages['address'];  
+                document.getElementById('lastName_err').innerHTML = error_messages['lastName'];
 
-               
-                document.getElementById('country_err').innerHTML =error_messages['country'];  
 
-             
-                document.getElementById('state_err').innerHTML =error_messages['state'];  
 
-                document.getElementById('city_err').innerHTML =error_messages['city'];  
-             
-                document.getElementById('username_err').innerHTML =error_messages['username'];  
-             
-                document.getElementById('password_err').innerHTML =error_messages['password'];  
+                document.getElementById('email_err').innerHTML = error_messages['email'];
 
-              
-              
 
-            } 
-            
-            else{
+
+                document.getElementById('phone_err').innerHTML = error_messages['phone'];
+
+
+
+                document.getElementById('dob_err').innerHTML = error_messages['dob'];
+
+
+
+                document.getElementById('gender_err').innerHTML = error_messages['gender'];
+
+
+
+                document.getElementById('address_err').innerHTML = error_messages['address'];
+
+
+                document.getElementById('country_err').innerHTML = error_messages['country'];
+
+
+                document.getElementById('state_err').innerHTML = error_messages['state'];
+
+                document.getElementById('city_err').innerHTML = error_messages['city'];
+
+                document.getElementById('username_err').innerHTML = error_messages['username'];
+
+                document.getElementById('password_err').innerHTML = error_messages['password'];
+
+
+
+
+            }
+
+            else {
 
                 event.preventDefault();
                 let error_messages = validate_result[0];
-                document.getElementById('salutation_err').innerHTML =error_messages['salutation'];  
+                document.getElementById('salutation_err').innerHTML = error_messages['salutation'];
 
-           
-             
-                document.getElementById('firstName_err').innerHTML =error_messages['firstName'];  
 
-              
-              
-                document.getElementById('lastName_err').innerHTML =error_messages['lastName'];  
 
-             
-              
-                document.getElementById('email_err').innerHTML =error_messages['email'];  
+                document.getElementById('firstName_err').innerHTML = error_messages['firstName'];
 
-             
-              
-                document.getElementById('phone_err').innerHTML =error_messages['phone'];  
 
-             
-              
-                document.getElementById('dob_err').innerHTML =error_messages['dob'];  
 
-              
-              
-                document.getElementById('gender_err').innerHTML =error_messages['gender'];  
+                document.getElementById('lastName_err').innerHTML = error_messages['lastName'];
 
-              
-             
-                document.getElementById('address_err').innerHTML =error_messages['address'];  
 
-               
-                document.getElementById('country_err').innerHTML =error_messages['country'];  
 
-             
-                document.getElementById('state_err').innerHTML =error_messages['state'];  
+                document.getElementById('email_err').innerHTML = error_messages['email'];
 
-                document.getElementById('city_err').innerHTML =error_messages['city'];  
-             
-                document.getElementById('username_err').innerHTML =error_messages['username'];  
-             
-                document.getElementById('password_err').innerHTML =error_messages['password'];  
 
-              
-              
+
+                document.getElementById('phone_err').innerHTML = error_messages['phone'];
+
+
+
+                document.getElementById('dob_err').innerHTML = error_messages['dob'];
+
+
+
+                document.getElementById('gender_err').innerHTML = error_messages['gender'];
+
+
+
+                document.getElementById('address_err').innerHTML = error_messages['address'];
+
+
+                document.getElementById('country_err').innerHTML = error_messages['country'];
+
+
+                document.getElementById('state_err').innerHTML = error_messages['state'];
+
+                document.getElementById('city_err').innerHTML = error_messages['city'];
+
+                document.getElementById('username_err').innerHTML = error_messages['username'];
+
+                document.getElementById('password_err').innerHTML = error_messages['password'];
+
+
+
 
                 fetch(server_url + '/' + value, {
 
                     method: `${http_method}`, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(from_data)
                 }).then((response) => {
-    
+
                     if (!response.ok) {
                         throw new Error('Check the URL please');
                     }
                     else {
                         return response.json();
                     }
-    
+
                 }).then((data) => {
-    
+
                     let image = document.getElementById('edit_image').files[0];
-                    if(image)
-                    {
-                        let image_object =new FormData();
+                    if (image) {
+                        let image_object = new FormData();
                         image_object.append('avatar', image);
                         console.log(server_url + '/' + value + '/avatar');
-    
-                        fetch(`${server_url}/${value}/avatar`, {method:'POST' ,body:image_object, }).then((response) => {
-        
+
+                        fetch(`${server_url}/${value}/avatar`, { method: 'POST', body: image_object, }).then((response) => {
+
                             if (!response.ok) {
                                 throw new Error('Check the URL please');
                             }
                             else {
                                 return response.json();
                             }
-            
+
                         }).then((data) => {
-                        return data; });
+                            return data;
+                        });
 
                     }
-                   
-    
+
+
                 }).catch((error) => {
                     console.log(error);
                 })
             }
-          
+
         });
 
 
@@ -409,189 +406,160 @@ async function form_submission(a, value, http_method) {
 
 }
 
-async function validate_form (value)
-{
-    let error_data= {address:'',
-    city:'',
-    country:'',
-    dob:'',
-    email:'',
-    firstName:'',
-    gender:'',
-    lastName:'',
-    password:'',
-    phone:'',
-    qualifications:'',
-    salutation:'',
-    state:'',
-    username:''};
-    let err_flg =0;
+async function validate_form(value) {
+    let error_data = {
+        address: '',
+        city: '',
+        country: '',
+        dob: '',
+        email: '',
+        firstName: '',
+        gender: '',
+        lastName: '',
+        password: '',
+        phone: '',
+        qualifications: '',
+        salutation: '',
+        state: '',
+        username: ''
+    };
+    let err_flg = 0;
     let form_data = value;
     console.log(form_data);
-    for(let eachdata in form_data) //eachdata represents key
+    for (let eachdata in form_data) //eachdata represents key
     {
-          
-        if(eachdata == 'address')
-        {
-            if(form_data[eachdata] == '')
-            {
-                err_flg=1;
-               error_data[eachdata] ='Enetr address';
-               
+
+        if (eachdata == 'address') {
+            if (form_data[eachdata] == '') {
+                err_flg = 1;
+                error_data[eachdata] = 'Enetr address';
+
             }
-           
+
         }
-        if(eachdata == 'city')
-        {
-            if(form_data[eachdata] == '')
-            {
-                err_flg=1;
-               error_data[eachdata] ='Enetr city';
-               
+        if (eachdata == 'city') {
+            if (form_data[eachdata] == '') {
+                err_flg = 1;
+                error_data[eachdata] = 'Enetr city';
+
             }
-           
+
         }
-        if(eachdata == 'country')
-        {
-            if(form_data[eachdata] == '')
-            {
-                err_flg=1;
-               error_data[eachdata] ='Enetr country';
-               
+        if (eachdata == 'country') {
+            if (form_data[eachdata] == '') {
+                err_flg = 1;
+                error_data[eachdata] = 'Enetr country';
+
             }
-           
+
         }
-        if(eachdata == 'dob')
-        {
-            if(form_data[eachdata] == '--' || form_data[eachdata] == '' )
-            {
-                err_flg=1;
-               error_data[eachdata] ='Enetr dob';
-               
+        if (eachdata == 'dob') {
+            if (form_data[eachdata] == '--' || form_data[eachdata] == '') {
+                err_flg = 1;
+                error_data[eachdata] = 'Enetr dob';
+
             }
-           
+
         }
-        if(eachdata === 'email')
-        {
+        if (eachdata === 'email') {
             let emailRegex = /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/;
-            if(form_data[eachdata] == '' )
-            {
-                err_flg=1;
-               error_data[eachdata] ='Enetr email';
-              
-               
+            if (form_data[eachdata] == '') {
+                err_flg = 1;
+                error_data[eachdata] = 'Enetr email';
+
+
             }
-              else if(!emailRegex.test(form_data[eachdata]))   
-              {
-                
-                  err_flg=1;
-                error_data[eachdata] ='Enetr valid email';
-              }
-           
-           
-        }
-        if(eachdata == 'firstName')
-        {
-            if(form_data[eachdata] == '')
-            {
-                err_flg=1;
-               error_data[eachdata] ='Enetr firstName';
-               
+            else if (!emailRegex.test(form_data[eachdata])) {
+
+                err_flg = 1;
+                error_data[eachdata] = 'Enetr valid email';
             }
-           
+
+
         }
-        if(eachdata == 'gender')
-        {
-            if(form_data[eachdata] == '')
-            {
-                err_flg=1;
-               error_data[eachdata] ='Enetr gender';
-               
+        if (eachdata == 'firstName') {
+            if (form_data[eachdata] == '') {
+                err_flg = 1;
+                error_data[eachdata] = 'Enetr firstName';
+
             }
-           
+
         }
-        if(eachdata == 'lastName')
-        {
-            if(form_data[eachdata] == '')
-            {
-                err_flg=1;
-               error_data[eachdata] ='Enetr lastName';
-               
+        if (eachdata == 'gender') {
+            if (form_data[eachdata] == '') {
+                err_flg = 1;
+                error_data[eachdata] = 'Enetr gender';
+
             }
-           
+
         }
-        if(eachdata == 'password')
-        {
-            if(form_data[eachdata] == '')
-            {
-                err_flg=1;
-               error_data[eachdata] ='Enetr password';
-               
+        if (eachdata == 'lastName') {
+            if (form_data[eachdata] == '') {
+                err_flg = 1;
+                error_data[eachdata] = 'Enetr lastName';
+
             }
-           
+
         }
-        if(eachdata == 'phone')
-        { 
+        if (eachdata == 'password') {
+            if (form_data[eachdata] == '') {
+                err_flg = 1;
+                error_data[eachdata] = 'Enetr password';
+
+            }
+
+        }
+        if (eachdata == 'phone') {
             let mob_regex = /\d{10}/;
-            if(form_data[eachdata] == '')
-            {
-                err_flg=1;
-               error_data[eachdata] ='Enetr phone';
-               
+            if (form_data[eachdata] == '') {
+                err_flg = 1;
+                error_data[eachdata] = 'Enetr phone';
+
             }
-            else if(!mob_regex.test(form_data[eachdata]))
-            {
-                err_flg=1;
-                error_data[eachdata] ='Enter valid phone number';
+            else if (!mob_regex.test(form_data[eachdata])) {
+                err_flg = 1;
+                error_data[eachdata] = 'Enter valid phone number';
             }
-           
+
         }
-        if(eachdata == 'qualifications')
-        {
-            if(form_data[eachdata] == '')
-            {
-                err_flg=1;
-               error_data[eachdata] ='Enetr qualifications';
-               
+        if (eachdata == 'qualifications') {
+            if (form_data[eachdata] == '') {
+                err_flg = 1;
+                error_data[eachdata] = 'Enetr qualifications';
+
             }
-           
+
         }
-        if(eachdata == 'salutation')
-        {
-            if(form_data[eachdata] == '')
-            {
-                err_flg=1;
-               error_data[eachdata] ='Enetr salutation';
-               
+        if (eachdata == 'salutation') {
+            if (form_data[eachdata] == '') {
+                err_flg = 1;
+                error_data[eachdata] = 'Enetr salutation';
+
             }
-           
+
         }
-        if(eachdata == 'state')
-        {
-            if(form_data[eachdata] == '')
-            {
-                err_flg=1;
-               error_data[eachdata] ='Enetr state';
-               
+        if (eachdata == 'state') {
+            if (form_data[eachdata] == '') {
+                err_flg = 1;
+                error_data[eachdata] = 'Enetr state';
+
             }
-           
+
         }
-        if(eachdata == 'username')
-        {
-            if(form_data[eachdata] == '')
-            {
-                err_flg=1;
-               error_data[eachdata] ='Enetr username';
-               
+        if (eachdata == 'username') {
+            if (form_data[eachdata] == '') {
+                err_flg = 1;
+                error_data[eachdata] = 'Enetr username';
+
             }
-           
+
         }
 
-       
-        
+
+
     };
-    return [error_data , err_flg];
-    
+    return [error_data, err_flg];
+
 }
 
 
@@ -606,7 +574,7 @@ function cancelAdding() {
 
 
 async function addEmployee() {
-   await addingEmployee();
+    await addingEmployee();
     cancelAdding();
 
 }
@@ -635,15 +603,14 @@ async function fetchUser(selector) {
 
 }
 //fetch image
-async function fetch_image(id)
-{
-  let image = fetch(`${server_url}/${id}/avatar` );
-  return image
+async function fetch_image(id) {
+    let image = fetch(`${server_url}/${id}/avatar`);
+    return image
 }
 //populate each user data in each row of the table
 async function populateData() {
     let users = await fetchUser('all');
-   
+
     let eachrows = '';
     let count = 1;
     users.forEach(async (user) => {
@@ -653,7 +620,7 @@ async function populateData() {
              <td scope='col' class='fw-bold' >#0${count++}</td>
              <td scope='col' class='fw-bold' >
              <span> 
-             <img src=${server_url+'/'+user.avatar.split('.')[0]+'/avatar'} class='side_images'></span>
+             <img src=${server_url + '/' + user.avatar.split('.')[0] + '/avatar'} class='side_images'></span>
              ${user.firstName}
              </td>
              <td scope='col' class='fw-bold' >${user.email}</td>
@@ -734,17 +701,17 @@ function editemployees() {
 
                     let age = currentyear - data.dob.slice(6, 10);
 
-                    
-                    document.getElementsByClassName('img_view')[0].src=`${server_url + '/' +btn.value+ '/avatar'}`
+
+                    document.getElementsByClassName('img_view')[0].src = `${server_url + '/' + btn.value + '/avatar'}`
                     document.getElementsByClassName('full_name')[0].innerHTML = `<h5>${data.salutation} ${data.firstName} ${data.lastName}</h5>`;
-                    document.getElementsByClassName('usr-email')[0].innerHTML =`<h5>${data.email}</h5>`;
+                    document.getElementsByClassName('usr-email')[0].innerHTML = `<h5>${data.email}</h5>`;
                     document.getElementsByClassName('usr-gndr')[0].innerHTML = `<h5>${data.gender}</h5>`;
                     document.getElementsByClassName('usr-age')[0].innerHTML = `<h5>${age}</h5>`;
                     document.getElementsByClassName('usr-dob')[0].innerHTML = `<h5>${data.dob}</h5>`;
                     document.getElementsByClassName('usr-mob')[0].innerHTML = `<h5>${data.phone}</h5>`;
                     document.getElementsByClassName('usr-qualifctn')[0].innerHTML = `<h5>${data.qualifications}</h5>`;
-                    document.getElementsByClassName('usr-addrs')[0].innerHTML =`<h5>${data.address}</h5>`;
-                    document.getElementsByClassName('usr-usrname')[0].innerHTML =`<h5>${data.username}</h5>`;
+                    document.getElementsByClassName('usr-addrs')[0].innerHTML = `<h5>${data.address}</h5>`;
+                    document.getElementsByClassName('usr-usrname')[0].innerHTML = `<h5>${data.username}</h5>`;
 
 
                 })
@@ -759,7 +726,7 @@ function editemployees() {
         if (btn.className === 'edit_btn') {
             btn.addEventListener('click', async () => {
                 await form_submission(1, btn.value, 'PUT');
-               
+
 
             });
         }
@@ -811,12 +778,72 @@ function editemployees() {
 
     })
 }
+//search option
+
+async function search_user() {
+    let users = await fetchUser('all');
+    console.log(users);
+    
+    let search_value = document.getElementById('sub-search');
+    search_value.addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+          let search_result = users.filter((user) => 
+        {
+           if(user.firstName === search_value.value)
+           {
+            return user;
+           }
+        });
+        let eachrows = '';
+        let count = 1;
+        search_result.map(async (user) => {
+           
+            eachrows += `<tr scope='row'>
+                
+                 <td scope='col' class='fw-bold' >#0${count++}</td>
+                 <td scope='col' class='fw-bold' >
+                 <span> 
+                 <img src=${server_url + '/' + user.avatar.split('.')[0] + '/avatar'} class='side_images'></span>
+                 ${user.firstName}
+                 </td>
+                 <td scope='col' class='fw-bold' >${user.email}</td>
+                 <td scope='col' class='fw-bold' >${user.phone}</td>
+                 <td scope='col' class='fw-bold' >${user.gender}</td>
+                 <td scope='col' class='fw-bold' >${user.dob}</td>
+                 <td scope='col' class='fw-bold' >${user.country}</td>
+                 <td scope='col' class="edit"><span class="material-symbols-outlined select-dots">
+                 more_horiz
+                 </span>
+                 <ul class='edit-details'>
+                    <li class='d-flex '><span class="material-symbols-outlined">
+                    visibility
+                    </span><button class='view_btn' value="${user.id}">View Details</button></li>
+                    <li class='d-flex '><span class="material-symbols-outlined">
+                    edit
+                    </span><button class='edit_btn' value="${user.id}">Edit</button></li>
+                    <li class='d-flex '><span class="material-symbols-outlined">
+                    delete
+                    </span><button class='dlte_btn' value="${user.id}">Delete</button></li>
+                 </ul 
+                   </td>
+            
+               </tr>`;
+        });
+        document.getElementById("table-body").innerHTML = eachrows;
+       
+        
+        }
+        
+    });
+    
+}
 
 //calling the above functions in order
 async function employeeFunction() {
     await populateData();
     addCLickEvent();
     editemployees();
+    search_user();
 }
 
 employeeFunction();
@@ -838,16 +865,16 @@ window.addEventListener("load", () => {
 //to change the src when image is added in edit form
 
 document.getElementById('edit_image').addEventListener('change', () => {
-    
+
     const file = document.getElementById('edit_image').files[0];
-    
-  
+
+
     document.getElementsByClassName('edit-image')[0].src = URL.createObjectURL(file);
-   
-     
-      
-      }
-  
+
+
+
+}
+
 );
 
 
