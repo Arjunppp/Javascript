@@ -650,6 +650,86 @@ async function populateData() {
 }
 
 
+///pagenation seting
+
+
+async function PageNationsetUp() {
+    let users = await fetchUser('all');
+
+    let state ={
+       
+        'page' :3,
+        'rows' :1
+    }
+
+    function pagenation(queryset , page ,rows)
+    {
+        var trimstart = (page-1)*rows;
+        var trimend = trimstart + rows;
+        var trimdata = queryset.slice(trimstart ,trimend);
+        var pages = Math.ceil((queryset.length)/rows);
+        return{
+            'queryset':trimdata,
+            'pages':pages
+        }
+    }
+    
+    return pagenation(users , state.page , state.rows);
+   
+    
+    
+}
+
+async function displaypagnation()
+{
+    let a = await PageNationsetUp();
+    let b = a.queryset;
+    let eachrows = '';
+    let count = 1;
+    let c = b.map((user) =>
+    {
+        eachrows += `<tr scope='row'>
+            
+        <td scope='col' class='fw-bold' >#0${count++}</td>
+        <td scope='col' class='fw-bold' >
+        <span> 
+        <img src=${server_url + '/' + user.avatar.split('.')[0] + '/avatar'} class='side_images'></span>
+        ${user.firstName}
+        </td>
+        <td scope='col' class='fw-bold' >${user.email}</td>
+        <td scope='col' class='fw-bold' >${user.phone}</td>
+        <td scope='col' class='fw-bold' >${user.gender}</td>
+        <td scope='col' class='fw-bold' >${user.dob}</td>
+        <td scope='col' class='fw-bold' >${user.country}</td>
+        <td scope='col' class="edit"><span class="material-symbols-outlined select-dots">
+        more_horiz
+        </span>
+        <ul class='edit-details'>
+           <li class='d-flex '><span class="material-symbols-outlined">
+           visibility
+           </span><button class='view_btn' value="${user.id}">View Details</button></li>
+           <li class='d-flex '><span class="material-symbols-outlined">
+           edit
+           </span><button class='edit_btn' value="${user.id}">Edit</button></li>
+           <li class='d-flex '><span class="material-symbols-outlined">
+           delete
+           </span><button class='dlte_btn' value="${user.id}">Delete</button></li>
+        </ul 
+          </td>
+   
+      </tr>`;
+
+      return eachrows;
+
+    });
+    
+   let d = c.join(',');
+   console.log(d);  
+
+}
+
+displaypagnation();
+
 
 
 
@@ -782,7 +862,7 @@ function editemployees() {
 
 async function search_user() {
     let users = await fetchUser('all');
-    console.log(users);
+   
     
     let search_value = document.getElementById('sub-search');
     search_value.addEventListener('keypress', function (e) {
