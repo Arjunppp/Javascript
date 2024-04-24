@@ -717,7 +717,7 @@ function editemployees() {
                     let age = currentyear - data.dob.slice(6, 10);
 
                     
-
+                    document.getElementsByClassName('img_view')[0].src=`${server_url + '/' +btn.value+ '/avatar'}`
                     document.getElementsByClassName('full_name')[0].innerHTML = `<h5>${data.salutation} ${data.firstName} ${data.lastName}</h5>`;
                     document.getElementsByClassName('usr-email')[0].innerHTML =`<h5>${data.email}</h5>`;
                     document.getElementsByClassName('usr-gndr')[0].innerHTML = `<h5>${data.gender}</h5>`;
