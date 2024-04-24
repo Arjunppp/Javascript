@@ -320,3 +320,56 @@ ul
     padding-top: 0.9rem;
     padding-bottom: 0.9rem;
 }
+
+
+/* Loader CSS */
+.loader
+{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color:#fff;
+    transition: opacity  0.75s ,visibility 0.75s;
+}
+
+.loader-hidden
+{
+    opacity: 0;
+    visibility: hidden;
+}
+
+.loader::after
+{
+    content: "";
+    width: 75px;
+    height: 75px;
+    border: 10px solid #988a8a;
+    border-top-color:#2B3674 ;
+    border-radius: 50%;
+    animation: loading 0.75s ease infinite;
+}
+
+@keyframes loading {
+
+    from
+    {
+        transform: rotate(0turn);
+    }
+    to 
+    {
+        transform: rotate(1turn);
+    }
+}
+
+
+.side_images
+{
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+}

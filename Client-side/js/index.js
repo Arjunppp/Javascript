@@ -2,13 +2,19 @@
 let server_url = 'http://localhost:3000/employees';
 
 //Function to add event listner to add EMployee button
-function addingEmployee() {
+ async function addingEmployee() {
     document.getElementById('add_employee').addEventListener('click', async () => {
         document.getElementsByClassName('card')[0].style.display = 'block';
         document.getElementsByClassName("btn-add")[0].style.display = 'block';
         document.getElementsByClassName('btn-save-chnge')[0].style.display = 'none';
-        await form_submission(0, 0, 'POST');
+    await form_submission(0, 0, 'POST');
+  
+  
+  
+  
+        
     });
+
 }
 
 
@@ -19,11 +25,12 @@ async function form_submission(a, value, http_method) {
         document.getElementsByClassName('btn-save-chnge')[0].type = 'button';
         document.getElementsByClassName('btn-add')[0].type = 'submit';
         document.getElementById('form').addEventListener('submit', async(event) => {
-          
+           event.preventDefault();
             let dob = document.getElementById('date_of_birth').value;
         
             let crctdDob = dob.slice(8, 10) + '-' + dob.slice(5, 7) + '-' + dob.slice(0, 4);
              let value = {
+                
                 "salutation": `${document.getElementById('salutation').value}`,
                 "firstName": `${document.getElementById('first_name').value}`,
                 "lastName": `${document.getElementById('last_name').value}`,
@@ -157,9 +164,23 @@ async function form_submission(a, value, http_method) {
     
                 }).then((data) => {
     
-                    console.log(data);
+                    console.log(data.id);
+                    let image = document.getElementById('file').files[0];
+                    let image_object =new FormData();
+                    image_object.append('avatar', image);
+                    console.log(server_url + '/' + data.id + '/avatar');
+
+                    fetch(`${server_url}/${data.id}/avatar`, {method:'POST' ,body:image_object, }).then((response) => {
     
-                    return data;
+                        if (!response.ok) {
+                            throw new Error('Check the URL please');
+                        }
+                        else {
+                            return response.json();
+                        }
+        
+                    }).then((data) => {
+                    return data; });
     
                 }).catch((error) => {
                     console.log(error);
@@ -567,7 +588,7 @@ function cancelAdding() {
 
 
 async function addEmployee() {
-    addingEmployee();
+   await addingEmployee();
     cancelAdding();
 
 }
@@ -595,15 +616,28 @@ async function fetchUser(selector) {
     }
 
 }
+//fetch image
+async function fetch_image(id)
+{
+  let image = fetch(`${server_url}/${id}/avatar` );
+  return image
+}
 //populate each user data in each row of the table
 async function populateData() {
     let users = await fetchUser('all');
+   
     let eachrows = '';
     let count = 1;
-    users.forEach((user) => {
+    users.forEach(async (user) => {
+        console.log();
         eachrows += `<tr scope='row'>
+            
              <td scope='col' class='fw-bold' >#0${count++}</td>
-             <td scope='col' class='fw-bold' >${user.firstName}</td>
+             <td scope='col' class='fw-bold' >
+             <span> 
+             <img src=${server_url+'/'+user.avatar.split('.')[0]+'/avatar'} class='side_images'></span>
+             ${user.firstName}
+             </td>
              <td scope='col' class='fw-bold' >${user.email}</td>
              <td scope='col' class='fw-bold' >${user.phone}</td>
              <td scope='col' class='fw-bold' >${user.gender}</td>
@@ -775,7 +809,12 @@ employeeFunction();
 //footer dynamic year
 document.getElementById('present-year').innerHTML = new Date().getFullYear();
 
+//loader function
+window.addEventListener("load", () => {
+    const loader = document.querySelector(".loader");
+    loader.classList.add('loader-hidden');
 
+});
 
 
 
