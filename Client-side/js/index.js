@@ -789,7 +789,7 @@ async function search_user() {
         if (e.key === 'Enter') {
           let search_result = users.filter((user) => 
         {
-           if(user.firstName === search_value.value)
+           if((user.firstName).toLowerCase() === (search_value.value).toLowerCase())
            {
             return user;
            }
