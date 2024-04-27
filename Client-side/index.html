@@ -27,7 +27,7 @@
 
 <body>
     <div class="container-fluid">
-        <div class="row" style="height: 100vh;">
+        <div class="row">
             <div class="col-3 p-0 side-bar d-flex flex-column justify-content-between">
                 <div class="d-flex flex-column p-3 ">
                     <h2 class="d-flex flex-column fw-normal"><span class="fw-bolder">Employee</span>Management</h2>
@@ -75,6 +75,7 @@
                     <h4 class="m-0">Powered by</h4>
                     <img class="m-0" src="image/logo.png" alt="">
                 </div>
+               
             </div>
             <div class="col-9 p-0 main-page">
                 <div class="row p-3 m-0">
@@ -108,6 +109,19 @@
                             <div class="row p-3 m-0 flex-row-reverse add_emplyee_div">
                                 <button class="col-2 btn btn-primary p-3 " id="add_employee">Add Employee</button>
                             </div>
+                            <div class="row p-3 m-0 d-flex">
+                                <label for="employee-row">Employee List</label>
+                                <select name="Employee List" id="employee-row"   class="form-select">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                  </select>
+                            </div>
                             <table class="table">
                                 <thead>
 
@@ -126,6 +140,11 @@
 
                                 </tbody>
                             </table>
+                            <div class="div">
+                                <div id="page-button-wrapper" class="d-flex gap-3">
+
+                                </div>
+                            </div>
                         </div>
 
 
@@ -141,7 +160,7 @@
                         <div class="col-12 div ">
                             <img src="" alt="" class="img_view">
                         </div>
-                    </div> 
+                    </div>
                     <div class="row">
                         <div class="col-12 full_name">
 
@@ -184,6 +203,168 @@
 
 
                 </div>
+                 <form id="form">
+                    <div class="card col-8 brdr-rds-20 py-2 ">
+                        <div class="card-header py-0 pt-3">
+            
+                            <h3 class="card-title h3-style">Add Employee</h3>
+            
+                        </div>
+                        <div class="card-body d-flex flex-column justify-content-start ">
+                            <div class="row mb-3 upld-pdng ">
+                                <div class="row mb-3">
+                                    <label for="edit_image">
+                                        <img src="" class="edit-image" alt=""
+                                            style="height: 100px; width: 100px; border:2px dashed grey">
+                                    </label>
+                                    <input type="file" id="edit_image">
+                                </div>
+                                <div class="col label_upld">
+                                    <label for="file"
+                                        class="form-label d-flex flex-column justify-content-center align-items-center px-5 py-3 lbl-brdr ">
+                                        <span class="material-symbols-outlined icn-fnt-32 text-clr">
+                                            upload_2
+                                        </span>
+                                        <h5 class="text-clr h5-style">Upload Image</h5>
+                                        <h6 class="h6-style">PNG, JPG files are allowed</h6>
+            
+                                    </label>
+                                </div>
+                                <input type="file" class="form-control d-none" id="file">
+                            </div>
+                          
+                            <div class="row mb-3 nme-row">
+                                <div class="sal-width col">
+                                    <label for="salutation" class="form-label lbl-style lbl-astrck">Salutation</label>
+                                    <select id="salutation" class="form-select  custom-select ">
+                                        <option selected=""></option>
+                                        <option value="Mr.">Mr.</option>
+                                        <option value="Ms.">Ms.</option>
+                                        <option value="Mrs.">Mrs.</option>
+                                        <option value="Mx.">Mx.</option>
+                                    </select>
+                                    <p id="salutation_err" class="err"></p>
+                                </div>
+                                <div class="col">
+                                    <label for="first_name" class="form-label lbl-style lbl-astrck">First Name</label>
+                                    <input type="text" id="first_name" class="form-control" placeholder="john">
+                                    <p id="firstName_err" class="err"></p>
+                                </div>
+                                <div class="col">
+                                    <label for="last_name" class="form-label lbl-style lbl-astrck">Last Name</label>
+                                    <input type="text" id="last_name" class="form-control" placeholder="doe">
+                                    <p id="lastName_err" class="err"></p>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-6 col">
+                                    <label for="email" class="form-label lbl-style lbl-astrck">Email Address</label>
+                                    <input type="email" id="email" class="form-control " placeholder="mail@simmple.com">
+                                    <p id="email_err" class="err"></p>
+                                </div>
+                                <div class="col-md-6 col">
+                                    <label for="mobile_number" class="form-label lbl-style lbl-astrck">Mobile Number</label>
+                                    <input type="tel" id="mobile_number" class="form-control" placeholder="enter mobile number">
+                                    <p id="phone_err" class="err"></p>
+                                </div>
+                            </div>
+                            <div class="row mb-3 nme-row">
+                                <div class="col col-md-6">
+                                    <label for="date_of_birth" class="form-label lbl-style lbl-astrck">Date of Birth</label>
+                                    <input type="date" id="date_of_birth" aria-label="Date of Birth" class="form-control">
+                                    <p id="dob_err" class="err"></p>
+                                </div>
+                                <div class="col col-md-6">
+                                    <div class="d-flex flex-column gap-2">
+                                        <p class="lbl-astrck lbl-style">
+                                            Gender
+                                        </p>
+                                        <div class="d-flex flex-row gap-3">
+                                            <div class="d-flex align-center gap-2">
+                                                <input type="radio" class="form-check-input" value='male' id="male" name="gender">
+                                                <label for="male" class="lbl-style">Male</label>
+                                            </div>
+                                            <div class="d-flex align-center gap-2">
+                                                <input type="radio" class="form-check-input" value='female' id="female"
+                                                    name="gender" checked>
+                                                <label for="female" class="lbl-style">Female</label>
+                                            </div>
+                                        </div>
+                                        <p id="gender_err" class="err"></p>
+                                    </div>
+                                </div>
+            
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col">
+                                    <label for="address" class="form-label lbl-astrck lbl-style">Address</label>
+                                    <input type="text" id="address" placeholder="enter address" class="form-control">
+                                    <p id="address_err" class="err"></p>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col col-md-6">
+                                    <label for="country" class="form-label lbl-astrck lbl-style">Country</label>
+                                    <select id="country" class="form-select custom-select">
+                                        <option selected=""></option>
+                                        <option value="India">India</option>
+                                        <option value="Japan">Japan</option>
+                                        <option value="China">China</option>
+                                        <option value="USA">USA</option>
+                                    </select>
+                                    <p id="country_err" class="err"></p>
+                                </div>
+                                <div class="col col-md-6">
+                                    <label for="state" class="form-label lbl-astrck lbl-style">State</label>
+                                    <select id="state" class="form-select custom-select">
+                                        <option selected=""></option>
+                                        <option value="Kerala">Kerala</option>
+                                        <option value="Tamil Nadu">Tamil Nadu</option>
+                                        <option value="Karnataka">Karnataka</option>
+                                        <option value="Gujarat">Gujarat</option>
+                                    </select>
+                                    <p id="state_err" class="err"></p>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col col-md-6">
+                                    <label for="city" class="form-label lbl-astrck lbl-style">City</label>
+                                    <input type="text" id="city" class="form-control" placeholder="enter city">
+                                    <p id="city_err" class="err"></p>
+                                </div>
+                                <div class="col col-md-6">
+                                    <label for="qualification" class="form-label lbl-astrck lbl-style">Qualification</label>
+                                    <input type="text" id="qualification" class="form-control" placeholder="enter qualification">
+                                    <p id="qualifications_err" class="err"></p>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col col-md-6">
+                                    <label for="username" class="form-label lbl-astrck lbl-style">Username</label>
+                                    <input type="text" id="username" class="form-control" placeholder="Enter username">
+                                    <p id="username_err" class="err"></p>
+                                </div>
+                                <div class="col col-md-6">
+                                    <label for="password" class="form-label lbl-astrck lbl-style">Password</label>
+                                    <input type="password" id="password" class="form-control" placeholder="enter password">
+                                    <p id="password_err" class="err"></p>
+                                </div>
+                            </div>
+                            <div class="row mb-3 gap-3">
+                                <button class="btn btn-primary btn-cncl" type="button">
+                                    cancel
+                                </button>
+                                <button class="btn btn-primary btn-add" type="button">
+                                    Add employee
+                                </button>
+                                <button class="btn btn-primary btn-save-chnge" type="button">
+                                    save changes
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+            
+                </form>
                 <div class="row p-2 m-0 bg-transparent">
                     <footer class="bg-transparent d-flex align-items-center justify-content-between">
                         <h5 class="d-flex align-items-center gap-2">
@@ -212,174 +393,16 @@
 
                 </div>
             </div>
+           
         </div>
-
-    </div>
-    <div class="div delete p-3">
-    </div>
-    <form id="form">
-        <div class="card col-8 brdr-rds-20 py-2 ">
-            <div class="card-header py-0 pt-3">
-
-                <h3 class="card-title h3-style">Add Employee</h3>
-
-            </div>
-            <div class="card-body d-flex flex-column justify-content-start ">
-                <div class="row mb-3 upld-pdng">
-                    <div class="col label_upld">
-                        <label for="file"
-                            class="form-label d-flex flex-column justify-content-center align-items-center px-5 py-3 lbl-brdr ">
-                            <span class="material-symbols-outlined icn-fnt-32 text-clr">
-                                upload_2
-                            </span>
-                            <h5 class="text-clr h5-style">Upload Image</h5>
-                            <h6 class="h6-style">PNG, JPG files are allowed</h6>
-
-                        </label>
-                    </div>
-                    <input type="file" class="form-control d-none" id="file">
-                </div>
-                <div class="row mb-3">
-                   <label for="edit_image">
-                    <img src="" class="edit-image" alt=""  style="height: 100px; width: 100px; border:2px dashed grey">
-                   </label>
-                   <input type="file" id="edit_image">
-                </div>
-                <div class="row mb-3 nme-row">
-                    <div class="sal-width col">
-                        <label for="salutation" class="form-label lbl-style lbl-astrck">Salutation</label>
-                        <select id="salutation" class="form-select  custom-select ">
-                            <option selected=""></option>
-                            <option value="Mr.">Mr.</option>
-                            <option value="Ms.">Ms.</option>
-                            <option value="Mrs.">Mrs.</option>
-                            <option value="Mx.">Mx.</option>
-                        </select>
-                        <p id="salutation_err" class="err"></p>
-                    </div>
-                    <div class="col">
-                        <label for="first_name" class="form-label lbl-style lbl-astrck">First Name</label>
-                        <input type="text" id="first_name" class="form-control" placeholder="john">
-                        <p id="firstName_err" class="err"></p>
-                    </div>
-                    <div class="col">
-                        <label for="last_name" class="form-label lbl-style lbl-astrck">Last Name</label>
-                        <input type="text" id="last_name" class="form-control" placeholder="doe">
-                        <p id="lastName_err" class="err"></p>
-                    </div>
-                </div>
-                <div class="row mb-3">
-                    <div class="col-md-6 col">
-                        <label for="email" class="form-label lbl-style lbl-astrck">Email Address</label>
-                        <input type="email" id="email" class="form-control " placeholder="mail@simmple.com">
-                        <p id="email_err" class="err"></p>
-                    </div>
-                    <div class="col-md-6 col">
-                        <label for="mobile_number" class="form-label lbl-style lbl-astrck">Mobile Number</label>
-                        <input type="tel" id="mobile_number" class="form-control" placeholder="enter mobile number">
-                        <p id="phone_err" class="err"></p>
-                    </div>
-                </div>
-                <div class="row mb-3 nme-row">
-                    <div class="col col-md-6">
-                        <label for="date_of_birth" class="form-label lbl-style lbl-astrck">Date of Birth</label>
-                        <input type="date" id="date_of_birth" aria-label="Date of Birth" class="form-control">
-                        <p id="dob_err" class="err"></p>
-                    </div>
-                    <div class="col col-md-6">
-                        <div class="d-flex flex-column gap-2">
-                            <p class="lbl-astrck lbl-style">
-                                Gender
-                            </p>
-                            <div class="d-flex flex-row gap-3">
-                                <div class="d-flex align-center gap-2">
-                                    <input type="radio" class="form-check-input" value='male' id="male" name="gender">
-                                    <label for="male" class="lbl-style">Male</label>
-                                </div>
-                                <div class="d-flex align-center gap-2">
-                                    <input type="radio" class="form-check-input" value='female' id="female"
-                                        name="gender" checked>
-                                    <label for="female" class="lbl-style">Female</label>
-                                </div>
-                            </div>
-                            <p id="gender_err" class="err"></p>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="row mb-3">
-                    <div class="col">
-                        <label for="address" class="form-label lbl-astrck lbl-style">Address</label>
-                        <input type="text" id="address" placeholder="enter address" class="form-control">
-                        <p id="address_err" class="err"></p>
-                    </div>
-                </div>
-                <div class="row mb-3">
-                    <div class="col col-md-6">
-                        <label for="country" class="form-label lbl-astrck lbl-style">Country</label>
-                        <select id="country" class="form-select custom-select">
-                            <option selected=""></option>
-                            <option value="India">India</option>
-                            <option value="Japan">Japan</option>
-                            <option value="China">China</option>
-                            <option value="USA">USA</option>
-                        </select>
-                        <p id="country_err" class="err"></p>
-                    </div>
-                    <div class="col col-md-6">
-                        <label for="state" class="form-label lbl-astrck lbl-style">State</label>
-                        <select id="state" class="form-select custom-select">
-                            <option selected=""></option>
-                            <option value="Kerala">Kerala</option>
-                            <option value="Tamil Nadu">Tamil Nadu</option>
-                            <option value="Karnataka">Karnataka</option>
-                            <option value="Gujarat">Gujarat</option>
-                        </select>
-                        <p id="state_err" class="err"></p>
-                    </div>
-                </div>
-                <div class="row mb-3">
-                    <div class="col col-md-6">
-                        <label for="city" class="form-label lbl-astrck lbl-style">City</label>
-                        <input type="text" id="city" class="form-control" placeholder="enter city">
-                        <p id="city_err" class="err"></p>
-                    </div>
-                    <div class="col col-md-6">
-                        <label for="qualification" class="form-label lbl-astrck lbl-style">Qualification</label>
-                        <input type="text" id="qualification" class="form-control" placeholder="enter qualification">
-                        <p id="qualifications_err" class="err"></p>
-                    </div>
-                </div>
-                <div class="row mb-3">
-                    <div class="col col-md-6">
-                        <label for="username" class="form-label lbl-astrck lbl-style">Username</label>
-                        <input type="text" id="username" class="form-control" placeholder="Enter username">
-                        <p id="username_err" class="err"></p>
-                    </div>
-                    <div class="col col-md-6">
-                        <label for="password" class="form-label lbl-astrck lbl-style">Password</label>
-                        <input type="password" id="password" class="form-control" placeholder="enter password">
-                        <p id="password_err" class="err"></p>
-                    </div>
-                </div>
-                <div class="row mb-3 gap-3">
-                    <button class="btn btn-primary btn-cncl" type="button">
-                        cancel
-                    </button>
-                    <button class="btn btn-primary btn-add" type="button">
-                        Add employee
-                    </button>
-                    <button class="btn btn-primary btn-save-chnge" type="button">
-                        save changes
-                    </button>
-                </div>
-            </div>
+        <div class="div delete p-3">
         </div>
-
-    </form>
-    <div class="loader">
-
+       
+        <div class="loader">
+    
+        </div>
     </div>
+   
 
 
     <script src="./js/index.js"></script>

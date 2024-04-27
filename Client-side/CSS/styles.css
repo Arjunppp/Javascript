@@ -383,3 +383,9 @@ ul
 {
     display: none;
 }
+
+.button_page
+{
+    background-color: #2B3674;
+    color: #fff;
+}

@@ -2,15 +2,12 @@
 let server_url = 'http://localhost:3000/employees';
 
 //Function to add event listner to add EMployee button
+//It also enable the form section.
 async function addingEmployee() {
     document.getElementById('add_employee').addEventListener('click', async () => {
         document.getElementsByClassName('card')[0].style.display = 'block';
         document.getElementsByClassName("btn-add")[0].style.display = 'block';
         document.getElementsByClassName('btn-save-chnge')[0].style.display = 'none';
-        await form_submission(0, 0, 'POST');
-
-
-
 
 
     });
@@ -18,10 +15,10 @@ async function addingEmployee() {
 }
 
 
-// submiting form
-async function form_submission(a, value, http_method) {
+// submiting form defenition
+async function form_submission(option, value, http_method) {
 
-    if (a === 0) {
+    if (option == 'Add') {
         document.getElementsByClassName('btn-save-chnge')[0].type = 'button';
         document.getElementsByClassName('btn-add')[0].type = 'submit';
         document.getElementById('form').addEventListener('submit', async (event) => {
@@ -49,7 +46,7 @@ async function form_submission(a, value, http_method) {
             };
 
 
-            console.log(value);
+
             let validate_result = await validate_form(value);
             if (validate_result[1] == 1) {
                 event.preventDefault();
@@ -406,161 +403,161 @@ async function form_submission(a, value, http_method) {
 
 }
 
-async function validate_form(value) {
-    let error_data = {
-        address: '',
-        city: '',
-        country: '',
-        dob: '',
-        email: '',
-        firstName: '',
-        gender: '',
-        lastName: '',
-        password: '',
-        phone: '',
-        qualifications: '',
-        salutation: '',
-        state: '',
-        username: ''
-    };
-    let err_flg = 0;
-    let form_data = value;
-    console.log(form_data);
-    for (let eachdata in form_data) //eachdata represents key
-    {
+// async function validate_form(value) {
+//     let error_data = {
+//         address: '',
+//         city: '',
+//         country: '',
+//         dob: '',
+//         email: '',
+//         firstName: '',
+//         gender: '',
+//         lastName: '',
+//         password: '',
+//         phone: '',
+//         qualifications: '',
+//         salutation: '',
+//         state: '',
+//         username: ''
+//     };
+//     let err_flg = 0;
+//     let form_data = value;
+//     console.log(form_data);
+//     for (let eachdata in form_data) //eachdata represents key
+//     {
 
-        if (eachdata == 'address') {
-            if (form_data[eachdata] == '') {
-                err_flg = 1;
-                error_data[eachdata] = 'Enetr address';
+//         if (eachdata == 'address') {
+//             if (form_data[eachdata] == '') {
+//                 err_flg = 1;
+//                 error_data[eachdata] = 'Enetr address';
 
-            }
+//             }
 
-        }
-        if (eachdata == 'city') {
-            if (form_data[eachdata] == '') {
-                err_flg = 1;
-                error_data[eachdata] = 'Enetr city';
+//         }
+//         if (eachdata == 'city') {
+//             if (form_data[eachdata] == '') {
+//                 err_flg = 1;
+//                 error_data[eachdata] = 'Enetr city';
 
-            }
+//             }
 
-        }
-        if (eachdata == 'country') {
-            if (form_data[eachdata] == '') {
-                err_flg = 1;
-                error_data[eachdata] = 'Enetr country';
+//         }
+//         if (eachdata == 'country') {
+//             if (form_data[eachdata] == '') {
+//                 err_flg = 1;
+//                 error_data[eachdata] = 'Enetr country';
 
-            }
+//             }
 
-        }
-        if (eachdata == 'dob') {
-            if (form_data[eachdata] == '--' || form_data[eachdata] == '') {
-                err_flg = 1;
-                error_data[eachdata] = 'Enetr dob';
+//         }
+//         if (eachdata == 'dob') {
+//             if (form_data[eachdata] == '--' || form_data[eachdata] == '') {
+//                 err_flg = 1;
+//                 error_data[eachdata] = 'Enetr dob';
 
-            }
+//             }
 
-        }
-        if (eachdata === 'email') {
-            let emailRegex = /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/;
-            if (form_data[eachdata] == '') {
-                err_flg = 1;
-                error_data[eachdata] = 'Enetr email';
-
-
-            }
-            else if (!emailRegex.test(form_data[eachdata])) {
-
-                err_flg = 1;
-                error_data[eachdata] = 'Enetr valid email';
-            }
+//         }
+//         if (eachdata === 'email') {
+//             let emailRegex = /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/;
+//             if (form_data[eachdata] == '') {
+//                 err_flg = 1;
+//                 error_data[eachdata] = 'Enetr email';
 
 
-        }
-        if (eachdata == 'firstName') {
-            if (form_data[eachdata] == '') {
-                err_flg = 1;
-                error_data[eachdata] = 'Enetr firstName';
+//             }
+//             else if (!emailRegex.test(form_data[eachdata])) {
 
-            }
-
-        }
-        if (eachdata == 'gender') {
-            if (form_data[eachdata] == '') {
-                err_flg = 1;
-                error_data[eachdata] = 'Enetr gender';
-
-            }
-
-        }
-        if (eachdata == 'lastName') {
-            if (form_data[eachdata] == '') {
-                err_flg = 1;
-                error_data[eachdata] = 'Enetr lastName';
-
-            }
-
-        }
-        if (eachdata == 'password') {
-            if (form_data[eachdata] == '') {
-                err_flg = 1;
-                error_data[eachdata] = 'Enetr password';
-
-            }
-
-        }
-        if (eachdata == 'phone') {
-            let mob_regex = /\d{10}/;
-            if (form_data[eachdata] == '') {
-                err_flg = 1;
-                error_data[eachdata] = 'Enetr phone';
-
-            }
-            else if (!mob_regex.test(form_data[eachdata])) {
-                err_flg = 1;
-                error_data[eachdata] = 'Enter valid phone number';
-            }
-
-        }
-        if (eachdata == 'qualifications') {
-            if (form_data[eachdata] == '') {
-                err_flg = 1;
-                error_data[eachdata] = 'Enetr qualifications';
-
-            }
-
-        }
-        if (eachdata == 'salutation') {
-            if (form_data[eachdata] == '') {
-                err_flg = 1;
-                error_data[eachdata] = 'Enetr salutation';
-
-            }
-
-        }
-        if (eachdata == 'state') {
-            if (form_data[eachdata] == '') {
-                err_flg = 1;
-                error_data[eachdata] = 'Enetr state';
-
-            }
-
-        }
-        if (eachdata == 'username') {
-            if (form_data[eachdata] == '') {
-                err_flg = 1;
-                error_data[eachdata] = 'Enetr username';
-
-            }
-
-        }
+//                 err_flg = 1;
+//                 error_data[eachdata] = 'Enetr valid email';
+//             }
 
 
+//         }
+//         if (eachdata == 'firstName') {
+//             if (form_data[eachdata] == '') {
+//                 err_flg = 1;
+//                 error_data[eachdata] = 'Enetr firstName';
 
-    };
-    return [error_data, err_flg];
+//             }
 
-}
+//         }
+//         if (eachdata == 'gender') {
+//             if (form_data[eachdata] == '') {
+//                 err_flg = 1;
+//                 error_data[eachdata] = 'Enetr gender';
+
+//             }
+
+//         }
+//         if (eachdata == 'lastName') {
+//             if (form_data[eachdata] == '') {
+//                 err_flg = 1;
+//                 error_data[eachdata] = 'Enetr lastName';
+
+//             }
+
+//         }
+//         if (eachdata == 'password') {
+//             if (form_data[eachdata] == '') {
+//                 err_flg = 1;
+//                 error_data[eachdata] = 'Enetr password';
+
+//             }
+
+//         }
+//         if (eachdata == 'phone') {
+//             let mob_regex = /\d{10}/;
+//             if (form_data[eachdata] == '') {
+//                 err_flg = 1;
+//                 error_data[eachdata] = 'Enetr phone';
+
+//             }
+//             else if (!mob_regex.test(form_data[eachdata])) {
+//                 err_flg = 1;
+//                 error_data[eachdata] = 'Enter valid phone number';
+//             }
+
+//         }
+//         if (eachdata == 'qualifications') {
+//             if (form_data[eachdata] == '') {
+//                 err_flg = 1;
+//                 error_data[eachdata] = 'Enetr qualifications';
+
+//             }
+
+//         }
+//         if (eachdata == 'salutation') {
+//             if (form_data[eachdata] == '') {
+//                 err_flg = 1;
+//                 error_data[eachdata] = 'Enetr salutation';
+
+//             }
+
+//         }
+//         if (eachdata == 'state') {
+//             if (form_data[eachdata] == '') {
+//                 err_flg = 1;
+//                 error_data[eachdata] = 'Enetr state';
+
+//             }
+
+//         }
+//         if (eachdata == 'username') {
+//             if (form_data[eachdata] == '') {
+//                 err_flg = 1;
+//                 error_data[eachdata] = 'Enetr username';
+
+//             }
+
+//         }
+
+
+
+//     };
+//     return [error_data, err_flg];
+
+// }
 
 
 
@@ -575,6 +572,8 @@ function cancelAdding() {
 
 async function addEmployee() {
     await addingEmployee();
+    // calling add employee function
+    form_submission('Add', 0, 'POST');
     cancelAdding();
 
 }
@@ -608,7 +607,8 @@ async function fetch_image(id) {
     return image
 }
 //populate each user data in each row of the table
-async function populateData() {
+/*   
+ async function populateData() {
     let users = await fetchUser('all');
 
     let eachrows = '';
@@ -647,88 +647,131 @@ async function populateData() {
            </tr>`;
     });
     document.getElementById("table-body").innerHTML = eachrows;
-}
+}   
+   */
+
+//pagenation ---data
 
 
-///pagenation seting
 
 
+
+document.getElementById('employee-row').addEventListener('click', (event) => {
+
+    state.rows = parseInt(event.target.value);
+
+    state.page = 1;
+
+    displayPagination();
+});
+
+
+let state = {
+    page: 1,
+    rows: 7,
+};
+
+document.getElementById('employee-row').value = state.rows;
 async function PageNationsetUp() {
     let users = await fetchUser('all');
 
-    let state ={
-       
-        'page' :3,
-        'rows' :1
+    function pagination(queryset, page, rows) {
+
+        const trimStart = (page - 1) * rows;
+        const trimEnd = trimStart + rows;
+
+        const trimData = queryset.slice(trimStart, trimEnd);
+
+        const pages = Math.ceil(queryset.length / rows);
+        return {
+            queryset: trimData,
+            pages: pages
+        };
     }
 
-    function pagenation(queryset , page ,rows)
-    {
-        var trimstart = (page-1)*rows;
-        var trimend = trimstart + rows;
-        var trimdata = queryset.slice(trimstart ,trimend);
-        var pages = Math.ceil((queryset.length)/rows);
-        return{
-            'queryset':trimdata,
-            'pages':pages
-        }
-    }
-    
-    return pagenation(users , state.page , state.rows);
-   
-    
-    
+    return pagination(users, state.page, state.rows);
 }
 
-async function displaypagnation()
-{
-    let a = await PageNationsetUp();
-    let b = a.queryset;
-    let eachrows = '';
-    let count = 1;
-    let c = b.map((user) =>
-    {
-        eachrows += `<tr scope='row'>
-            
-        <td scope='col' class='fw-bold' >#0${count++}</td>
-        <td scope='col' class='fw-bold' >
-        <span> 
-        <img src=${server_url + '/' + user.avatar.split('.')[0] + '/avatar'} class='side_images'></span>
-        ${user.firstName}
-        </td>
-        <td scope='col' class='fw-bold' >${user.email}</td>
-        <td scope='col' class='fw-bold' >${user.phone}</td>
-        <td scope='col' class='fw-bold' >${user.gender}</td>
-        <td scope='col' class='fw-bold' >${user.dob}</td>
-        <td scope='col' class='fw-bold' >${user.country}</td>
-        <td scope='col' class="edit"><span class="material-symbols-outlined select-dots">
-        more_horiz
-        </span>
-        <ul class='edit-details'>
-           <li class='d-flex '><span class="material-symbols-outlined">
-           visibility
-           </span><button class='view_btn' value="${user.id}">View Details</button></li>
-           <li class='d-flex '><span class="material-symbols-outlined">
-           edit
-           </span><button class='edit_btn' value="${user.id}">Edit</button></li>
-           <li class='d-flex '><span class="material-symbols-outlined">
-           delete
-           </span><button class='dlte_btn' value="${user.id}">Delete</button></li>
-        </ul 
-          </td>
-   
-      </tr>`;
 
-      return eachrows;
+async function pageButton(pages) {
+    const buttonDiv = document.getElementById('page-button-wrapper');
+    let buttonHtml = '';
 
+
+    for (let page = 1; page <= pages; page++) {
+        buttonHtml += `<button value="${page}" class='btn button_page'>${page}</button>`;
+    }
+
+
+    buttonDiv.innerHTML = buttonHtml;
+
+    const pageButtons = document.getElementsByClassName('button_page');
+    Array.from(pageButtons).forEach((eachBtn) => {
+        eachBtn.addEventListener('click', () => {
+
+            state.page = parseInt(eachBtn.value, 10);
+
+            displayPagination();
+        });
     });
-    
-   let d = c.join(',');
-   console.log(d);  
-
 }
 
-displaypagnation();
+
+async function displayPagination() {
+
+    const a = await PageNationsetUp();
+    const b = a.queryset;
+
+
+    let eachRows = '';
+    let count = 1;
+    b.forEach((user) => {
+
+        eachRows += `<tr scope='row'>
+            <td scope='col' class='fw-bold'>#0${count++}</td>
+            <td scope='col' class='fw-bold'>
+                <span>
+                    <img src=${server_url + '/' + user.avatar.split('.')[0] + '/avatar'} class='side_images'>
+                </span>
+                ${user.firstName}
+            </td>
+            <td scope='col' class='fw-bold'>${user.email}</td>
+            <td scope='col' class='fw-bold'>${user.phone}</td>
+            <td scope='col' class='fw-bold'>${user.gender}</td>
+            <td scope='col' class='fw-bold'>${user.dob}</td>
+            <td scope='col' class='fw-bold'>${user.country}</td>
+            <td scope='col' class='edit'>
+                <span class='material-symbols-outlined select-dots'>
+                    more_horiz
+                </span>
+                <ul class='edit-details'>
+                    <li class='d-flex'>
+                        <span class='material-symbols-outlined'>visibility</span>
+                        <button class='view_btn' value="${user.id}">View Details</button>
+                    </li>
+                    <li class='d-flex'>
+                        <span class='material-symbols-outlined'>edit</span>
+                        <button class='edit_btn' value="${user.id}">Edit</button>
+                    </li>
+                    <li class='d-flex'>
+                        <span class='material-symbols-outlined'>delete</span>
+                        <button class='delete_btn' value="${user.id}">Delete</button>
+                    </li>
+                </ul>
+            </td>
+        </tr>`;
+    });
+
+
+    document.getElementById("table-body").innerHTML = eachRows;
+
+
+    pageButton(a.pages);
+}
+
+
+displayPagination();
+
 
 
 
@@ -736,10 +779,13 @@ displaypagnation();
 
 
 //Adding Click events to each of the user
-function addCLickEvent() {
-
+async function addCLickEvent() {
+    console.log(1);
     let selectDotsElements = document.getElementsByClassName('select-dots');
+
     Array.from(selectDotsElements).forEach((each_dot, index) => {
+
+
 
         each_dot.addEventListener('click', () => {
             if (document.getElementsByClassName('edit-details')[index].style.display === 'flex') {
@@ -804,13 +850,15 @@ function editemployees() {
         }
 
         if (btn.className === 'edit_btn') {
+
             btn.addEventListener('click', async () => {
                 await form_submission(1, btn.value, 'PUT');
 
 
             });
         }
-        if (btn.className === 'dlte_btn') {
+        if (btn.className == 'delete_btn') {
+            console.log('a');
 
             btn.addEventListener('click', () => {
                 console.log('haiii');
@@ -862,23 +910,21 @@ function editemployees() {
 
 async function search_user() {
     let users = await fetchUser('all');
-   
-    
+
+
     let search_value = document.getElementById('sub-search');
     search_value.addEventListener('keypress', function (e) {
         if (e.key === 'Enter') {
-          let search_result = users.filter((user) => 
-        {
-           if((user.firstName).toLowerCase() === (search_value.value).toLowerCase())
-           {
-            return user;
-           }
-        });
-        let eachrows = '';
-        let count = 1;
-        search_result.map(async (user) => {
-           
-            eachrows += `<tr scope='row'>
+            let search_result = users.filter((user) => {
+                if ((user.firstName).toLowerCase() === (search_value.value).toLowerCase()) {
+                    return user;
+                }
+            });
+            let eachrows = '';
+            let count = 1;
+            search_result.map(async (user) => {
+
+                eachrows += `<tr scope='row'>
                 
                  <td scope='col' class='fw-bold' >#0${count++}</td>
                  <td scope='col' class='fw-bold' >
@@ -908,19 +954,20 @@ async function search_user() {
                    </td>
             
                </tr>`;
-        });
-        document.getElementById("table-body").innerHTML = eachrows;
-       
-        
+            });
+            document.getElementById("table-body").innerHTML = eachrows;
+
+
         }
-        
+
     });
-    
+
 }
 
 //calling the above functions in order
 async function employeeFunction() {
-    await populateData();
+    await displayPagination();
+
     addCLickEvent();
     editemployees();
     search_user();
@@ -957,6 +1004,14 @@ document.getElementById('edit_image').addEventListener('change', () => {
 
 );
 
+
+//to change the src of add employeee form
+
+document.getElementById('file').addEventListener('change', () => {
+    let file = document.getElementById('file').files[0];
+    console.log(file);
+    document.getElementsByClassName('edit-image')[0].src = URL.createObjectURL(file);
+})
 
 
 
