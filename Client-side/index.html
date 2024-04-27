@@ -75,7 +75,7 @@
                     <h4 class="m-0">Powered by</h4>
                     <img class="m-0" src="image/logo.png" alt="">
                 </div>
-               
+
             </div>
             <div class="col-9 p-0 main-page">
                 <div class="row p-3 m-0">
@@ -111,7 +111,7 @@
                             </div>
                             <div class="row p-3 m-0 d-flex">
                                 <label for="employee-row">Employee List</label>
-                                <select name="Employee List" id="employee-row"   class="form-select">
+                                <select name="Employee List" id="employee-row" class="form-select">
                                     <option value="1">1</option>
                                     <option value="2">2</option>
                                     <option value="3">3</option>
@@ -120,7 +120,7 @@
                                     <option value="6">6</option>
                                     <option value="7">7</option>
                                     <option value="8">8</option>
-                                  </select>
+                                </select>
                             </div>
                             <table class="table">
                                 <thead>
@@ -203,16 +203,16 @@
 
 
                 </div>
-                 <form id="form">
+                <form id="form">
                     <div class="card col-8 brdr-rds-20 py-2 ">
                         <div class="card-header py-0 pt-3">
-            
+
                             <h3 class="card-title h3-style">Add Employee</h3>
-            
+
                         </div>
                         <div class="card-body d-flex flex-column justify-content-start ">
-                            <div class="row mb-3 upld-pdng ">
-                                <div class="row mb-3">
+                            <div class="row mb-3 upld-pdng align-items-center">
+                                <div class="col edit edit_image_div">
                                     <label for="edit_image">
                                         <img src="" class="edit-image" alt=""
                                             style="height: 100px; width: 100px; border:2px dashed grey">
@@ -227,12 +227,12 @@
                                         </span>
                                         <h5 class="text-clr h5-style">Upload Image</h5>
                                         <h6 class="h6-style">PNG, JPG files are allowed</h6>
-            
+
                                     </label>
                                 </div>
                                 <input type="file" class="form-control d-none" id="file">
                             </div>
-                          
+
                             <div class="row mb-3 nme-row">
                                 <div class="sal-width col">
                                     <label for="salutation" class="form-label lbl-style lbl-astrck">Salutation</label>
@@ -248,12 +248,12 @@
                                 <div class="col">
                                     <label for="first_name" class="form-label lbl-style lbl-astrck">First Name</label>
                                     <input type="text" id="first_name" class="form-control" placeholder="john">
-                                    <p id="firstName_err" class="err"></p>
+                                    <p id="first_err" class="err"></p>
                                 </div>
                                 <div class="col">
                                     <label for="last_name" class="form-label lbl-style lbl-astrck">Last Name</label>
                                     <input type="text" id="last_name" class="form-control" placeholder="doe">
-                                    <p id="lastName_err" class="err"></p>
+                                    <p id="last_err" class="err"></p>
                                 </div>
                             </div>
                             <div class="row mb-3">
@@ -263,16 +263,20 @@
                                     <p id="email_err" class="err"></p>
                                 </div>
                                 <div class="col-md-6 col">
-                                    <label for="mobile_number" class="form-label lbl-style lbl-astrck">Mobile Number</label>
-                                    <input type="tel" id="mobile_number" class="form-control" placeholder="enter mobile number">
+                                    <label for="mobile_number" class="form-label lbl-style lbl-astrck">Mobile
+                                        Number</label>
+                                    <input type="tel" id="mobile_number" class="form-control"
+                                        placeholder="enter mobile number">
                                     <p id="phone_err" class="err"></p>
                                 </div>
                             </div>
                             <div class="row mb-3 nme-row">
                                 <div class="col col-md-6">
-                                    <label for="date_of_birth" class="form-label lbl-style lbl-astrck">Date of Birth</label>
-                                    <input type="date" id="date_of_birth" aria-label="Date of Birth" class="form-control">
-                                    <p id="dob_err" class="err"></p>
+                                    <label for="date_of_birth" class="form-label lbl-style lbl-astrck">Date of
+                                        Birth</label>
+                                    <input type="date" id="date_of_birth" aria-label="Date of Birth"
+                                        class="form-control">
+                                    <p id="date_err" class="err"></p>
                                 </div>
                                 <div class="col col-md-6">
                                     <div class="d-flex flex-column gap-2">
@@ -281,7 +285,8 @@
                                         </p>
                                         <div class="d-flex flex-row gap-3">
                                             <div class="d-flex align-center gap-2">
-                                                <input type="radio" class="form-check-input" value='male' id="male" name="gender">
+                                                <input type="radio" class="form-check-input" value='male' id="male"
+                                                    name="gender">
                                                 <label for="male" class="lbl-style">Male</label>
                                             </div>
                                             <div class="d-flex align-center gap-2">
@@ -293,7 +298,7 @@
                                         <p id="gender_err" class="err"></p>
                                     </div>
                                 </div>
-            
+
                             </div>
                             <div class="row mb-3">
                                 <div class="col">
@@ -333,8 +338,10 @@
                                     <p id="city_err" class="err"></p>
                                 </div>
                                 <div class="col col-md-6">
-                                    <label for="qualification" class="form-label lbl-astrck lbl-style">Qualification</label>
-                                    <input type="text" id="qualification" class="form-control" placeholder="enter qualification">
+                                    <label for="qualification"
+                                        class="form-label lbl-astrck lbl-style">Qualification</label>
+                                    <input type="text" id="qualification" class="form-control"
+                                        placeholder="enter qualification">
                                     <p id="qualifications_err" class="err"></p>
                                 </div>
                             </div>
@@ -346,7 +353,8 @@
                                 </div>
                                 <div class="col col-md-6">
                                     <label for="password" class="form-label lbl-astrck lbl-style">Password</label>
-                                    <input type="password" id="password" class="form-control" placeholder="enter password">
+                                    <input type="password" id="password" class="form-control"
+                                        placeholder="enter password">
                                     <p id="password_err" class="err"></p>
                                 </div>
                             </div>
@@ -363,7 +371,7 @@
                             </div>
                         </div>
                     </div>
-            
+
                 </form>
                 <div class="row p-2 m-0 bg-transparent">
                     <footer class="bg-transparent d-flex align-items-center justify-content-between">
@@ -393,16 +401,19 @@
 
                 </div>
             </div>
-           
+
         </div>
         <div class="div delete p-3">
         </div>
-       
+        <div class="add-emp-cnfrmation flex-column gap-3">
+            <h5>Employee Created sucessfully</h5>
+            <div class="btn btn-sm btn-primary employee-add-btn">OKay</div>
+        </div>
+
         <div class="loader">
-    
         </div>
     </div>
-   
+
 
 
     <script src="./js/index.js"></script>
