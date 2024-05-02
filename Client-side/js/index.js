@@ -76,7 +76,7 @@ async function displayPagination() {
     let count = 1;
     b.forEach((user) => {
         if (user.hasOwnProperty('avatar')) {
-            console.log(user.avatar);
+
             eachRows += `<tr scope='row'>
                 <td scope='col' class='fw-bold'>#0${count++}</td>
                 <td scope='col'  class='fw-bold d-flex align-items-center justify-content-between'>
@@ -170,10 +170,10 @@ displayPagination();
 async function addingEmployee() {
     document.getElementById('add_employee').addEventListener('click', async () => {
         document.getElementsByClassName('card')[0].style.display = 'block';
-        document.getElementsByClassName("btn-add")[0].style.display = 'block';
-        document.getElementsByClassName('btn-save-chnge')[0].style.display = 'none';
-
-
+        document.getElementsByClassName('btn-add')[0].innerHTML = 'Add EMployee';
+        // calling add employee function
+        await form_submission('Add', 0, 'POST');
+        cancelAdding();
     });
 
 }
@@ -183,114 +183,33 @@ async function addingEmployee() {
 async function form_submission(option, value, http_method) {
 
     if (option == 'Add') {
-        document.getElementsByClassName('btn-save-chnge')[0].type = 'button';
-        document.getElementsByClassName('btn-add')[0].type = 'submit';
-        document.getElementById('form').addEventListener('submit', async (event) => {
-            event.preventDefault();
-            let dob = document.getElementById('date_of_birth').value;
-            let crctdDob = dob.slice(8, 10) + '-' + dob.slice(5, 7) + '-' + dob.slice(0, 4);
-            let value = {
 
-                "salutation": `${document.getElementById('salutation').value}`,
-                "firstName": `${document.getElementById('first_name').value}`,
-                "lastName": `${document.getElementById('last_name').value}`,
-                "email": `${document.getElementById('email').value}`,
-                "phone": `${document.getElementById('mobile_number').value}`,
-                "dob": crctdDob,
-                "gender": `${document.querySelector('input[name="gender"]:checked').value}`,
-                "qualifications": `${document.getElementById('salutation').value}`,
-                "address": `${document.getElementById('address').value}`,
-                "city": `${document.getElementById('city').value}`,
-                "state": `${document.getElementById('state').value}`,
-                "country": `${document.getElementById('country').value}`,
-                "username": `${document.getElementById('username').value}`,
-                "password": `${document.getElementById('password').value}`
-
-            };
-
-            let respose = await fetch(server_url, {
-                method: `${http_method}`, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(value)
-            })
-
-            let data = await respose.json();
-            let image = document.getElementById('file').files[0];
-            let image_object = new FormData();
-            image_object.append('avatar', image);
+        var function_option = option;
+        var method = http_method;
+        var button_value = value;
+        var URL = server_url;
 
 
-            fetch(`${server_url}/${data.id}/avatar`, { method: 'POST', body: image_object, }).then((response) => {
-
-                if (!response.ok) {
-                    throw new Error('Check the URL please');
-                }
-                else {
-                    return response.json();
-                }
-
-            }).then((data) => {
-
-                return data;
-            });
-
-            for (let eachdata in data) {
-                if (eachdata == 'errors') {
-                    let errors = data[eachdata];
-                    let All_error = document.getElementsByClassName('err');
-                    //Not giving any data if there is no error
-                    for (let each of All_error) {
-                        each.innerHTML = '';
-                    }
-                    //displaying errors if there is error
-                    for (let eacherror of errors) {
-                        let lower_err = eacherror.split(' ')[0].toLowerCase();
-                        console.log(lower_err);
-                        if (lower_err != 'invalid') {
-                            document.getElementById(`${lower_err}` + '_err').innerText = eacherror;
-                        }
-                        if (lower_err === 'invalid') {
-                            let lower_err = eacherror.split(' ')[1].toLowerCase();
-                            document.getElementById(`${lower_err}` + '_err').innerText = eacherror;
-                        }
-                    }
-
-                }
-                else {
-
-                    document.getElementsByClassName('card')[0].style.display = 'none';
-                    document.querySelector('.add-emp-cnfrmation h5').innerText = data['message'];
-                    document.getElementsByClassName('add-emp-cnfrmation')[0].style.display = 'flex';
-                    document.getElementsByClassName('employee-add-btn')[0].addEventListener('click', () => {
-                        document.getElementsByClassName('add-emp-cnfrmation')[0].style.display = 'none';
-                        displayPagination();
-
-                    })
-
-                }
-            }
-
-
-
-
-
-
-        });
 
     }
     else {
+        image = document.getElementById('edit_image').files[0];
 
+        function_option = option;
+        method = http_method;
+        button_value = value;
+        URL = server_url + '/' + value;
         let data = await fetchUser(value);
-
         let date = data.dob.split('-').reverse().join('-');
         document.getElementsByClassName('card')[0].style.display = 'block';
         document.getElementsByClassName("label_upld")[0].style.display = 'none';
-        document.getElementsByClassName("btn-add")[0].style.display = 'none';
-        document.getElementsByClassName("btn-save-chnge")[0].style.display = 'block';
+
 
 
         if (data.gender == 'male') {
             document.getElementById('male').checked = true;
         }
-        document.getElementsByClassName('edit-image')[0].src = `${server_url + '/' + value + '/avatar'}`
+        document.getElementsByClassName('edit-image')[0].src = `${URL + '/avatar'}`;
         document.getElementById('salutation').value = data.salutation;
         document.getElementById('first_name').value = data.firstName;
         document.getElementById('last_name').value = data.lastName;
@@ -303,269 +222,110 @@ async function form_submission(option, value, http_method) {
         document.getElementById('city').value = data.city;
         document.getElementById('username').value = data.username;
         document.getElementById('password').value = data.password;
-        document.getElementsByClassName('btn-save-chnge')[0].type = 'submit';
-        document.getElementsByClassName('btn-add')[0].type = 'button';
+    }
+
+    document.getElementById('form').addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        let dob = document.getElementById('date_of_birth').value;
+        let crctdDob = dob.slice(8, 10) + '-' + dob.slice(5, 7) + '-' + dob.slice(0, 4);
+        let value = {
+
+            "salutation": `${document.getElementById('salutation').value}`,
+            "firstName": `${document.getElementById('first_name').value}`,
+            "lastName": `${document.getElementById('last_name').value}`,
+            "email": `${document.getElementById('email').value}`,
+            "phone": `${document.getElementById('mobile_number').value}`,
+            "dob": crctdDob,
+            "gender": `${document.querySelector('input[name="gender"]:checked').value}`,
+            "qualifications": `${document.getElementById('salutation').value}`,
+            "address": `${document.getElementById('address').value}`,
+            "city": `${document.getElementById('city').value}`,
+            "state": `${document.getElementById('state').value}`,
+            "country": `${document.getElementById('country').value}`,
+            "username": `${document.getElementById('username').value}`,
+            "password": `${document.getElementById('password').value}`
+
+        };
 
 
-
-        document.getElementById('form').addEventListener('submit', async (event) => {
-            let dob = document.getElementById('date_of_birth').value;
-            let crctdDob = dob.slice(8, 10) + '-' + dob.slice(5, 7) + '-' + dob.slice(0, 4);
-            let from_data = {
-                "salutation": `${document.getElementById('salutation').value}`,
-                "firstName": `${document.getElementById('first_name').value}`,
-                "lastName": `${document.getElementById('last_name').value}`,
-                "email": `${document.getElementById('email').value}`,
-                "phone": `${document.getElementById('mobile_number').value}`,
-                "dob": crctdDob,
-                "gender": `${document.querySelector('input[name="gender"]:checked').id}`,
-                "qualifications": `${document.getElementById('salutation').value}`,
-                "address": `${document.getElementById('address').value}`,
-                "city": `${document.getElementById('city').value}`,
-                "state": `${document.getElementById('state').value}`,
-                "country": `${document.getElementById('country').value}`,
-                "username": `${document.getElementById('username').value}`,
-                "password": `${document.getElementById('password').value}`
-
-            };
-            event.preventDefault();
-
-            let response = await fetch(server_url + '/' + value, {
-                method: `${http_method}`, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(from_data)
-            });
-            let data = await response.json();
-
-            let image = document.getElementById('edit_image').files[0];
-            if (image) {
-                let image_object = new FormData();
-                image_object.append('avatar', image);
-                console.log(server_url + '/' + value + '/avatar');
-
-                fetch(`${server_url}/${value}/avatar`, { method: 'POST', body: image_object, }).then((response) => {
-
-                    if (!response.ok) {
-                        throw new Error('Check the URL please');
+        let response = await fetch(URL, {
+            method: `${method}`, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(value)
+        });
+        let data = await response.json();
+        console.log(data);
+        for (let eachdata in data) {
+            if (eachdata == 'errors') {
+                let errors = data[eachdata];
+                let All_error = document.getElementsByClassName('err');
+                //Not giving any data if there is no error
+                for (let each of All_error) {
+                    each.innerHTML = '';
+                }
+                //displaying errors if there is error
+                for (let eacherror of errors) {
+                    let lower_err = eacherror.split(' ')[0].toLowerCase();
+                    console.log(lower_err);
+                    if (lower_err != 'invalid') {
+                        document.getElementById(`${lower_err}` + '_err').innerText = eacherror;
                     }
-                    else {
-                        return response.json();
+                    if (lower_err === 'invalid') {
+                        let lower_err = eacherror.split(' ')[1].toLowerCase();
+                        document.getElementById(`${lower_err}` + '_err').innerText = eacherror;
                     }
-
-
-
-
-
-
-
-                }).then((data) => {
-                    return data;
-                });
+                }
 
             }
+            else {
 
-            for (let eachdata in data) {
-                if (eachdata == 'errors') {
-                    let errors = data[eachdata];
-                    let All_error = document.getElementsByClassName('err');
-                    //Not giving any data if there is no error
-                    for (let each of All_error) {
-                        each.innerHTML = '';
-                    }
-                    //displaying errors if there is error
-                    for (let eacherror of errors) {
-                        let lower_err = eacherror.split(' ')[0].toLowerCase();
-                        console.log(lower_err);
-                        if (lower_err != 'invalid') {
-                            document.getElementById(`${lower_err}` + '_err').innerText = eacherror;
-                        }
-                        if (lower_err === 'invalid') {
-                            let lower_err = eacherror.split(' ')[1].toLowerCase();
-                            document.getElementById(`${lower_err}` + '_err').innerText = eacherror;
-                        }
-                    }
+                document.getElementsByClassName('card')[0].style.display = 'none';
+                document.querySelector('.add-emp-cnfrmation h5').innerText = data['message'];
+                document.getElementsByClassName('add-emp-cnfrmation')[0].style.display = 'flex';
+                document.getElementsByClassName('employee-add-btn')[0].addEventListener('click', () => {
+                    document.getElementsByClassName('add-emp-cnfrmation')[0].style.display = 'none';
+                    displayPagination();
 
-                }
-                else {
+                })
 
-                    document.getElementsByClassName('card')[0].style.display = 'none';
-                    document.querySelector('.add-emp-cnfrmation h5').innerText = data['message'];
-                    document.getElementsByClassName('add-emp-cnfrmation')[0].style.display = 'flex';
-                    document.getElementsByClassName('employee-add-btn')[0].addEventListener('click', () => {
-                        document.getElementsByClassName('add-emp-cnfrmation')[0].style.display = 'none';
-                        displayPagination();
+            }
+        }
 
-                    })
+        let image = '';
+        let img_url = '';
+        if (option === 'Add') {
+            image = await document.getElementById('file').files[0];
+            img_url = `${server_url}/${data.id}/avatar`;
+        }
+        else {
+            image = await document.getElementById('edit_image').files[0];
+            img_url = `${server_url}/${button_value}/avatar`;
 
-                }
+        }
+        let image_object = new FormData();
+        image_object.append('avatar', image);
+        await fetch(img_url, {
+            method: 'POST',
+            body: image_object
+        }).then((response) => {
+            if (!response.ok) {
+                throw new Error('Check the URL please');
+
+            } else {
+                return response.json();
             }
 
-
-
+        }).then((data) => {
+            return data;
         });
 
 
-
-
-
-    }
+    })
 
 
 }
 
-async function validate_form(value) {
-    let error_data = {
-        address: '',
-        city: '',
-        country: '',
-        dob: '',
-        email: '',
-        firstName: '',
-        gender: '',
-        lastName: '',
-        password: '',
-        phone: '',
-        qualifications: '',
-        salutation: '',
-        state: '',
-        username: ''
-    };
-    let err_flg = 0;
-    let form_data = value;
-    console.log(form_data);
-    for (let eachdata in form_data) //eachdata represents key
-    {
-
-        if (eachdata == 'address') {
-            if (form_data[eachdata] == '') {
-                err_flg = 1;
-                error_data[eachdata] = 'Enetr address';
-
-            }
-
-        }
-        if (eachdata == 'city') {
-            if (form_data[eachdata] == '') {
-                err_flg = 1;
-                error_data[eachdata] = 'Enetr city';
-
-            }
-
-        }
-        if (eachdata == 'country') {
-            if (form_data[eachdata] == '') {
-                err_flg = 1;
-                error_data[eachdata] = 'Enetr country';
-
-            }
-
-        }
-        if (eachdata == 'dob') {
-            if (form_data[eachdata] == '--' || form_data[eachdata] == '') {
-                err_flg = 1;
-                error_data[eachdata] = 'Enetr dob';
-
-            }
-
-        }
-        if (eachdata === 'email') {
-            let emailRegex = /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/;
-            if (form_data[eachdata] == '') {
-                err_flg = 1;
-                error_data[eachdata] = 'Enetr email';
 
 
-            }
-            else if (!emailRegex.test(form_data[eachdata])) {
-
-                err_flg = 1;
-                error_data[eachdata] = 'Enetr valid email';
-            }
-
-
-        }
-        if (eachdata == 'firstName') {
-            if (form_data[eachdata] == '') {
-                err_flg = 1;
-                error_data[eachdata] = 'Enetr firstName';
-
-            }
-
-        }
-        if (eachdata == 'gender') {
-            if (form_data[eachdata] == '') {
-                err_flg = 1;
-                error_data[eachdata] = 'Enetr gender';
-
-            }
-
-        }
-        if (eachdata == 'lastName') {
-            if (form_data[eachdata] == '') {
-                err_flg = 1;
-                error_data[eachdata] = 'Enetr lastName';
-
-            }
-
-        }
-        if (eachdata == 'password') {
-            if (form_data[eachdata] == '') {
-                err_flg = 1;
-                error_data[eachdata] = 'Enetr password';
-
-            }
-
-        }
-        if (eachdata == 'phone') {
-            let mob_regex = /\d{10}/;
-            if (form_data[eachdata] == '') {
-                err_flg = 1;
-                error_data[eachdata] = 'Enetr phone';
-
-            }
-            else if (!mob_regex.test(form_data[eachdata])) {
-                err_flg = 1;
-                error_data[eachdata] = 'Enter valid phone number';
-            }
-
-        }
-        if (eachdata == 'qualifications') {
-            if (form_data[eachdata] == '') {
-                err_flg = 1;
-                error_data[eachdata] = 'Enetr qualifications';
-
-            }
-
-        }
-        if (eachdata == 'salutation') {
-            if (form_data[eachdata] == '') {
-                err_flg = 1;
-                error_data[eachdata] = 'Enetr salutation';
-
-            }
-
-        }
-        if (eachdata == 'state') {
-            if (form_data[eachdata] == '') {
-                err_flg = 1;
-                error_data[eachdata] = 'Enetr state';
-
-            }
-
-        }
-        if (eachdata == 'username') {
-            if (form_data[eachdata] == '') {
-                err_flg = 1;
-                error_data[eachdata] = 'Enetr username';
-
-            }
-
-        }
-
-
-
-    };
-    return [error_data, err_flg];
-
-}
 
 
 
@@ -580,9 +340,7 @@ function cancelAdding() {
 
 async function addEmployee() {
     await addingEmployee();
-    // calling add employee function
-    form_submission('Add', 0, 'POST');
-    cancelAdding();
+
 
 }
 
@@ -625,7 +383,7 @@ async function fetch_image(id) {
 
 //Adding Click events to each of the user
 async function addCLickEvent() {
-    console.log(1);
+
     let selectDotsElements = document.getElementsByClassName('select-dots');
 
     Array.from(selectDotsElements).forEach((each_dot, index) => {
@@ -657,7 +415,7 @@ function editemployees() {
                 document.getElementsByClassName('details')[0].style.display = 'flex';
                 document.getElementsByClassName('table-main')[0].style.display = 'none';
                 document.getElementsByClassName('table')[0].style.display = 'none';
-                console.log(server_url + '/' + btn.value);
+
                 fetch(server_url + '/' + btn.value).then((res) => {
                     if (!res.ok) {
                         throw new Error('check URL please');
@@ -667,7 +425,7 @@ function editemployees() {
                     }
                 }).then((data) => {
 
-                    console.log(data);
+
                     let currentyear = new Date().getFullYear();
 
                     let age = currentyear - data.dob.slice(6, 10);
@@ -697,16 +455,19 @@ function editemployees() {
         if (btn.className === 'edit_btn') {
 
             btn.addEventListener('click', async () => {
-                await form_submission(1, btn.value, 'PUT');
-
-
+                document.getElementsByClassName('card')[0].style.display = 'block';
+                document.getElementsByClassName("label_upld")[0].style.display = 'none';
+                document.getElementsByClassName("btn-add")[0].innerHTML = 'Save Changes';
+                document.getElementsByClassName('edit_image_div')[0].style.display = 'block';
+                await form_submission('Update', btn.value, 'PUT');
+                cancelAdding();
             });
         }
         if (btn.className == 'delete_btn') {
-            console.log('a');
+
 
             btn.addEventListener('click', () => {
-                console.log('haiii');
+
                 document.getElementsByClassName('delete')[0].style.display = 'flex';
                 let delete_items = `<h4>Delete Employees</h4>
                        <p>Are you sure you wanna delete this employee</p>
@@ -770,7 +531,7 @@ async function search_user() {
             search_result.map(async (user) => {
 
                 if (user.hasOwnProperty('avatar')) {
-                    console.log(user.avatar);
+
                     eachRows += `<tr scope='row'>
                         <td scope='col' class='fw-bold'>#0${count++}</td>
                         <td scope='col'  class='fw-bold d-flex align-items-center justify-content-between'>
