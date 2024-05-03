@@ -226,6 +226,7 @@ ul
     background-color: #fff;
     color:#2B3674;
     display: none;
+    position: relative;
 }
 
 /*  Bootstrap styling */
@@ -387,6 +388,9 @@ ul
     height: 75px;
     width: 75px;
     border-radius: 50%;
+    position: absolute;
+    top: 155px;
+    border: 3px solid white;
 }
 
 #edit_image
@@ -451,5 +455,4 @@ tr
 {
     vertical-align: middle;
 }
-
 

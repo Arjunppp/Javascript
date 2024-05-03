@@ -240,7 +240,7 @@ async function form_submission(option, value, http_method) {
             "phone": `${document.getElementById('mobile_number').value}`,
             "dob": crctdDob,
             "gender": `${document.querySelector('input[name="gender"]:checked').value}`,
-            "qualifications": `${document.getElementById('salutation').value}`,
+            "qualifications": `${document.getElementById('qualification').value}`,
             "address": `${document.getElementById('address').value}`,
             "city": `${document.getElementById('city').value}`,
             "state": `${document.getElementById('state').value}`,
@@ -439,7 +439,7 @@ async function view_employee(btn) {
             document.getElementsByClassName('usr-addrs')[0].innerHTML = `<h5>${data.address}</h5>`;
             document.getElementsByClassName('usr-usrname')[0].innerHTML = `<h5>${data.username}</h5>`;
 
-            let btns = document.querySelectorAll('.view_section button');
+            let btns = document.querySelectorAll('.user_info button');
             btns.forEach(async (btn) => {
                 btn.value = data.id;
                 if (btn.classList.contains('edit_btn')) {
