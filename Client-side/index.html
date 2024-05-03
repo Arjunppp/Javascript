@@ -106,12 +106,13 @@
                 <div class="row p-2 m-0">
                     <div class="col-12 bg-transparent p-0">
                         <div class="table-main p-3 bg-white ">
-                            <div class="row p-3 m-0 flex-row-reverse add_emplyee_div">
+                           <div class="row flex-row-reverse">
+                            <div class="col p-3 m-0  add_emplyee_div">
                                 <button class="col-2 btn btn-primary p-3 " id="add_employee">Add Employee</button>
                             </div>
-                            <div class="row p-3 m-0 d-flex">
-                                <label for="employee-row">Employee List</label>
-                                <select name="Employee List" id="employee-row" class="form-select">
+                            <div class="col p-3 m-0 d-flex align-items-center">
+                                <label for="employee-row" class="col">Employee List</label>
+                                <select name="Employee List" id="employee-row" class="form-select col">
                                     <option value="1">1</option>
                                     <option value="2">2</option>
                                     <option value="3">3</option>
@@ -122,6 +123,7 @@
                                     <option value="8">8</option>
                                 </select>
                             </div>
+                           </div>
                             <table class="table">
                                 <thead>
 
@@ -199,6 +201,10 @@
 
                         </div>
                     </div>
+                    <div class="row view_section">
+                        <button class='btn btn-primary edit_btn '>Edit</button>
+                        <button class='btn btn-primary delete_btn'>Delete</button>
+                    </div>
 
 
 
@@ -215,7 +221,7 @@
                                 <div class="col edit edit_image_div">
                                     <label for="edit_image">
                                         <img src="" class="edit-image" alt=""
-                                            style="height: 100px; width: 100px; border:2px dashed grey">
+                                            style="height: 115px; width: 115px; border:2px dashed grey">
                                     </label>
                                     <input type="file" id="edit_image">
                                 </div>

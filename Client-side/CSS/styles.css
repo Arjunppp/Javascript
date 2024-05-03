@@ -9,6 +9,8 @@ body
 {
     color: var(--color);
     font-family: var(--primary-font);
+  
+   
 }
 
 .bi {
@@ -20,6 +22,7 @@ body
  {
     background: linear-gradient(149.96deg, #301F81 12.51%, #0F0441 89.53%);
     font-family: var(--sidebar-font);
+   
  }
  
  .side-bar-clr
@@ -63,7 +66,9 @@ body
  .main-page
  {
     background:#edeff4;
-    
+    position: relative;
+   
+   
  }
 
  #page-title ,footer *
@@ -201,11 +206,11 @@ ul
 }
 .card
 {
-    position: absolute;
+   
     display: none;
-    top: 20%;
-    left: 15%;
-    
+    position: absolute;
+    left: 14%;
+    top: 0;
 
 }
 
@@ -423,4 +428,28 @@ ul
     color: #0F0441;
 
 }
+
+label[for=employee-row]
+{
+    color:#2B3674;
+    flex: 0 0 200px;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 32px;
+}
+#employee-row
+{
+    flex: 0 0 65px !important;
+}
+
+.add_emplyee_div
+{
+    flex: 0 0 0%;
+}
+
+tr
+{
+    vertical-align: middle;
+}
+
 

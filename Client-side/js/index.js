@@ -77,7 +77,7 @@ async function displayPagination() {
     b.forEach((user) => {
         if (user.hasOwnProperty('avatar')) {
 
-            eachRows += `<tr scope='row'>
+            eachRows += `<tr scope='row' >
                 <td scope='col' class='fw-bold'>#0${count++}</td>
                 <td scope='col'  class='fw-bold d-flex align-items-center justify-content-between'>
                     <span>
@@ -113,7 +113,7 @@ async function displayPagination() {
             </tr>`;
         }
         else {
-            eachRows += `<tr scope='row'>
+            eachRows += `<tr scope='row' class='py-3 '>
                 <td scope='col' class='fw-bold'>#0${count++}</td>
                 <td scope='col' class='fw-bold d-flex align-items-center justify-content-between'>
                     <span>
@@ -188,11 +188,13 @@ async function form_submission(option, value, http_method) {
         var method = http_method;
         var button_value = value;
         var URL = server_url;
+        console.log('its an add');
 
 
 
     }
-    else {
+    else if(option =='Update')
+    {
         image = document.getElementById('edit_image').files[0];
 
         function_option = option;
@@ -405,107 +407,128 @@ async function addCLickEvent() {
 
 
 }
+async function view_employee(btn) {
+    btn.addEventListener('click', () => {
+        document.getElementsByClassName('details')[0].style.display = 'flex';
+        document.getElementsByClassName('table-main')[0].style.display = 'none';
+        document.getElementsByClassName('table')[0].style.display = 'none';
+
+        fetch(server_url + '/' + btn.value).then((res) => {
+            if (!res.ok) {
+                throw new Error('check URL please');
+            }
+            else {
+                return res.json();
+            }
+        }).then((data) => {
+
+
+            let currentyear = new Date().getFullYear();
+
+            let age = currentyear - data.dob.slice(6, 10);
+
+
+            document.getElementsByClassName('img_view')[0].src = `${server_url + '/' + btn.value + '/avatar'}`
+            document.getElementsByClassName('full_name')[0].innerHTML = `<h5>${data.salutation} ${data.firstName} ${data.lastName}</h5>`;
+            document.getElementsByClassName('usr-email')[0].innerHTML = `<h5>${data.email}</h5>`;
+            document.getElementsByClassName('usr-gndr')[0].innerHTML = `<h5>${data.gender}</h5>`;
+            document.getElementsByClassName('usr-age')[0].innerHTML = `<h5>${age}</h5>`;
+            document.getElementsByClassName('usr-dob')[0].innerHTML = `<h5>${data.dob}</h5>`;
+            document.getElementsByClassName('usr-mob')[0].innerHTML = `<h5>${data.phone}</h5>`;
+            document.getElementsByClassName('usr-qualifctn')[0].innerHTML = `<h5>${data.qualifications}</h5>`;
+            document.getElementsByClassName('usr-addrs')[0].innerHTML = `<h5>${data.address}</h5>`;
+            document.getElementsByClassName('usr-usrname')[0].innerHTML = `<h5>${data.username}</h5>`;
+
+            let btns = document.querySelectorAll('.view_section button');
+            btns.forEach(async (btn) => {
+                btn.value = data.id;
+                if (btn.classList.contains('edit_btn')) {
+                   await edit_employee(btn);
+                }
+                if (btn.classList.contains('delete_btn')) {
+                   
+                     await delete_employee(btn);
+                }
+            })
+
+        })
+    });
+
+}
+
+async function edit_employee(btn)
+{
+    btn.addEventListener('click', async () => {
+        document.getElementsByClassName('card')[0].style.display = 'block';
+        document.getElementsByClassName("label_upld")[0].style.display = 'none';
+        document.getElementsByClassName("btn-add")[0].innerHTML = 'Save Changes';
+        document.getElementsByClassName('edit_image_div')[0].style.display = 'block';
+        await form_submission('Update', btn.value, 'PUT');
+        cancelAdding();
+    });
+
+}
+
+async function delete_employee(btn)
+{
+    
+    btn.addEventListener('click', () => {
+
+        document.getElementsByClassName('delete')[0].style.display = 'flex';
+        let delete_items = `<h4>Delete Employees</h4>
+               <p>Are you sure you wanna delete this employee</p>
+               <div class='delete_btns'>
+               <button>Cancel</button>
+               <button value=${btn.value}>Delete</button>
+               </div>`;
+        document.getElementsByClassName('delete')[0].innerHTML = delete_items;
+
+        let cncl_dlt = document.querySelectorAll('.delete button');
+        cncl_dlt[0].addEventListener('click', () => {
+
+            document.querySelector('.delete').style.display = 'none';
+            document.querySelector('.edit-details').style.display = 'none';
+
+        });
+
+        cncl_dlt[1].addEventListener('click', () => {
+
+
+            let options = {
+                method: 'DELETE',
+                headers: { 'content-type': 'application/JSON' },
+            };
+            fetch(server_url + '/' + btn.value, options).then((res) => {
+                if (!res.ok) {
+                    throw new Error('Check your URL');
+                }
+                else {
+                    return res.json();
+                }
+            }).then((data) => {
+                document.querySelector('.delete').style.display = 'none';
+                window.location.reload();
+
+            });
+        })
+    });
+}
 
 function editemployees() {
 
     let btns = document.querySelectorAll('.edit-details button');
-    Array.from(btns).forEach((btn) => {
+    Array.from(btns).forEach(async (btn) => {
         if (btn.className === 'view_btn') {
-            btn.addEventListener('click', () => {
-                document.getElementsByClassName('details')[0].style.display = 'flex';
-                document.getElementsByClassName('table-main')[0].style.display = 'none';
-                document.getElementsByClassName('table')[0].style.display = 'none';
-
-                fetch(server_url + '/' + btn.value).then((res) => {
-                    if (!res.ok) {
-                        throw new Error('check URL please');
-                    }
-                    else {
-                        return res.json();
-                    }
-                }).then((data) => {
-
-
-                    let currentyear = new Date().getFullYear();
-
-                    let age = currentyear - data.dob.slice(6, 10);
-
-
-                    document.getElementsByClassName('img_view')[0].src = `${server_url + '/' + btn.value + '/avatar'}`
-                    document.getElementsByClassName('full_name')[0].innerHTML = `<h5>${data.salutation} ${data.firstName} ${data.lastName}</h5>`;
-                    document.getElementsByClassName('usr-email')[0].innerHTML = `<h5>${data.email}</h5>`;
-                    document.getElementsByClassName('usr-gndr')[0].innerHTML = `<h5>${data.gender}</h5>`;
-                    document.getElementsByClassName('usr-age')[0].innerHTML = `<h5>${age}</h5>`;
-                    document.getElementsByClassName('usr-dob')[0].innerHTML = `<h5>${data.dob}</h5>`;
-                    document.getElementsByClassName('usr-mob')[0].innerHTML = `<h5>${data.phone}</h5>`;
-                    document.getElementsByClassName('usr-qualifctn')[0].innerHTML = `<h5>${data.qualifications}</h5>`;
-                    document.getElementsByClassName('usr-addrs')[0].innerHTML = `<h5>${data.address}</h5>`;
-                    document.getElementsByClassName('usr-usrname')[0].innerHTML = `<h5>${data.username}</h5>`;
-
-
-                })
-            });
-
-
-
-
-
+            await view_employee(btn)
         }
 
         if (btn.className === 'edit_btn') {
 
-            btn.addEventListener('click', async () => {
-                document.getElementsByClassName('card')[0].style.display = 'block';
-                document.getElementsByClassName("label_upld")[0].style.display = 'none';
-                document.getElementsByClassName("btn-add")[0].innerHTML = 'Save Changes';
-                document.getElementsByClassName('edit_image_div')[0].style.display = 'block';
-                await form_submission('Update', btn.value, 'PUT');
-                cancelAdding();
-            });
+           await edit_employee(btn);
         }
         if (btn.className == 'delete_btn') {
 
-
-            btn.addEventListener('click', () => {
-
-                document.getElementsByClassName('delete')[0].style.display = 'flex';
-                let delete_items = `<h4>Delete Employees</h4>
-                       <p>Are you sure you wanna delete this employee</p>
-                       <div class='delete_btns'>
-                       <button>Cancel</button>
-                       <button value=${btn.value}>Delete</button>
-                       </div>`;
-                document.getElementsByClassName('delete')[0].innerHTML = delete_items;
-
-                let cncl_dlt = document.querySelectorAll('.delete button');
-                cncl_dlt[0].addEventListener('click', () => {
-
-                    document.querySelector('.delete').style.display = 'none';
-                    document.querySelector('.edit-details').style.display = 'none';
-
-                });
-
-                cncl_dlt[1].addEventListener('click', () => {
-
-
-                    let options = {
-                        method: 'DELETE',
-                        headers: { 'content-type': 'application/JSON' },
-                    };
-                    fetch(server_url + '/' + btn.value, options).then((res) => {
-                        if (!res.ok) {
-                            throw new Error('Check your URL');
-                        }
-                        else {
-                            return res.json();
-                        }
-                    }).then((data) => {
-                        document.querySelector('.delete').style.display = 'none';
-                        window.location.reload();
-
-                    });
-                })
-            });
+            await delete_employee(btn);
 
 
         }
@@ -609,6 +632,116 @@ async function search_user() {
         }
 
     });
+    let a = ''
+    search_value.addEventListener('keydown', function (e) {
+
+        let eachRows = '';
+        let count = 1;
+        if (e.key !== 'Backspace' && e.key !== 'Alt' && e.key !== 'Shift' && e.key !== 'Control') {
+            a += e.key;
+        }
+        else if (e.key == 'Backspace') {
+            a = a.slice(0, -1);
+        }
+
+        let search_result = users.filter((user) => {
+            if (a.length == 0) {
+
+                search_name = user.firstName.toLowerCase();
+
+                return search_name;
+            }
+            else {
+                let search_name = user.firstName.slice(0, a.length);
+                if (search_name.toLowerCase() == a) {
+                    return search_name.toLowerCase();
+                }
+
+            }
+
+        });
+
+
+        console.log(search_result);
+        search_result.map(async (user) => {
+
+            if (user.hasOwnProperty('avatar')) {
+
+                eachRows += `<tr scope='row'>
+                <td scope='col' class='fw-bold'>#0${count++}</td>
+                <td scope='col'  class='fw-bold d-flex align-items-center justify-content-between'>
+                    <span>
+                    
+                        <img src=${server_url + '/' + user.avatar.split('.')[0] + '/avatar'} class='side_images'>
+                    </span>
+                    ${user.firstName}
+                </td>
+                <td scope='col' class='fw-bold'>${user.email}</td>
+                <td scope='col' class='fw-bold'>${user.phone}</td>
+                <td scope='col' class='fw-bold'>${user.gender}</td>
+                <td scope='col' class='fw-bold'>${user.dob}</td>
+                <td scope='col' class='fw-bold'>${user.country}</td>
+                <td scope='col' class='edit'>
+                    <span class='material-symbols-outlined select-dots'>
+                        more_horiz
+                    </span>
+                    <ul class='edit-details'>
+                        <li class='d-flex'>
+                            <span class='material-symbols-outlined'>visibility</span>
+                            <button class='view_btn' value="${user.id}">View Details</button>
+                        </li>
+                        <li class='d-flex'>
+                            <span class='material-symbols-outlined'>edit</span>
+                            <button class='edit_btn' value="${user.id}">Edit</button>
+                        </li>
+                        <li class='d-flex'>
+                            <span class='material-symbols-outlined'>delete</span>
+                            <button class='delete_btn' value="${user.id}">Delete</button>
+                        </li>
+                    </ul>
+                </td>
+            </tr>`;
+            }
+            else {
+                eachRows += `<tr scope='row'>
+                <td scope='col' class='fw-bold'>#0${count++}</td>
+                <td scope='col' class='fw-bold d-flex align-items-center justify-content-between'>
+                    <span>
+                        <div class='side_images d-flex align-items-center justify-content-center'>${user.firstName[0].toUpperCase() + user.lastName[0].toUpperCase()}</div>
+                     </span>
+                    ${user.firstName}
+                </td>
+                <td scope='col' class='fw-bold'>${user.email}</td>
+                <td scope='col' class='fw-bold'>${user.phone}</td>
+                <td scope='col' class='fw-bold'>${user.gender}</td>
+                <td scope='col' class='fw-bold'>${user.dob}</td>
+                <td scope='col' class='fw-bold'>${user.country}</td>
+                <td scope='col' class='edit'>
+                    <span class='material-symbols-outlined select-dots'>
+                        more_horiz
+                    </span>
+                    <ul class='edit-details'>
+                        <li class='d-flex'>
+                            <span class='material-symbols-outlined'>visibility</span>
+                            <button class='view_btn' value="${user.id}">View Details</button>
+                        </li>
+                        <li class='d-flex'>
+                            <span class='material-symbols-outlined'>edit</span>
+                            <button class='edit_btn' value="${user.id}">Edit</button>
+                        </li>
+                        <li class='d-flex'>
+                            <span class='material-symbols-outlined'>delete</span>
+                            <button class='delete_btn' value="${user.id}">Delete</button>
+                        </li>
+                    </ul>
+                </td>
+            </tr>`;
+            }
+        });
+        document.getElementById("table-body").innerHTML = eachRows;
+
+    })
+
 
 }
 
@@ -649,7 +782,7 @@ document.getElementById('edit_image').addEventListener('change', () => {
 document.getElementById('file').addEventListener('change', () => {
     let file = document.getElementById('file').files[0];
     document.getElementsByClassName('edit_image_div')[0].style.display = 'block';
-    document.getElementsByClassName('label_upld')[0].style.flex = '0 0 83%';
+    document.getElementsByClassName('label_upld')[0].style.flex = '0 0 75%';
     document.querySelector(`label[for="file"] h5`).innerHTML = 'Change image';
     document.getElementsByClassName('edit-image')[0].src = URL.createObjectURL(file);
 })
