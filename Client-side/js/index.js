@@ -74,23 +74,27 @@ async function displayPagination() {
 
     let eachRows = '';
     let count = 1;
-    b.forEach((user) => {
+    for (let user of b) {
+
+        let month = await getcurrentmonth(parseInt(user.dob.split('-')[1]));
+        
         if (user.hasOwnProperty('avatar')) {
 
+
             eachRows += `<tr scope='row' >
-                <td scope='col' class='fw-bold'>#0${count++}</td>
-                <td scope='col'  class='fw-bold d-flex align-items-center justify-content-between'>
+                <td scope='col' class='td-data'>#0${count++}</td>
+                <td scope='col'  class='td-data d-flex align-items-center  gap-2'>
                     <span>
                     
                         <img src=${server_url + '/' + user.avatar.split('.')[0] + '/avatar'} class='side_images'>
                     </span>
-                    ${user.firstName}
+                    ${user.salutation + ' ' + user.firstName + ' ' + user.lastName}
                 </td>
-                <td scope='col' class='fw-bold'>${user.email}</td>
-                <td scope='col' class='fw-bold'>${user.phone}</td>
-                <td scope='col' class='fw-bold'>${user.gender}</td>
-                <td scope='col' class='fw-bold'>${user.dob}</td>
-                <td scope='col' class='fw-bold'>${user.country}</td>
+                <td scope='col' class='td-data'>${user.email}</td>
+                <td scope='col' class='td-data'>${user.phone}</td>
+                <td scope='col' class='td-data'>${user.gender}</td>
+                <td scope='col' class='td-data'>${user.dob.split('-')[0]+' '+month+' '+user.dob.split('-')[2]}</td>
+                <td scope='col' class='td-data'>${user.country}</td>
                 <td scope='col' class='edit'>
                     <span class='material-symbols-outlined select-dots'>
                         more_horiz
@@ -113,19 +117,20 @@ async function displayPagination() {
             </tr>`;
         }
         else {
+
             eachRows += `<tr scope='row' class='py-3 '>
-                <td scope='col' class='fw-bold'>#0${count++}</td>
-                <td scope='col' class='fw-bold d-flex align-items-center justify-content-between'>
+                <td scope='col' class='td-data'>#0${count++}</td>
+                <td scope='col' class='td-data d-flex align-items-center  gap-2'>
                     <span>
                         <div class='side_images d-flex align-items-center justify-content-center'>${user.firstName[0].toUpperCase() + user.lastName[0].toUpperCase()}</div>
                      </span>
-                    ${user.firstName}
+                    ${user.salutation + ' ' + user.firstName + ' ' + user.lastName}
                 </td>
-                <td scope='col' class='fw-bold'>${user.email}</td>
-                <td scope='col' class='fw-bold'>${user.phone}</td>
-                <td scope='col' class='fw-bold'>${user.gender}</td>
-                <td scope='col' class='fw-bold'>${user.dob}</td>
-                <td scope='col' class='fw-bold'>${user.country}</td>
+                <td scope='col' class='td-data'>${user.email}</td>
+                <td scope='col' class='td-data'>${user.phone}</td>
+                <td scope='col' class='td-data'>${user.gender}</td>
+                <td scope='col' class='td-data'>${user.dob.split('-')[0]+' '+month+' '+user.dob.split('-')[2]}</td>
+                <td scope='col' class='td-data'>${user.country}</td>
                 <td scope='col' class='edit'>
                     <span class='material-symbols-outlined select-dots'>
                         more_horiz
@@ -148,7 +153,7 @@ async function displayPagination() {
             </tr>`;
         }
 
-    });
+    };
 
 
     document.getElementById("table-body").innerHTML = eachRows;
@@ -193,8 +198,7 @@ async function form_submission(option, value, http_method) {
 
 
     }
-    else if(option =='Update')
-    {
+    else if (option == 'Update') {
         image = document.getElementById('edit_image').files[0];
 
         function_option = option;
@@ -380,7 +384,48 @@ async function fetch_image(id) {
 
 
 
-
+async function getcurrentmonth(monthnum) {
+    let month;
+    switch (monthnum) {
+        case 1:
+            month = "January";
+            break;
+        case 2:
+            month = "February";
+            break;
+        case 3:
+            month = "March";
+            break;
+        case 4:
+            month = "April";
+            break;
+        case 5:
+            month = "May";
+            break;
+        case 6:
+            month = "June";
+            break;
+        case 7:
+            month = "July";
+            break;
+        case 8:
+            month = "August";
+            break;
+        case 9:
+            month = "September";
+            break;
+        case 10:
+            month = "October";
+            break;
+        case 11:
+            month = "November";
+            break;
+        case 12:
+            month = "December";
+            break;
+    }
+    return month;
+}
 
 
 //Adding Click events to each of the user
@@ -420,34 +465,41 @@ async function view_employee(btn) {
             else {
                 return res.json();
             }
-        }).then((data) => {
+        }).then(async (data) => {
 
 
             let currentyear = new Date().getFullYear();
 
             let age = currentyear - data.dob.slice(6, 10);
 
+            let month1 = parseInt(data.dob.split('-')[1]);
+
+
+            let month = await getcurrentmonth(month1);
+
+
+
 
             document.getElementsByClassName('img_view')[0].src = `${server_url + '/' + btn.value + '/avatar'}`
-            document.getElementsByClassName('full_name')[0].innerHTML = `<h5>${data.salutation} ${data.firstName} ${data.lastName}</h5>`;
-            document.getElementsByClassName('usr-email')[0].innerHTML = `<h5>${data.email}</h5>`;
-            document.getElementsByClassName('usr-gndr')[0].innerHTML = `<h5>${data.gender}</h5>`;
-            document.getElementsByClassName('usr-age')[0].innerHTML = `<h5>${age}</h5>`;
-            document.getElementsByClassName('usr-dob')[0].innerHTML = `<h5>${data.dob}</h5>`;
-            document.getElementsByClassName('usr-mob')[0].innerHTML = `<h5>${data.phone}</h5>`;
-            document.getElementsByClassName('usr-qualifctn')[0].innerHTML = `<h5>${data.qualifications}</h5>`;
-            document.getElementsByClassName('usr-addrs')[0].innerHTML = `<h5>${data.address}</h5>`;
-            document.getElementsByClassName('usr-usrname')[0].innerHTML = `<h5>${data.username}</h5>`;
+            document.getElementsByClassName('full_name')[0].innerHTML = `<h5>${data.salutation} ${data.firstName} ${data.lastName}<h5>`;
+            document.getElementsByClassName('usr-email')[0].innerHTML = `<h5 class='view-details-box'>${data.email}</h5>`;
+            document.getElementsByClassName('usr-gndr')[0].innerHTML = `${data.gender}`;
+            document.getElementsByClassName('usr-age')[0].innerHTML = `${age}`;
+            document.getElementsByClassName('usr-dob')[0].innerHTML = `${data.dob.split('-')[0] + ' ' + month + ' ' + data.dob.split('-')[2]}`;
+            document.getElementsByClassName('usr-mob')[0].innerHTML = `${data.phone}`;
+            document.getElementsByClassName('usr-qualifctn')[0].innerHTML = `${data.qualifications}`;
+            document.getElementsByClassName('usr-addrs')[0].innerHTML = `${data.address}`;
+            document.getElementsByClassName('usr-usrname')[0].innerHTML = `${data.username}`;
 
             let btns = document.querySelectorAll('.user_info button');
             btns.forEach(async (btn) => {
                 btn.value = data.id;
                 if (btn.classList.contains('edit_btn')) {
-                   await edit_employee(btn);
+                    await edit_employee(btn);
                 }
                 if (btn.classList.contains('delete_btn')) {
-                   
-                     await delete_employee(btn);
+
+                    await delete_employee(btn);
                 }
             })
 
@@ -456,8 +508,7 @@ async function view_employee(btn) {
 
 }
 
-async function edit_employee(btn)
-{
+async function edit_employee(btn) {
     btn.addEventListener('click', async () => {
         document.getElementsByClassName('card')[0].style.display = 'block';
         document.getElementsByClassName("label_upld")[0].style.display = 'none';
@@ -469,9 +520,8 @@ async function edit_employee(btn)
 
 }
 
-async function delete_employee(btn)
-{
-    
+async function delete_employee(btn) {
+
     btn.addEventListener('click', () => {
 
         document.getElementsByClassName('delete')[0].style.display = 'flex';
@@ -524,7 +574,7 @@ function editemployees() {
 
         if (btn.className === 'edit_btn') {
 
-           await edit_employee(btn);
+            await edit_employee(btn);
         }
         if (btn.className == 'delete_btn') {
 
@@ -542,7 +592,7 @@ async function search_user() {
 
 
     let search_value = document.getElementById('sub-search');
-    search_value.addEventListener('keypress', function (e) {
+    search_value.addEventListener('keypress', async function (e) {
         if (e.key === 'Enter') {
             let search_result = users.filter((user) => {
                 if ((user.firstName).toLowerCase() === (search_value.value).toLowerCase()) {
@@ -551,24 +601,28 @@ async function search_user() {
             });
             let eachRows = '';
             let count = 1;
-            search_result.map(async (user) => {
+           for(let user of search_result)
+           {
+            let month = await getcurrentmonth(parseInt(user.dob.split('-')[1]));
+            
 
                 if (user.hasOwnProperty('avatar')) {
 
+
                     eachRows += `<tr scope='row'>
-                        <td scope='col' class='fw-bold'>#0${count++}</td>
-                        <td scope='col'  class='fw-bold d-flex align-items-center justify-content-between'>
+                        <td scope='col' class='td-data'>#0${count++}</td>
+                        <td scope='col'  class='td-data d-flex align-items-center gap-2 '>
                             <span>
                             
                                 <img src=${server_url + '/' + user.avatar.split('.')[0] + '/avatar'} class='side_images'>
                             </span>
-                            ${user.firstName}
+                            ${user.salutation + ' ' + user.firstName + ' ' + user.lastName}
                         </td>
-                        <td scope='col' class='fw-bold'>${user.email}</td>
-                        <td scope='col' class='fw-bold'>${user.phone}</td>
-                        <td scope='col' class='fw-bold'>${user.gender}</td>
-                        <td scope='col' class='fw-bold'>${user.dob}</td>
-                        <td scope='col' class='fw-bold'>${user.country}</td>
+                        <td scope='col' class='td-data'>${user.email}</td>
+                        <td scope='col' class='td-data'>${user.phone}</td>
+                        <td scope='col' class='td-data'>${user.gender}</td>
+                        <td scope='col' class='td-data'>${user.dob.split('-')[0]+' '+month+' '+user.dob.split('-')[2]}</td>
+                        <td scope='col' class='td-data'>${user.country}</td>
                         <td scope='col' class='edit'>
                             <span class='material-symbols-outlined select-dots'>
                                 more_horiz
@@ -592,19 +646,19 @@ async function search_user() {
                 }
                 else {
                     eachRows += `<tr scope='row'>
-                        <td scope='col' class='fw-bold'>#0${count++}</td>
-                        <td scope='col' class='fw-bold d-flex align-items-center justify-content-between'>
+                        <td scope='col' class='td-data '>#0${count++}</td>
+                        <td scope='col' class='td-data  d-flex align-items-center  gap-2'>
                             <span>
                                 <div class='side_images d-flex align-items-center justify-content-center'>${user.firstName[0].toUpperCase() + user.lastName[0].toUpperCase()}</div>
                              </span>
-                            ${user.firstName}
+                             ${user.salutation + ' ' + user.firstName + ' ' + user.lastName}
                         </td>
-                        <td scope='col' class='fw-bold'>${user.email}</td>
-                        <td scope='col' class='fw-bold'>${user.phone}</td>
-                        <td scope='col' class='fw-bold'>${user.gender}</td>
-                        <td scope='col' class='fw-bold'>${user.dob}</td>
-                        <td scope='col' class='fw-bold'>${user.country}</td>
-                        <td scope='col' class='edit'>
+                        <td scope='col' class='td-data '>${user.email}</td>
+                        <td scope='col' class='td-data '>${user.phone}</td>
+                        <td scope='col' class='td-data '>${user.gender}</td>
+                        <td scope='col' class='td-data '>${user.dob.split('-')[0]+' '+month+' '+user.dob.split('-')[2]}</td>
+                        <td scope='col' class='td-data '>${user.country}</td>
+                        <td scope='col' class='td-data edit'>
                             <span class='material-symbols-outlined select-dots'>
                                 more_horiz
                             </span>
@@ -625,7 +679,7 @@ async function search_user() {
                         </td>
                     </tr>`;
                 }
-            });
+            };
             document.getElementById("table-body").innerHTML = eachRows;
 
 
@@ -633,7 +687,7 @@ async function search_user() {
 
     });
     let a = ''
-    search_value.addEventListener('keydown', function (e) {
+    search_value.addEventListener('keydown', async function (e) {
 
         let eachRows = '';
         let count = 1;
@@ -663,24 +717,25 @@ async function search_user() {
 
 
         console.log(search_result);
-        search_result.map(async (user) => {
-
+        for(let user of search_result) {
+            let month = await getcurrentmonth(parseInt(user.dob.split('-')[1]));
+            
             if (user.hasOwnProperty('avatar')) {
 
                 eachRows += `<tr scope='row'>
-                <td scope='col' class='fw-bold'>#0${count++}</td>
-                <td scope='col'  class='fw-bold d-flex align-items-center justify-content-between'>
+                <td scope='col' class='td-data'>#0${count++}</td>
+                <td scope='col'  class='td-data d-flex align-items-center  gap-2'>
                     <span>
                     
                         <img src=${server_url + '/' + user.avatar.split('.')[0] + '/avatar'} class='side_images'>
                     </span>
-                    ${user.firstName}
+                    ${user.salutation + ' ' + user.firstName + ' ' + user.lastName}
                 </td>
-                <td scope='col' class='fw-bold'>${user.email}</td>
-                <td scope='col' class='fw-bold'>${user.phone}</td>
-                <td scope='col' class='fw-bold'>${user.gender}</td>
-                <td scope='col' class='fw-bold'>${user.dob}</td>
-                <td scope='col' class='fw-bold'>${user.country}</td>
+                <td scope='col' class='td-data'>${user.email}</td>
+                <td scope='col' class='td-data'>${user.phone}</td>
+                <td scope='col' class='td-data'>${user.gender}</td>
+                <td scope='col' class='td-data'>${user.dob.split('-')[0]+' '+month+' '+user.dob.split('-')[2]}</td>
+                <td scope='col' class='td-data'>${user.country}</td>
                 <td scope='col' class='edit'>
                     <span class='material-symbols-outlined select-dots'>
                         more_horiz
@@ -704,18 +759,18 @@ async function search_user() {
             }
             else {
                 eachRows += `<tr scope='row'>
-                <td scope='col' class='fw-bold'>#0${count++}</td>
-                <td scope='col' class='fw-bold d-flex align-items-center justify-content-between'>
+                <td scope='col' class='td-data'>#0${count++}</td>
+                <td scope='col' class='td-data d-flex align-items-center  gap-2'>
                     <span>
                         <div class='side_images d-flex align-items-center justify-content-center'>${user.firstName[0].toUpperCase() + user.lastName[0].toUpperCase()}</div>
                      </span>
-                    ${user.firstName}
+                     ${user.salutation + ' ' + user.firstName + ' ' + user.lastName}
                 </td>
-                <td scope='col' class='fw-bold'>${user.email}</td>
-                <td scope='col' class='fw-bold'>${user.phone}</td>
-                <td scope='col' class='fw-bold'>${user.gender}</td>
-                <td scope='col' class='fw-bold'>${user.dob}</td>
-                <td scope='col' class='fw-bold'>${user.country}</td>
+                <td scope='col' class='td-data'>${user.email}</td>
+                <td scope='col' class='td-data'>${user.phone}</td>
+                <td scope='col' class='td-data'>${user.gender}</td>
+                <td scope='col' class='td-data'>${user.dob.split('-')[0]+' '+month+' '+user.dob.split('-')[2]}</td>
+                <td scope='col' class='td-data'>${user.country}</td>
                 <td scope='col' class='edit'>
                     <span class='material-symbols-outlined select-dots'>
                         more_horiz
@@ -737,7 +792,7 @@ async function search_user() {
                 </td>
             </tr>`;
             }
-        });
+        };
         document.getElementById("table-body").innerHTML = eachRows;
 
     })
@@ -790,3 +845,5 @@ document.getElementById('file').addEventListener('change', () => {
 
 
 
+const element = document.querySelector('.card');
+element.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
