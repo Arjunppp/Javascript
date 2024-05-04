@@ -457,6 +457,7 @@ async function view_employee(btn) {
         document.getElementsByClassName('details')[0].style.display = 'flex';
         document.getElementsByClassName('table-main')[0].style.display = 'none';
         document.getElementsByClassName('table')[0].style.display = 'none';
+        document.getElementsByClassName('edit-details')[0].style.display ='none';
 
         fetch(server_url + '/' + btn.value).then((res) => {
             if (!res.ok) {
@@ -514,6 +515,7 @@ async function edit_employee(btn) {
         document.getElementsByClassName("label_upld")[0].style.display = 'none';
         document.getElementsByClassName("btn-add")[0].innerHTML = 'Save Changes';
         document.getElementsByClassName('edit_image_div')[0].style.display = 'block';
+        document.getElementsByClassName('edit-details')[0].style.display ='none';
         await form_submission('Update', btn.value, 'PUT');
         cancelAdding();
     });
@@ -525,11 +527,12 @@ async function delete_employee(btn) {
     btn.addEventListener('click', () => {
 
         document.getElementsByClassName('delete')[0].style.display = 'flex';
+        document.getElementsByClassName('edit-details')[0].style.display ='none';
         let delete_items = `<h4>Delete Employees</h4>
                <p>Are you sure you wanna delete this employee</p>
                <div class='delete_btns'>
-               <button>Cancel</button>
-               <button value=${btn.value}>Delete</button>
+               <button class='btn cncl-btn'>Cancel</button>
+               <button class='btn delte-btn' value=${btn.value}>Delete</button>
                </div>`;
         document.getElementsByClassName('delete')[0].innerHTML = delete_items;
 
@@ -844,6 +847,3 @@ document.getElementById('file').addEventListener('change', () => {
 
 
 
-
-const element = document.querySelector('.card');
-element.scrollIntoView({ behavior: 'smooth', block: 'nearest' });

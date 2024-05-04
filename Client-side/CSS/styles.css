@@ -209,12 +209,13 @@ ul {
     flex-direction: column;
     justify-content: space-between;
     display: none;
-    top: 50%;
-    left: 30%;
-    width: 690px;
-    height: 250px;
+    top: 50vh;
+    left: 35vw;
+    width: 500px;
+    height: 200px;
     border-radius: 22px !important;
-    background-color: #988a8a;
+    background-color: #FFFFFF;
+    ;
     color: #2B3674;
     z-index: 1;
 }
@@ -545,4 +546,24 @@ line-height: 24px;
 letter-spacing: -0.02em;
 
 
+}
+
+.cncl-btn
+{
+    background-color:#FAF9FF;
+    color: #2B3674;
+
+}
+
+.delte-btn{
+    background-color:#EB506C;
+    color: #FFFFFF;
+
+
+}
+.delte_btns
+{
+    display: flex;
+    justify-content: end;
+    box-shadow: 0px 1px 4px 0px #1010311F;
 }
