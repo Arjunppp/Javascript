@@ -230,7 +230,7 @@ ul {
     display: none;
     position: absolute;
     left: 20%;
-    bottom: -314px;
+   bottom: -612px; 
 
 }
 
@@ -403,9 +403,19 @@ textarea::placeholder {
     border-radius: 50%;
     position: absolute;
     top: 260px;
+    left: 44%;
+    
+    background-color: #2B3674;
+    color: #fff;
+}
+.img_view img
+{
+    border-radius: 50%;
+   
+    height: 119px;
+    width: 119px;
     border: 4px solid #FFFFFF;
 }
-
 #edit_image {
     display: none;
 }

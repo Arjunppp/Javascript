@@ -194,7 +194,19 @@ async function form_submission(option, value, http_method) {
         var button_value = value;
         var URL = server_url;
         console.log('its an add');
-
+        document.getElementById('salutation').value = '';
+        document.getElementById('first_name').value = '';
+        document.getElementById('last_name').value = '';
+        document.getElementById('email').value = '';
+        document.getElementById('mobile_number').value = '';
+        document.getElementById('country').value = '';
+        document.getElementById('state').value = '';
+        document.getElementById('date_of_birth').value = '';
+        document.getElementById('address').value = '';
+        document.getElementById('city').value = '';
+        document.getElementById('username').value = '';
+        document.getElementById('qualification').value = '';
+        document.getElementById('password').value ='';
 
 
     }
@@ -210,7 +222,7 @@ async function form_submission(option, value, http_method) {
         document.getElementsByClassName('card')[0].style.display = 'block';
         document.getElementsByClassName("label_upld")[0].style.display = 'none';
 
-
+    
 
         if (data.gender == 'male') {
             document.getElementById('male').checked = true;
@@ -225,6 +237,7 @@ async function form_submission(option, value, http_method) {
         document.getElementById('state').value = data.state;
         document.getElementById('date_of_birth').value = date;
         document.getElementById('address').value = data.address;
+        document.getElementById('qualification').value = data.qualifications;
         document.getElementById('city').value = data.city;
         document.getElementById('username').value = data.username;
         document.getElementById('password').value = data.password;
@@ -468,7 +481,7 @@ async function view_employee(btn) {
             }
         }).then(async (data) => {
 
-
+            console.log(data);
             let currentyear = new Date().getFullYear();
 
             let age = currentyear - data.dob.slice(6, 10);
@@ -480,8 +493,14 @@ async function view_employee(btn) {
 
 
 
-
-            document.getElementsByClassName('img_view')[0].src = `${server_url + '/' + btn.value + '/avatar'}`
+            if(data.hasOwnProperty('avatar'))
+            {
+                document.getElementsByClassName('img_view')[0].innerHTML = `<img src="${server_url + '/' + btn.value + '/avatar'}" alt="" >`;
+            }
+            else{
+                document.getElementsByClassName('img_view')[0].innerHTML = ` <div class='d-flex align-items-center justify-content-center'>${data.firstName[0].toUpperCase() + data.lastName[0].toUpperCase()}</div>`
+            }
+           
             document.getElementsByClassName('full_name')[0].innerHTML = `<h5>${data.salutation} ${data.firstName} ${data.lastName}<h5>`;
             document.getElementsByClassName('usr-email')[0].innerHTML = `<h5 class='view-details-box'>${data.email}</h5>`;
             document.getElementsByClassName('usr-gndr')[0].innerHTML = `${data.gender}`;
