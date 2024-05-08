@@ -5,7 +5,7 @@ let server_url = 'http://localhost:3000/employees';
 //pagenation ---data
 
 
-document.getElementById('employee-row').addEventListener('click', (event) => {
+document.getElementById('employee-row').addEventListener('change', (event) => {
 
     state.rows = parseInt(event.target.value);
 
@@ -17,7 +17,8 @@ document.getElementById('employee-row').addEventListener('click', (event) => {
 
 let state = {
     page: 1,
-    rows: 7,
+    rows: 6,
+    window : 3
 };
 
 document.getElementById('employee-row').value = state.rows;
@@ -44,22 +45,56 @@ async function PageNationsetUp() {
 
 async function pageButton(pages) {
     const buttonDiv = document.getElementById('page-button-wrapper');
-    let buttonHtml = '';
+    let buttonHtml = '<button id="cvrn_left" class="btn  btn-lg  btn-info"><span class="material-symbols-outlined"> chevron_left </span> </button>';
 
+  let maxLeft = (state.page - Math.floor(state.window /2));
+  let maxRight = (state.page + Math.floor(state.window /2));
+  if(maxLeft <1)
+  {
+    maxLeft =1;
+    maxRight =state.window;
+  }
+  if(maxRight >pages)
+  {
+    maxLeft = pages -(state.window -1);
+    maxRight = pages;
 
-    for (let page = 1; page <= pages; page++) {
-        buttonHtml += `<button value="${page}" class='btn button_page'>${page}</button>`;
+    if(maxLeft <1)
+    {
+        maxLeft =1;
+    }
+  }
+    for (let page = maxLeft; page <= maxRight; page++) {
+        buttonHtml += `<button value="${page}" class='btn button_page btn-lg  btn-info'>${page}</button>`;
     }
 
-
+    buttonHtml += '<button id ="chvrn_right" class="btn  btn-lg  btn-info"><span class="material-symbols-outlined"> chevron_right </span> </button>';
     buttonDiv.innerHTML = buttonHtml;
+    document.getElementById('cvrn_left').addEventListener('click' ,() => 
+    {
 
+        let pageButtons =  document.getElementsByClassName('button_page');
+        
+        state.page = parseInt(pageButtons[0].value);
+        displayPagination();
+
+    });
+    document.getElementById('chvrn_right').addEventListener('click' ,() => 
+    {
+
+        let pageButtons =  document.getElementsByClassName('button_page');
+        
+       
+        state.page = parseInt(pageButtons[pageButtons.length -1].value);
+        displayPagination();
+
+    });
     const pageButtons = document.getElementsByClassName('button_page');
     Array.from(pageButtons).forEach((eachBtn) => {
         eachBtn.addEventListener('click', () => {
 
             state.page = parseInt(eachBtn.value, 10);
-
+          
             displayPagination();
         });
     });
@@ -69,20 +104,30 @@ async function pageButton(pages) {
 async function displayPagination() {
 
     const a = await PageNationsetUp();
+    
     const b = a.queryset;
 
 
+    
+
+     let start_value = (parseInt(state.page) - 1) * parseInt(state.rows) + 1 ;
+    
+
+     console.log(start_value);
+     
+
     let eachRows = '';
-    let count = 1;
+   
+   
     for (let user of b) {
 
         let month = await getcurrentmonth(parseInt(user.dob.split('-')[1]));
         
         if (user.hasOwnProperty('avatar')) {
 
-
+           
             eachRows += `<tr scope='row' >
-                <td scope='col' class='td-data'>#0${count++}</td>
+                <td scope='col' class='td-data'>#0${start_value++}</td>
                 <td scope='col'  class='td-data d-flex align-items-center  gap-2'>
                     <span>
                     
@@ -119,7 +164,7 @@ async function displayPagination() {
         else {
 
             eachRows += `<tr scope='row' class='py-3 '>
-                <td scope='col' class='td-data'>#0${count++}</td>
+                <td scope='col' class='td-data'>#0${start_value++}</td>
                 <td scope='col' class='td-data d-flex align-items-center  gap-2'>
                     <span>
                         <div class='side_images d-flex align-items-center justify-content-center'>${user.firstName[0].toUpperCase() + user.lastName[0].toUpperCase()}</div>
@@ -916,4 +961,16 @@ document.getElementById('overlay').addEventListener('click' , () =>
     document.getElementById('overlay').style.display='none';
     document.getElementsByClassName('delete')[0].style.display ='none';
     displayPagination();
-})
+});
+
+
+
+
+// document.addEventListener('click', (e) => {
+//     // Check if the clicked element does not have the class 'edit-details'
+//    if(e.target.classList.value == 'edit-details' ||e.target.classList.value == 'view_btn' ||e.target.classList.value == 'edit_btn')
+//    {
+
+//    }
+// });
+
