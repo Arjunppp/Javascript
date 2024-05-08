@@ -175,7 +175,9 @@ displayPagination();
 async function addingEmployee() {
     document.getElementById('add_employee').addEventListener('click', async () => {
         document.getElementsByClassName('card')[0].style.display = 'block';
-        document.getElementsByClassName('btn-add')[0].innerHTML = 'Add EMployee';
+        document.getElementById('overlay').style.display ='block';
+        document.getElementsByClassName('btn-add')[0].innerHTML = 'Add Employee';
+        
         // calling add employee function
         await form_submission('Add', 0, 'POST');
         cancelAdding();
@@ -186,28 +188,39 @@ async function addingEmployee() {
 
 // submiting form defenition
 async function form_submission(option, value, http_method) {
+    document.getElementById('salutation').value = '';
+    document.getElementById('first_name').value = '';
+    document.getElementById('last_name').value = '';
+    document.getElementById('email').value = '';
+    document.getElementById('mobile_number').value = '';
+    document.getElementById('country').value = '';
+    document.getElementById('state').value = '';
+    document.getElementById('date_of_birth').value = '';
+    document.getElementById('address').value = '';
+    document.getElementById('city').value = '';
+    document.getElementById('username').value = '';
+    document.getElementById('qualification').value = '';
+    document.getElementById('password').value ='';
+    let All_error = document.getElementsByClassName('err');
+                //Not giving any data if there is no error
+                for (let each of All_error) {
+                    each.innerHTML = '';
+                }
+                var function_option = '';
+                var method = '';
+                var button_value = '';
+                var URL = '';
 
     if (option == 'Add') {
 
-        var function_option = option;
-        var method = http_method;
-        var button_value = value;
-        var URL = server_url;
+         function_option = option;
+         method = http_method;
+         button_value = value;
+         URL = server_url;
+        document.getElementsByClassName('edit_image_div')[0].style.display ='none';
+        document.getElementsByClassName("label_upld")[0].style.display = 'block';
         console.log('its an add');
-        document.getElementById('salutation').value = '';
-        document.getElementById('first_name').value = '';
-        document.getElementById('last_name').value = '';
-        document.getElementById('email').value = '';
-        document.getElementById('mobile_number').value = '';
-        document.getElementById('country').value = '';
-        document.getElementById('state').value = '';
-        document.getElementById('date_of_birth').value = '';
-        document.getElementById('address').value = '';
-        document.getElementById('city').value = '';
-        document.getElementById('username').value = '';
-        document.getElementById('qualification').value = '';
-        document.getElementById('password').value ='';
-
+        
 
     }
     else if (option == 'Update') {
@@ -302,6 +315,7 @@ async function form_submission(option, value, http_method) {
                 document.getElementsByClassName('add-emp-cnfrmation')[0].style.display = 'flex';
                 document.getElementsByClassName('employee-add-btn')[0].addEventListener('click', () => {
                     document.getElementsByClassName('add-emp-cnfrmation')[0].style.display = 'none';
+                    document.getElementById('overlay').style.display='none';
                     displayPagination();
 
                 })
@@ -339,9 +353,11 @@ async function form_submission(option, value, http_method) {
 
 
     })
+    
 
 
 }
+
 
 
 
@@ -352,7 +368,8 @@ async function form_submission(option, value, http_method) {
 function cancelAdding() {
     document.getElementsByClassName('btn-cncl')[0].addEventListener('click', () => {
         document.getElementsByClassName('card')[0].style.display = 'none';
-        window.location.reload();
+        document.getElementById('overlay').style.display = 'none';
+       displayPagination();
     });
 }
 
@@ -531,6 +548,7 @@ async function view_employee(btn) {
 async function edit_employee(btn) {
     btn.addEventListener('click', async () => {
         document.getElementsByClassName('card')[0].style.display = 'block';
+        document.getElementById('overlay').style.display ='block';
         document.getElementsByClassName("label_upld")[0].style.display = 'none';
         document.getElementsByClassName("btn-add")[0].innerHTML = 'Save Changes';
         document.getElementsByClassName('edit_image_div')[0].style.display = 'block';
@@ -545,12 +563,13 @@ async function delete_employee(btn) {
 
     btn.addEventListener('click', () => {
 
+        document.getElementById('overlay').style.display ='block';
         document.getElementsByClassName('delete')[0].style.display = 'flex';
         document.getElementsByClassName('edit-details')[0].style.display ='none';
         let delete_items = `<h4>Delete Employees</h4>
                <p>Are you sure you wanna delete this employee</p>
                <div class='delete_btns'>
-               <button class='btn cncl-btn'>Cancel</button>
+               <button class='btn btn-cncl'>Cancel</button>
                <button class='btn delte-btn' value=${btn.value}>Delete</button>
                </div>`;
         document.getElementsByClassName('delete')[0].innerHTML = delete_items;
@@ -560,6 +579,7 @@ async function delete_employee(btn) {
 
             document.querySelector('.delete').style.display = 'none';
             document.querySelector('.edit-details').style.display = 'none';
+            document.getElementById('overlay').style.display ='none';
 
         });
 
@@ -578,8 +598,11 @@ async function delete_employee(btn) {
                     return res.json();
                 }
             }).then((data) => {
+                
                 document.querySelector('.delete').style.display = 'none';
-                window.location.reload();
+                document.getElementById('overlay').style.display ='none';
+                displayPagination();
+                
 
             });
         })
@@ -864,5 +887,33 @@ document.getElementById('file').addEventListener('change', () => {
     document.getElementsByClassName('edit-image')[0].src = URL.createObjectURL(file);
 })
 
+let cncl_cls = document.getElementsByClassName('cncl-symbl');
+console.log(cncl_cls);
+document.getElementsByClassName('cncl-symbl')[0].addEventListener('click' , () =>
+{
+    document.getElementsByClassName('card')[0].style.display = 'none';
+    document.getElementById('overlay').style.display = 'none';
+   
+   displayPagination();
+})
+
+//button to change image
+
+let change_btn = document.getElementsByClassName('change_btn')[0];
+let input_editimage = document.getElementById('edit_image');
+
+change_btn.addEventListener('click' ,() => 
+{
+    input_editimage.click();
+})
 
 
+
+
+document.getElementById('overlay').addEventListener('click' , () =>
+{
+    document.getElementsByClassName('card')[0].style.display ='none';
+    document.getElementById('overlay').style.display='none';
+    document.getElementsByClassName('delete')[0].style.display ='none';
+    displayPagination();
+})

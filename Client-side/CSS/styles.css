@@ -65,7 +65,7 @@ body {
 
 .main-page {
     background: #edeff4;
-    position: relative;
+    /* position: relative; */
 
 
 }
@@ -228,10 +228,11 @@ ul {
 .card {
 
     display: none;
-    position: absolute;
+    /* position: absolute; */
+    position: relative;
     left: 20%;
-   bottom: -612px; 
-
+    bottom: 497px;
+    z-index: 1;
 }
 
 .table-main {
@@ -247,6 +248,10 @@ ul {
     position: relative;
 }
 
+.container-fluid
+{
+    position: relative;
+}
 /*  Bootstrap styling */
 
 .material-symbols-outlined.icn-fnt-32 {
@@ -343,6 +348,15 @@ textarea::placeholder {
     border-radius: 11px;
     padding-top: 0.9rem;
     padding-bottom: 0.9rem;
+}
+.btn-cncl
+{
+    background-color: #FAF9FF;
+}
+.btn-add
+{
+    background-color: #4318FF;
+    color: white;
 }
 
 
@@ -474,10 +488,10 @@ tr {
     vertical-align: middle;
 }
 
-#form {
+/* #form {
     position: relative;
 
-}
+} */
 
 .view-details-box {
     box-shadow: 0px 18px 40px 0px #7090B01F;
@@ -576,4 +590,26 @@ letter-spacing: -0.02em;
     display: flex;
     justify-content: end;
     box-shadow: 0px 1px 4px 0px #1010311F;
+}
+
+#overlay
+{
+    display: none;
+    z-index: 1;
+  
+    background-color: rgba(20 18 18 /91%);
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.change_btn
+{
+    background-color:  #EAE6FB;
+    color:  #4318FF;
+    width: 130px;
+    border-radius: 36px;
 }
