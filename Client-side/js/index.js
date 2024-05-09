@@ -231,9 +231,6 @@ function editemployees() {
     })
 }
 
-
-
-
 //It also enable the form section.function trigger when a click happens
 async function addingEmployee() {
 
@@ -254,9 +251,81 @@ async function addingEmployee() {
 // add event listner to add EMployee button
 document.getElementById('add_employee').addEventListener('click', addingEmployee);
 
-
+//add event listner to form submision
 document.getElementById('form').addEventListener('submit', handlingFormSubmission );
 
+
+//function to add or update employee
+async function addOrSaveEmployee(URL , method ,value)
+{
+	let response = await fetch(URL, {
+            method: `${method}`, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(value)
+        });
+        let data = await response.json();
+        for (let eachdata in data) {
+            if (eachdata == 'errors') {
+                let errors = data[eachdata];
+                let All_error = document.getElementsByClassName('err');
+                //Not giving any data if there is no error
+                for (let each of All_error) {
+                    each.innerHTML = '';
+                }
+                //displaying errors if there is error
+                for (let eacherror of errors) {
+                    let lower_err = eacherror.split(' ')[0].toLowerCase();
+                    console.log(lower_err);
+                    if (lower_err != 'invalid') {
+                        document.getElementById(`${lower_err}` + '_err').innerText = eacherror;
+                    }
+                    if (lower_err === 'invalid') {
+                        let lower_err = eacherror.split(' ')[1].toLowerCase();
+                        document.getElementById(`${lower_err}` + '_err').innerText = eacherror;
+                    }
+                }
+
+            }
+            else {
+
+                document.getElementsByClassName('card')[0].style.display = 'none';
+                document.querySelector('.add-emp-cnfrmation h5').innerText = data['message'];
+                document.getElementsByClassName('add-emp-cnfrmation')[0].style.display = 'flex';
+                document.getElementsByClassName('employee-add-btn')[0].addEventListener('click', () => {
+                    document.getElementsByClassName('add-emp-cnfrmation')[0].style.display = 'none';
+                    document.getElementById('overlay').style.display = 'none';
+                    displayPagination();
+
+                })
+
+            }
+        }
+	
+
+        return data.id;
+}
+
+//function to upload image
+async function uploadOrUpdateImage(img_url , image_object)
+{
+	 await fetch(img_url, {
+            method: 'POST',
+            body: image_object
+        }).then((response) => {
+            if (!response.ok) {
+                throw new Error('Check the URL please');
+
+            } else {
+                return response.json();
+            }
+
+        }).then((data) => {
+            return data;
+        });
+
+	
+	
+}
+
+//this function will be triggered when the submit event triggered
 async function handlingFormSubmission(event)
 {
     event.preventDefault();
@@ -286,157 +355,37 @@ async function handlingFormSubmission(event)
     if(addOrSave == 'add')
     {   let URL =server_url;
         let method = 'POST';
-
-        let response = await fetch(URL, {
-            method: `${method}`, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(value)
-        });
-        let data = await response.json();
-        for (let eachdata in data) {
-            if (eachdata == 'errors') {
-                let errors = data[eachdata];
-                let All_error = document.getElementsByClassName('err');
-                //Not giving any data if there is no error
-                for (let each of All_error) {
-                    each.innerHTML = '';
-                }
-                //displaying errors if there is error
-                for (let eacherror of errors) {
-                    let lower_err = eacherror.split(' ')[0].toLowerCase();
-                    console.log(lower_err);
-                    if (lower_err != 'invalid') {
-                        document.getElementById(`${lower_err}` + '_err').innerText = eacherror;
-                    }
-                    if (lower_err === 'invalid') {
-                        let lower_err = eacherror.split(' ')[1].toLowerCase();
-                        document.getElementById(`${lower_err}` + '_err').innerText = eacherror;
-                    }
-                }
-
-            }
-            else {
-
-                document.getElementsByClassName('card')[0].style.display = 'none';
-                document.querySelector('.add-emp-cnfrmation h5').innerText = data['message'];
-                document.getElementsByClassName('add-emp-cnfrmation')[0].style.display = 'flex';
-                document.getElementsByClassName('employee-add-btn')[0].addEventListener('click', () => {
-                    document.getElementsByClassName('add-emp-cnfrmation')[0].style.display = 'none';
-                    document.getElementById('overlay').style.display = 'none';
-                    displayPagination();
-
-                })
-
-            }
-        }
+		
+		let empid = await addOrSaveEmployee(URL , method ,value);
+        
         let image = await document.getElementById('file').files[0];
-        let img_url = `${server_url}/${data.id}/avatar`;
+        let img_url = `${server_url}/${empid}/avatar`;
         let image_object = new FormData();
         image_object.append('avatar', image);
-        await fetch(img_url, {
-            method: 'POST',
-            body: image_object
-        }).then((response) => {
-            if (!response.ok) {
-                throw new Error('Check the URL please');
-
-            } else {
-                return response.json();
-            }
-
-        }).then((data) => {
-            return data;
-        });
-
+		
+		await uploadOrUpdateImage(img_url , image_object);
+       
     }
     else if(addOrSave =='save')
     {
         let user = document.getElementsByClassName('btn-add')[0].value;
         let URL =server_url + '/' + user;
         let method = 'PUT';
-        let dob = document.getElementById('date_of_birth').value;
-        let crctdDob = dob.slice(8, 10) + '-' + dob.slice(5, 7) + '-' + dob.slice(0, 4);
-        let value = {
-
-            "salutation": `${document.getElementById('salutation').value}`,
-            "firstName": `${document.getElementById('first_name').value}`,
-            "lastName": `${document.getElementById('last_name').value}`,
-            "email": `${document.getElementById('email').value}`,
-            "phone": `${document.getElementById('mobile_number').value}`,
-            "dob": crctdDob,
-            "gender": `${document.querySelector('input[name="gender"]:checked').value}`,
-            "qualifications": `${document.getElementById('qualification').value}`,
-            "address": `${document.getElementById('address').value}`,
-            "city": `${document.getElementById('city').value}`,
-            "state": `${document.getElementById('state').value}`,
-            "country": `${document.getElementById('country').value}`,
-            "username": `${document.getElementById('username').value}`,
-            "password": `${document.getElementById('password').value}`
-
-        };
+        await addOrSaveEmployee(URL , method ,value);
 
 
-        let response = await fetch(URL, {
-            method: `${method}`, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(value)
-        });
-        let data = await response.json();
-        console.log(data);
-        for (let eachdata in data) {
-            if (eachdata == 'errors') {
-                let errors = data[eachdata];
-                let All_error = document.getElementsByClassName('err');
-                //Not giving any data if there is no error
-                for (let each of All_error) {
-                    each.innerHTML = '';
-                }
-                //displaying errors if there is error
-                for (let eacherror of errors) {
-                    let lower_err = eacherror.split(' ')[0].toLowerCase();
-                    console.log(lower_err);
-                    if (lower_err != 'invalid') {
-                        document.getElementById(`${lower_err}` + '_err').innerText = eacherror;
-                    }
-                    if (lower_err === 'invalid') {
-                        let lower_err = eacherror.split(' ')[1].toLowerCase();
-                        document.getElementById(`${lower_err}` + '_err').innerText = eacherror;
-                    }
-                }
-
-            }
-            else {
-
-                document.getElementsByClassName('card')[0].style.display = 'none';
-                document.querySelector('.add-emp-cnfrmation h5').innerText = data['message'];
-                document.getElementsByClassName('add-emp-cnfrmation')[0].style.display = 'flex';
-                document.getElementsByClassName('employee-add-btn')[0].addEventListener('click', () => {
-                    document.getElementsByClassName('add-emp-cnfrmation')[0].style.display = 'none';
-                    document.getElementById('overlay').style.display = 'none';
-                    displayPagination();
-
-                })
-
-            }
-        }
+       
         let image = await document.getElementById('edit_image').files[0];
          let   img_url = `${server_url}/${user}/avatar`;
          let image_object = new FormData();
          image_object.append('avatar', image);
-         await fetch(img_url, {
-             method: 'POST',
-             body: image_object
-         }).then((response) => {
-             if (!response.ok) {
-                 throw new Error('Check the URL please');
- 
-             } else {
-                 return response.json();
-             }
- 
-         }).then((data) => {
-             return data;
-         });
+         await uploadOrUpdateImage(img_url , image_object);
 
     }
 }
 
+
+//function to edit employee
 async function edit_employee(btn) {
 
    
@@ -485,6 +434,7 @@ async function edit_employee(btn) {
 
 }
 
+//to view the selected employee
 async function view_employee(btn) {
     btn.addEventListener('click', () => {
         document.getElementsByClassName('details')[0].style.display = 'flex';
@@ -548,7 +498,7 @@ async function view_employee(btn) {
 }
 
 
-
+//to dlete an selected employee
 async function delete_employee(btn) {
 
     btn.addEventListener('click', () => {
@@ -601,12 +551,6 @@ async function delete_employee(btn) {
 
 
 
-
-
-
-
-
-
 //function to clear the entries in the form
 
 async function clearFormEntries() {
@@ -626,9 +570,6 @@ async function clearFormEntries() {
 }
 
 // submiting form defenition
-
-
-
 
 
 //====================================================End of Adding, deleteing ,viewing, cancelling========================
@@ -674,10 +615,6 @@ async function fetch_image(id) {
     let image = fetch(`${server_url}/${id}/avatar`);
     return image
 }
-
-
-
-
 
 
 async function getcurrentmonth(monthnum) {
@@ -939,10 +876,6 @@ async function search_user() {
 }
 
 
-
-
-
-
 //footer dynamic year
 document.getElementById('present-year').innerHTML = new Date().getFullYear();
 
@@ -1007,8 +940,6 @@ document.getElementById('overlay').addEventListener('click', () => {
     document.getElementsByClassName('delete')[0].style.display = 'none';
     displayPagination();
 });
-
-
 
 
 let container = document.getElementsByClassName('edit-details');
