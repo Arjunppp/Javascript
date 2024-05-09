@@ -18,7 +18,7 @@ document.getElementById('employee-row').addEventListener('change', (event) => {
 let state = {
     page: 1,
     rows: 6,
-    window : 3
+    window: 3
 };
 
 document.getElementById('employee-row').value = state.rows;
@@ -47,45 +47,40 @@ async function pageButton(pages) {
     const buttonDiv = document.getElementById('page-button-wrapper');
     let buttonHtml = '<button id="cvrn_left" class="btn  btn-lg  btn-info"><span class="material-symbols-outlined"> chevron_left </span> </button>';
 
-  let maxLeft = (state.page - Math.floor(state.window /2));
-  let maxRight = (state.page + Math.floor(state.window /2));
-  if(maxLeft <1)
-  {
-    maxLeft =1;
-    maxRight =state.window;
-  }
-  if(maxRight >pages)
-  {
-    maxLeft = pages -(state.window -1);
-    maxRight = pages;
-
-    if(maxLeft <1)
-    {
-        maxLeft =1;
+    let maxLeft = (state.page - Math.floor(state.window / 2));
+    let maxRight = (state.page + Math.floor(state.window / 2));
+    if (maxLeft < 1) {
+        maxLeft = 1;
+        maxRight = state.window;
     }
-  }
+    if (maxRight > pages) {
+        maxLeft = pages - (state.window - 1);
+        maxRight = pages;
+
+        if (maxLeft < 1) {
+            maxLeft = 1;
+        }
+    }
     for (let page = maxLeft; page <= maxRight; page++) {
         buttonHtml += `<button value="${page}" class='btn button_page btn-lg  btn-info'>${page}</button>`;
     }
 
     buttonHtml += '<button id ="chvrn_right" class="btn  btn-lg  btn-info"><span class="material-symbols-outlined"> chevron_right </span> </button>';
     buttonDiv.innerHTML = buttonHtml;
-    document.getElementById('cvrn_left').addEventListener('click' ,() => 
-    {
+    document.getElementById('cvrn_left').addEventListener('click', () => {
 
-        let pageButtons =  document.getElementsByClassName('button_page');
-        
+        let pageButtons = document.getElementsByClassName('button_page');
+
         state.page = parseInt(pageButtons[0].value);
         displayPagination();
 
     });
-    document.getElementById('chvrn_right').addEventListener('click' ,() => 
-    {
+    document.getElementById('chvrn_right').addEventListener('click', () => {
 
-        let pageButtons =  document.getElementsByClassName('button_page');
-        
-       
-        state.page = parseInt(pageButtons[pageButtons.length -1].value);
+        let pageButtons = document.getElementsByClassName('button_page');
+
+
+        state.page = parseInt(pageButtons[pageButtons.length - 1].value);
         displayPagination();
 
     });
@@ -94,7 +89,7 @@ async function pageButton(pages) {
         eachBtn.addEventListener('click', () => {
 
             state.page = parseInt(eachBtn.value, 10);
-          
+
             displayPagination();
         });
     });
@@ -104,28 +99,28 @@ async function pageButton(pages) {
 async function displayPagination() {
 
     const a = await PageNationsetUp();
-    
+
     const b = a.queryset;
 
 
-    
 
-     let start_value = (parseInt(state.page) - 1) * parseInt(state.rows) + 1 ;
-    
 
-     console.log(start_value);
-     
+    let start_value = (parseInt(state.page) - 1) * parseInt(state.rows) + 1;
+
+
+    console.log(start_value);
+
 
     let eachRows = '';
-   
-   
+
+
     for (let user of b) {
 
         let month = await getcurrentmonth(parseInt(user.dob.split('-')[1]));
-        
+
         if (user.hasOwnProperty('avatar')) {
 
-           
+
             eachRows += `<tr scope='row' >
                 <td scope='col' class='td-data'>#0${start_value++}</td>
                 <td scope='col'  class='td-data d-flex align-items-center  gap-2'>
@@ -138,7 +133,7 @@ async function displayPagination() {
                 <td scope='col' class='td-data'>${user.email}</td>
                 <td scope='col' class='td-data'>${user.phone}</td>
                 <td scope='col' class='td-data'>${user.gender}</td>
-                <td scope='col' class='td-data'>${user.dob.split('-')[0]+' '+month+' '+user.dob.split('-')[2]}</td>
+                <td scope='col' class='td-data'>${user.dob.split('-')[0] + ' ' + month + ' ' + user.dob.split('-')[2]}</td>
                 <td scope='col' class='td-data'>${user.country}</td>
                 <td scope='col' class='edit'>
                     <span class='material-symbols-outlined select-dots'>
@@ -174,7 +169,7 @@ async function displayPagination() {
                 <td scope='col' class='td-data'>${user.email}</td>
                 <td scope='col' class='td-data'>${user.phone}</td>
                 <td scope='col' class='td-data'>${user.gender}</td>
-                <td scope='col' class='td-data'>${user.dob.split('-')[0]+' '+month+' '+user.dob.split('-')[2]}</td>
+                <td scope='col' class='td-data'>${user.dob.split('-')[0] + ' ' + month + ' ' + user.dob.split('-')[2]}</td>
                 <td scope='col' class='td-data'>${user.country}</td>
                 <td scope='col' class='edit'>
                     <span class='material-symbols-outlined select-dots'>
@@ -220,9 +215,9 @@ displayPagination();
 async function addingEmployee() {
     document.getElementById('add_employee').addEventListener('click', async () => {
         document.getElementsByClassName('card')[0].style.display = 'block';
-        document.getElementById('overlay').style.display ='block';
+        document.getElementById('overlay').style.display = 'block';
         document.getElementsByClassName('btn-add')[0].innerHTML = 'Add Employee';
-        
+
         // calling add employee function
         await form_submission('Add', 0, 'POST');
         cancelAdding();
@@ -245,27 +240,27 @@ async function form_submission(option, value, http_method) {
     document.getElementById('city').value = '';
     document.getElementById('username').value = '';
     document.getElementById('qualification').value = '';
-    document.getElementById('password').value ='';
+    document.getElementById('password').value = '';
     let All_error = document.getElementsByClassName('err');
-                //Not giving any data if there is no error
-                for (let each of All_error) {
-                    each.innerHTML = '';
-                }
-                var function_option = '';
-                var method = '';
-                var button_value = '';
-                var URL = '';
+    //Not giving any data if there is no error
+    for (let each of All_error) {
+        each.innerHTML = '';
+    }
+    var function_option = '';
+    var method = '';
+    var button_value = '';
+    var URL = '';
 
     if (option == 'Add') {
 
-         function_option = option;
-         method = http_method;
-         button_value = value;
-         URL = server_url;
-        document.getElementsByClassName('edit_image_div')[0].style.display ='none';
+        function_option = option;
+        method = http_method;
+        button_value = value;
+        URL = server_url;
+        document.getElementsByClassName('edit_image_div')[0].style.display = 'none';
         document.getElementsByClassName("label_upld")[0].style.display = 'block';
         console.log('its an add');
-        
+
 
     }
     else if (option == 'Update') {
@@ -280,7 +275,7 @@ async function form_submission(option, value, http_method) {
         document.getElementsByClassName('card')[0].style.display = 'block';
         document.getElementsByClassName("label_upld")[0].style.display = 'none';
 
-    
+
 
         if (data.gender == 'male') {
             document.getElementById('male').checked = true;
@@ -360,7 +355,7 @@ async function form_submission(option, value, http_method) {
                 document.getElementsByClassName('add-emp-cnfrmation')[0].style.display = 'flex';
                 document.getElementsByClassName('employee-add-btn')[0].addEventListener('click', () => {
                     document.getElementsByClassName('add-emp-cnfrmation')[0].style.display = 'none';
-                    document.getElementById('overlay').style.display='none';
+                    document.getElementById('overlay').style.display = 'none';
                     displayPagination();
 
                 })
@@ -398,7 +393,7 @@ async function form_submission(option, value, http_method) {
 
 
     })
-    
+
 
 
 }
@@ -414,7 +409,7 @@ function cancelAdding() {
     document.getElementsByClassName('btn-cncl')[0].addEventListener('click', () => {
         document.getElementsByClassName('card')[0].style.display = 'none';
         document.getElementById('overlay').style.display = 'none';
-       displayPagination();
+        displayPagination();
     });
 }
 
@@ -532,7 +527,7 @@ async function view_employee(btn) {
         document.getElementsByClassName('details')[0].style.display = 'flex';
         document.getElementsByClassName('table-main')[0].style.display = 'none';
         document.getElementsByClassName('table')[0].style.display = 'none';
-        document.getElementsByClassName('edit-details')[0].style.display ='none';
+        document.getElementsByClassName('edit-details')[0].style.display = 'none';
 
         fetch(server_url + '/' + btn.value).then((res) => {
             if (!res.ok) {
@@ -555,14 +550,13 @@ async function view_employee(btn) {
 
 
 
-            if(data.hasOwnProperty('avatar'))
-            {
+            if (data.hasOwnProperty('avatar')) {
                 document.getElementsByClassName('img_view')[0].innerHTML = `<img src="${server_url + '/' + btn.value + '/avatar'}" alt="" >`;
             }
-            else{
+            else {
                 document.getElementsByClassName('img_view')[0].innerHTML = ` <div class='d-flex align-items-center justify-content-center'>${data.firstName[0].toUpperCase() + data.lastName[0].toUpperCase()}</div>`
             }
-           
+
             document.getElementsByClassName('full_name')[0].innerHTML = `<h5>${data.salutation} ${data.firstName} ${data.lastName}<h5>`;
             document.getElementsByClassName('usr-email')[0].innerHTML = `<h5 class='view-details-box'>${data.email}</h5>`;
             document.getElementsByClassName('usr-gndr')[0].innerHTML = `${data.gender}`;
@@ -593,11 +587,11 @@ async function view_employee(btn) {
 async function edit_employee(btn) {
     btn.addEventListener('click', async () => {
         document.getElementsByClassName('card')[0].style.display = 'block';
-        document.getElementById('overlay').style.display ='block';
+        document.getElementById('overlay').style.display = 'block';
         document.getElementsByClassName("label_upld")[0].style.display = 'none';
         document.getElementsByClassName("btn-add")[0].innerHTML = 'Save Changes';
         document.getElementsByClassName('edit_image_div')[0].style.display = 'block';
-        document.getElementsByClassName('edit-details')[0].style.display ='none';
+        document.getElementsByClassName('edit-details')[0].style.display = 'none';
         await form_submission('Update', btn.value, 'PUT');
         cancelAdding();
     });
@@ -608,9 +602,9 @@ async function delete_employee(btn) {
 
     btn.addEventListener('click', () => {
 
-        document.getElementById('overlay').style.display ='block';
+        document.getElementById('overlay').style.display = 'block';
         document.getElementsByClassName('delete')[0].style.display = 'flex';
-        document.getElementsByClassName('edit-details')[0].style.display ='none';
+        document.getElementsByClassName('edit-details')[0].style.display = 'none';
         let delete_items = `<h4>Delete Employees</h4>
                <p>Are you sure you wanna delete this employee</p>
                <div class='delete_btns'>
@@ -624,7 +618,7 @@ async function delete_employee(btn) {
 
             document.querySelector('.delete').style.display = 'none';
             document.querySelector('.edit-details').style.display = 'none';
-            document.getElementById('overlay').style.display ='none';
+            document.getElementById('overlay').style.display = 'none';
 
         });
 
@@ -643,11 +637,11 @@ async function delete_employee(btn) {
                     return res.json();
                 }
             }).then((data) => {
-                
+
                 document.querySelector('.delete').style.display = 'none';
-                document.getElementById('overlay').style.display ='none';
+                document.getElementById('overlay').style.display = 'none';
                 displayPagination();
-                
+
 
             });
         })
@@ -691,10 +685,9 @@ async function search_user() {
             });
             let eachRows = '';
             let count = 1;
-           for(let user of search_result)
-           {
-            let month = await getcurrentmonth(parseInt(user.dob.split('-')[1]));
-            
+            for (let user of search_result) {
+                let month = await getcurrentmonth(parseInt(user.dob.split('-')[1]));
+
 
                 if (user.hasOwnProperty('avatar')) {
 
@@ -711,7 +704,7 @@ async function search_user() {
                         <td scope='col' class='td-data'>${user.email}</td>
                         <td scope='col' class='td-data'>${user.phone}</td>
                         <td scope='col' class='td-data'>${user.gender}</td>
-                        <td scope='col' class='td-data'>${user.dob.split('-')[0]+' '+month+' '+user.dob.split('-')[2]}</td>
+                        <td scope='col' class='td-data'>${user.dob.split('-')[0] + ' ' + month + ' ' + user.dob.split('-')[2]}</td>
                         <td scope='col' class='td-data'>${user.country}</td>
                         <td scope='col' class='edit'>
                             <span class='material-symbols-outlined select-dots'>
@@ -746,7 +739,7 @@ async function search_user() {
                         <td scope='col' class='td-data '>${user.email}</td>
                         <td scope='col' class='td-data '>${user.phone}</td>
                         <td scope='col' class='td-data '>${user.gender}</td>
-                        <td scope='col' class='td-data '>${user.dob.split('-')[0]+' '+month+' '+user.dob.split('-')[2]}</td>
+                        <td scope='col' class='td-data '>${user.dob.split('-')[0] + ' ' + month + ' ' + user.dob.split('-')[2]}</td>
                         <td scope='col' class='td-data '>${user.country}</td>
                         <td scope='col' class='td-data edit'>
                             <span class='material-symbols-outlined select-dots'>
@@ -807,9 +800,9 @@ async function search_user() {
 
 
         console.log(search_result);
-        for(let user of search_result) {
+        for (let user of search_result) {
             let month = await getcurrentmonth(parseInt(user.dob.split('-')[1]));
-            
+
             if (user.hasOwnProperty('avatar')) {
 
                 eachRows += `<tr scope='row'>
@@ -824,7 +817,7 @@ async function search_user() {
                 <td scope='col' class='td-data'>${user.email}</td>
                 <td scope='col' class='td-data'>${user.phone}</td>
                 <td scope='col' class='td-data'>${user.gender}</td>
-                <td scope='col' class='td-data'>${user.dob.split('-')[0]+' '+month+' '+user.dob.split('-')[2]}</td>
+                <td scope='col' class='td-data'>${user.dob.split('-')[0] + ' ' + month + ' ' + user.dob.split('-')[2]}</td>
                 <td scope='col' class='td-data'>${user.country}</td>
                 <td scope='col' class='edit'>
                     <span class='material-symbols-outlined select-dots'>
@@ -859,7 +852,7 @@ async function search_user() {
                 <td scope='col' class='td-data'>${user.email}</td>
                 <td scope='col' class='td-data'>${user.phone}</td>
                 <td scope='col' class='td-data'>${user.gender}</td>
-                <td scope='col' class='td-data'>${user.dob.split('-')[0]+' '+month+' '+user.dob.split('-')[2]}</td>
+                <td scope='col' class='td-data'>${user.dob.split('-')[0] + ' ' + month + ' ' + user.dob.split('-')[2]}</td>
                 <td scope='col' class='td-data'>${user.country}</td>
                 <td scope='col' class='edit'>
                     <span class='material-symbols-outlined select-dots'>
@@ -934,12 +927,11 @@ document.getElementById('file').addEventListener('change', () => {
 
 let cncl_cls = document.getElementsByClassName('cncl-symbl');
 console.log(cncl_cls);
-document.getElementsByClassName('cncl-symbl')[0].addEventListener('click' , () =>
-{
+document.getElementsByClassName('cncl-symbl')[0].addEventListener('click', () => {
     document.getElementsByClassName('card')[0].style.display = 'none';
     document.getElementById('overlay').style.display = 'none';
-   
-   displayPagination();
+
+    displayPagination();
 })
 
 //button to change image
@@ -947,30 +939,48 @@ document.getElementsByClassName('cncl-symbl')[0].addEventListener('click' , () =
 let change_btn = document.getElementsByClassName('change_btn')[0];
 let input_editimage = document.getElementById('edit_image');
 
-change_btn.addEventListener('click' ,() => 
-{
+change_btn.addEventListener('click', () => {
     input_editimage.click();
 })
 
 
 
 
-document.getElementById('overlay').addEventListener('click' , () =>
-{
-    document.getElementsByClassName('card')[0].style.display ='none';
-    document.getElementById('overlay').style.display='none';
-    document.getElementsByClassName('delete')[0].style.display ='none';
+document.getElementById('overlay').addEventListener('click', () => {
+    document.getElementsByClassName('card')[0].style.display = 'none';
+    document.getElementById('overlay').style.display = 'none';
+    document.getElementsByClassName('delete')[0].style.display = 'none';
     displayPagination();
 });
 
 
 
 
-// document.addEventListener('click', (e) => {
-//     // Check if the clicked element does not have the class 'edit-details'
-//    if(e.target.classList.value == 'edit-details' ||e.target.classList.value == 'view_btn' ||e.target.classList.value == 'edit_btn')
-//    {
+let container = document.getElementsByClassName('edit-details');
+let dots = document.getElementsByClassName('select-dots');
 
-//    }
-// });
+
+function hideContainer(event) {
+    
+    let containerArray = Array.from(container);
+    let dotsArray = Array.from(dots);
+
+    
+    containerArray.forEach((containerElement) => {
+        
+        let isOutsideContainer = !containerElement.contains(event.target);
+        let isOutsideDots = !dotsArray.some(dotElement => dotElement.contains(event.target));
+
+        
+        if (isOutsideContainer && isOutsideDots) {
+            containerElement.style.display = 'none';
+        }
+    });
+}
+
+
+document.addEventListener('click', hideContainer);
+
+
+
 
