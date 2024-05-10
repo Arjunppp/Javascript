@@ -434,8 +434,22 @@ textarea::placeholder {
     display: none;
 }
 
-.button_page {
-    background-color: #2B3674;
+.button_page , #chvrn_left , #chvrn_right {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+    color: #333;
+    border-radius: 8px;
+    height: 32px;
+    width: 32px;
+    border: 1px solid #F1F1F1;
+
+}
+
+.btn_onchange
+{
+    background-color: #4318FF;
     color: #fff;
 }
 

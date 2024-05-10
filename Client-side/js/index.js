@@ -93,13 +93,16 @@ async function pageNationButton(pages) {
     });
     const pageNationButtons = document.getElementsByClassName('button_page');
     Array.from(pageNationButtons).forEach((eachPageBtn) => {
-        eachPageBtn.addEventListener('click', () => {
-
+        eachPageBtn.addEventListener('click', async() => {
+            
             state.page = parseInt(eachPageBtn.value);
-
-            displayPagination();
+            await displayPagination();
+            
+           
+            
         });
     });
+
 }
 
 //function to populate data on each row on the table
@@ -174,6 +177,15 @@ async function displayPagination() {
     addCLickEvent();
     editemployees();
     search_user();
+     let pageButtons = document.getElementsByClassName('button_page');
+     console.log(pageButtons);
+     Array.from(pageButtons).forEach((eachBtn) => 
+    {
+        if(eachBtn.value == state.page)
+            {
+                eachBtn.classList.add('btn_onchange');
+            }
+    })
 }
 
 //Poulate data for the first time
@@ -252,134 +264,143 @@ async function addingEmployee() {
 document.getElementById('add_employee').addEventListener('click', addingEmployee);
 
 //add event listner to form submision
-document.getElementById('form').addEventListener('submit', handlingFormSubmission );
+document.getElementById('form').addEventListener('submit', handlingFormSubmission);
 
 
 //function to add or update employee
-async function addOrSaveEmployee(URL , method ,value)
-{
-	let response = await fetch(URL, {
-            method: `${method}`, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(value)
-        });
-        let data = await response.json();
-        for (let eachdata in data) {
-            if (eachdata == 'errors') {
-                let errors = data[eachdata];
-                let All_error = document.getElementsByClassName('err');
-                //Not giving any data if there is no error
-                for (let each of All_error) {
-                    each.innerHTML = '';
-                }
-                //displaying errors if there is error
-                for (let eacherror of errors) {
-                    let lower_err = eacherror.split(' ')[0].toLowerCase();
-                    console.log(lower_err);
-                    if (lower_err != 'invalid') {
-                        document.getElementById(`${lower_err}` + '_err').innerText = eacherror;
-                    }
-                    if (lower_err === 'invalid') {
-                        let lower_err = eacherror.split(' ')[1].toLowerCase();
-                        document.getElementById(`${lower_err}` + '_err').innerText = eacherror;
-                    }
-                }
-
+async function addOrSaveEmployee(URL, method, value) {
+    let response = await fetch(URL, {
+        method: `${method}`, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(value)
+    });
+    let data = await response.json();
+    for (let eachdata in data) {
+        if (eachdata == 'errors') {
+            let errors = data[eachdata];
+            let All_error = document.getElementsByClassName('err');
+            //Not giving any data if there is no error
+            for (let each of All_error) {
+                each.innerHTML = '';
             }
-            else {
+            //displaying errors if there is error
+            for (let eacherror of errors) {
+                let lower_err = eacherror.split(' ')[0].toLowerCase();
 
-                document.getElementsByClassName('card')[0].style.display = 'none';
-                document.querySelector('.add-emp-cnfrmation h5').innerText = data['message'];
-                document.getElementsByClassName('add-emp-cnfrmation')[0].style.display = 'flex';
-                document.getElementsByClassName('employee-add-btn')[0].addEventListener('click', () => {
-                    document.getElementsByClassName('add-emp-cnfrmation')[0].style.display = 'none';
-                    document.getElementById('overlay').style.display = 'none';
-                    displayPagination();
-
-                })
-
+                if (lower_err != 'invalid') {
+                    document.getElementById(`${lower_err}` + '_err').innerText = eacherror;
+                }
+                if (lower_err === 'invalid') {
+                    let lower_err = eacherror.split(' ')[1].toLowerCase();
+                    document.getElementById(`${lower_err}` + '_err').innerText = eacherror;
+                }
             }
+            return ('error');
         }
-	
+        else {
 
-        return data.id;
+            document.getElementsByClassName('card')[0].style.display = 'none';
+            document.querySelector('.add-emp-cnfrmation h5').innerText = data['message'];
+            document.getElementsByClassName('add-emp-cnfrmation')[0].style.display = 'flex';
+            document.getElementsByClassName('employee-add-btn')[0].addEventListener('click', () => {
+                document.getElementsByClassName('add-emp-cnfrmation')[0].style.display = 'none';
+                document.getElementById('overlay').style.display = 'none';
+                displayPagination();
+
+            })
+            return (data.id)
+        }
+    }
+
+
+
 }
 
 //function to upload image
-async function uploadOrUpdateImage(img_url , image_object)
-{
-	 await fetch(img_url, {
-            method: 'POST',
-            body: image_object
-        }).then((response) => {
-            if (!response.ok) {
-                throw new Error('Check the URL please');
+async function uploadOrUpdateImage(img_url, image_object) {
+    await fetch(img_url, {
+        method: 'POST',
+        body: image_object
+    }).then((response) => {
+        if (!response.ok) {
+            throw new Error('Check the URL please');
 
-            } else {
-                return response.json();
-            }
+        } else {
+            return response.json();
+        }
 
-        }).then((data) => {
-            return data;
-        });
+    }).then((data) => {
+        return data;
+    });
 
-	
-	
+
+
 }
 
 //this function will be triggered when the submit event triggered
-async function handlingFormSubmission(event)
-{
+async function handlingFormSubmission(event) {
     event.preventDefault();
     let btnnInnerHTML = document.getElementsByClassName('btn-add')[0].innerHTML;
-    console.log(btnnInnerHTML.split(' ')[0]);
+
     let addOrSave = btnnInnerHTML.split(' ')[0].toLocaleLowerCase();
     let dob = document.getElementById('date_of_birth').value;
-        let crctdDob = dob.slice(8, 10) + '-' + dob.slice(5, 7) + '-' + dob.slice(0, 4);
-        let value = {
+    let crctdDob = dob.slice(8, 10) + '-' + dob.slice(5, 7) + '-' + dob.slice(0, 4);
+    let value = {
 
-            "salutation": `${document.getElementById('salutation').value}`,
-            "firstName": `${document.getElementById('first_name').value}`,
-            "lastName": `${document.getElementById('last_name').value}`,
-            "email": `${document.getElementById('email').value}`,
-            "phone": `${document.getElementById('mobile_number').value}`,
-            "dob": crctdDob,
-            "gender": `${document.querySelector('input[name="gender"]:checked').value}`,
-            "qualifications": `${document.getElementById('qualification').value}`,
-            "address": `${document.getElementById('address').value}`,
-            "city": `${document.getElementById('city').value}`,
-            "state": `${document.getElementById('state').value}`,
-            "country": `${document.getElementById('country').value}`,
-            "username": `${document.getElementById('username').value}`,
-            "password": `${document.getElementById('password').value}`
+        "salutation": `${document.getElementById('salutation').value}`,
+        "firstName": `${document.getElementById('first_name').value}`,
+        "lastName": `${document.getElementById('last_name').value}`,
+        "email": `${document.getElementById('email').value}`,
+        "phone": `${document.getElementById('mobile_number').value}`,
+        "dob": crctdDob,
+        "gender": `${document.querySelector('input[name="gender"]:checked').value}`,
+        "qualifications": `${document.getElementById('qualification').value}`,
+        "address": `${document.getElementById('address').value}`,
+        "city": `${document.getElementById('city').value}`,
+        "state": `${document.getElementById('state').value}`,
+        "country": `${document.getElementById('country').value}`,
+        "username": `${document.getElementById('username').value}`,
+        "password": `${document.getElementById('password').value}`
 
-        };
-    if(addOrSave == 'add')
-    {   let URL =server_url;
+    };
+    if (addOrSave == 'add') {
+        let URL = server_url;
         let method = 'POST';
-		
-		let empid = await addOrSaveEmployee(URL , method ,value);
-        
-        let image = await document.getElementById('file').files[0];
-        let img_url = `${server_url}/${empid}/avatar`;
+
+        let returnValue = await addOrSaveEmployee(URL, method, value);
+
+        if (returnValue == 'error') {
+            console.log('There are some error while adding employee');
+        }
+        else {
+
+            let image = await document.getElementById('file').files[0];
+
+            if (image) {
+                let img_url = `${server_url}/${returnValue}/avatar`;
+                let image_object = new FormData();
+                image_object.append('avatar', image);
+
+                await uploadOrUpdateImage(img_url, image_object);
+            }
+
+
+        }
+
+
+
+    }
+    else if (addOrSave == 'save') {
+        let user = document.getElementsByClassName('btn-add')[0].value;
+        let URL = server_url + '/' + user;
+        let method = 'PUT';
+        await addOrSaveEmployee(URL, method, value);
+
+
+
+        let image = await document.getElementById('edit_image').files[0];
+        let img_url = `${server_url}/${user}/avatar`;
         let image_object = new FormData();
         image_object.append('avatar', image);
-		
-		await uploadOrUpdateImage(img_url , image_object);
-       
-    }
-    else if(addOrSave =='save')
-    {
-        let user = document.getElementsByClassName('btn-add')[0].value;
-        let URL =server_url + '/' + user;
-        let method = 'PUT';
-        await addOrSaveEmployee(URL , method ,value);
-
-
-       
-        let image = await document.getElementById('edit_image').files[0];
-         let   img_url = `${server_url}/${user}/avatar`;
-         let image_object = new FormData();
-         image_object.append('avatar', image);
-         await uploadOrUpdateImage(img_url , image_object);
+        await uploadOrUpdateImage(img_url, image_object);
 
     }
 }
@@ -388,10 +409,10 @@ async function handlingFormSubmission(event)
 //function to edit employee
 async function edit_employee(btn) {
 
-   
+
 
     btn.addEventListener('click', async () => {
-       
+
         document.getElementsByClassName('card')[0].style.display = 'block';
         document.getElementById('overlay').style.display = 'block';
         document.getElementsByClassName("label_upld")[0].style.display = 'none';
@@ -408,13 +429,13 @@ async function edit_employee(btn) {
         image = document.getElementById('edit_image').files[0];
         let data = await fetchUser(btn.value);
         let date = data.dob.split('-').reverse().join('-');
-        
+
         if (data.gender == 'male') {
             document.getElementById('male').checked = true;
         }
 
-       
-        document.getElementsByClassName('edit-image')[0].src = `${server_url +'/'+btn.value + '/avatar'}`;
+
+        document.getElementsByClassName('edit-image')[0].src = `${server_url + '/' + btn.value + '/avatar'}`;
         document.getElementById('salutation').value = data.salutation;
         document.getElementById('first_name').value = data.firstName;
         document.getElementById('last_name').value = data.lastName;
@@ -569,7 +590,7 @@ async function clearFormEntries() {
     document.getElementById('password').value = '';
 }
 
-// submiting form defenition
+
 
 
 //====================================================End of Adding, deleteing ,viewing, cancelling========================
@@ -589,7 +610,7 @@ document.getElementsByClassName('btn-cncl')[0].addEventListener('click', cancelA
 
 
 
-//Fetch user data from back_end
+//Fetch user data from back_end--Based on params single or all data will be fetched
 async function fetchUser(selector) {
     try {
         if (selector === 'all') {
@@ -665,124 +686,29 @@ async function getcurrentmonth(monthnum) {
 
 async function search_user() {
     let users = await fetchUser('all');
-
-
     let search_value = document.getElementById('sub-search');
-    search_value.addEventListener('keypress', async function (e) {
-        if (e.key === 'Enter') {
-            let search_result = users.filter((user) => {
-                if ((user.firstName).toLowerCase() === (search_value.value).toLowerCase()) {
-                    return user;
-                }
-            });
-            let eachRows = '';
-            let count = 1;
-            for (let user of search_result) {
-                let month = await getcurrentmonth(parseInt(user.dob.split('-')[1]));
-
-
-                if (user.hasOwnProperty('avatar')) {
-
-
-                    eachRows += `<tr scope='row'>
-                        <td scope='col' class='td-data'>#0${count++}</td>
-                        <td scope='col'  class='td-data d-flex align-items-center gap-2 '>
-                            <span>
-                            
-                                <img src=${server_url + '/' + user.avatar.split('.')[0] + '/avatar'} class='side_images'>
-                            </span>
-                            ${user.salutation + ' ' + user.firstName + ' ' + user.lastName}
-                        </td>
-                        <td scope='col' class='td-data'>${user.email}</td>
-                        <td scope='col' class='td-data'>${user.phone}</td>
-                        <td scope='col' class='td-data'>${user.gender}</td>
-                        <td scope='col' class='td-data'>${user.dob.split('-')[0] + ' ' + month + ' ' + user.dob.split('-')[2]}</td>
-                        <td scope='col' class='td-data'>${user.country}</td>
-                        <td scope='col' class='edit'>
-                            <span class='material-symbols-outlined select-dots'>
-                                more_horiz
-                            </span>
-                            <ul class='edit-details'>
-                                <li class='d-flex'>
-                                    <span class='material-symbols-outlined'>visibility</span>
-                                    <button class='view_btn' value="${user.id}">View Details</button>
-                                </li>
-                                <li class='d-flex'>
-                                    <span class='material-symbols-outlined'>edit</span>
-                                    <button class='edit_btn' value="${user.id}">Edit</button>
-                                </li>
-                                <li class='d-flex'>
-                                    <span class='material-symbols-outlined'>delete</span>
-                                    <button class='delete_btn' value="${user.id}">Delete</button>
-                                </li>
-                            </ul>
-                        </td>
-                    </tr>`;
-                }
-                else {
-                    eachRows += `<tr scope='row'>
-                        <td scope='col' class='td-data '>#0${count++}</td>
-                        <td scope='col' class='td-data  d-flex align-items-center  gap-2'>
-                            <span>
-                                <div class='side_images d-flex align-items-center justify-content-center'>${user.firstName[0].toUpperCase() + user.lastName[0].toUpperCase()}</div>
-                             </span>
-                             ${user.salutation + ' ' + user.firstName + ' ' + user.lastName}
-                        </td>
-                        <td scope='col' class='td-data '>${user.email}</td>
-                        <td scope='col' class='td-data '>${user.phone}</td>
-                        <td scope='col' class='td-data '>${user.gender}</td>
-                        <td scope='col' class='td-data '>${user.dob.split('-')[0] + ' ' + month + ' ' + user.dob.split('-')[2]}</td>
-                        <td scope='col' class='td-data '>${user.country}</td>
-                        <td scope='col' class='td-data edit'>
-                            <span class='material-symbols-outlined select-dots'>
-                                more_horiz
-                            </span>
-                            <ul class='edit-details'>
-                                <li class='d-flex'>
-                                    <span class='material-symbols-outlined'>visibility</span>
-                                    <button class='view_btn' value="${user.id}">View Details</button>
-                                </li>
-                                <li class='d-flex'>
-                                    <span class='material-symbols-outlined'>edit</span>
-                                    <button class='edit_btn' value="${user.id}">Edit</button>
-                                </li>
-                                <li class='d-flex'>
-                                    <span class='material-symbols-outlined'>delete</span>
-                                    <button class='delete_btn' value="${user.id}">Delete</button>
-                                </li>
-                            </ul>
-                        </td>
-                    </tr>`;
-                }
-            };
-            document.getElementById("table-body").innerHTML = eachRows;
-
-
-        }
-
-    });
-    let a = ''
+    let searchValue = ''
     search_value.addEventListener('keydown', async function (e) {
 
         let eachRows = '';
         let count = 1;
         if (e.key !== 'Backspace' && e.key !== 'Alt' && e.key !== 'Shift' && e.key !== 'Control') {
-            a += e.key;
+            searchValue += e.key;
         }
         else if (e.key == 'Backspace') {
-            a = a.slice(0, -1);
+            searchValue = searchValue.slice(0, -1);
         }
 
         let search_result = users.filter((user) => {
-            if (a.length == 0) {
+            if (searchValue.length == 0) {
 
                 search_name = user.firstName.toLowerCase();
 
                 return search_name;
             }
             else {
-                let search_name = user.firstName.slice(0, a.length);
-                if (search_name.toLowerCase() == a) {
+                let search_name = user.firstName.slice(0, searchValue.length);
+                if (search_name.toLowerCase() == searchValue) {
                     return search_name.toLowerCase();
                 }
 
@@ -794,84 +720,14 @@ async function search_user() {
         console.log(search_result);
         for (let user of search_result) {
             let month = await getcurrentmonth(parseInt(user.dob.split('-')[1]));
-
-            if (user.hasOwnProperty('avatar')) {
-
-                eachRows += `<tr scope='row'>
-                <td scope='col' class='td-data'>#0${count++}</td>
-                <td scope='col'  class='td-data d-flex align-items-center  gap-2'>
-                    <span>
-                    
-                        <img src=${server_url + '/' + user.avatar.split('.')[0] + '/avatar'} class='side_images'>
-                    </span>
-                    ${user.salutation + ' ' + user.firstName + ' ' + user.lastName}
-                </td>
-                <td scope='col' class='td-data'>${user.email}</td>
-                <td scope='col' class='td-data'>${user.phone}</td>
-                <td scope='col' class='td-data'>${user.gender}</td>
-                <td scope='col' class='td-data'>${user.dob.split('-')[0] + ' ' + month + ' ' + user.dob.split('-')[2]}</td>
-                <td scope='col' class='td-data'>${user.country}</td>
-                <td scope='col' class='edit'>
-                    <span class='material-symbols-outlined select-dots'>
-                        more_horiz
-                    </span>
-                    <ul class='edit-details'>
-                        <li class='d-flex'>
-                            <span class='material-symbols-outlined'>visibility</span>
-                            <button class='view_btn' value="${user.id}">View Details</button>
-                        </li>
-                        <li class='d-flex'>
-                            <span class='material-symbols-outlined'>edit</span>
-                            <button class='edit_btn' value="${user.id}">Edit</button>
-                        </li>
-                        <li class='d-flex'>
-                            <span class='material-symbols-outlined'>delete</span>
-                            <button class='delete_btn' value="${user.id}">Delete</button>
-                        </li>
-                    </ul>
-                </td>
-            </tr>`;
-            }
-            else {
-                eachRows += `<tr scope='row'>
-                <td scope='col' class='td-data'>#0${count++}</td>
-                <td scope='col' class='td-data d-flex align-items-center  gap-2'>
-                    <span>
-                        <div class='side_images d-flex align-items-center justify-content-center'>${user.firstName[0].toUpperCase() + user.lastName[0].toUpperCase()}</div>
-                     </span>
-                     ${user.salutation + ' ' + user.firstName + ' ' + user.lastName}
-                </td>
-                <td scope='col' class='td-data'>${user.email}</td>
-                <td scope='col' class='td-data'>${user.phone}</td>
-                <td scope='col' class='td-data'>${user.gender}</td>
-                <td scope='col' class='td-data'>${user.dob.split('-')[0] + ' ' + month + ' ' + user.dob.split('-')[2]}</td>
-                <td scope='col' class='td-data'>${user.country}</td>
-                <td scope='col' class='edit'>
-                    <span class='material-symbols-outlined select-dots'>
-                        more_horiz
-                    </span>
-                    <ul class='edit-details'>
-                        <li class='d-flex'>
-                            <span class='material-symbols-outlined'>visibility</span>
-                            <button class='view_btn' value="${user.id}">View Details</button>
-                        </li>
-                        <li class='d-flex'>
-                            <span class='material-symbols-outlined'>edit</span>
-                            <button class='edit_btn' value="${user.id}">Edit</button>
-                        </li>
-                        <li class='d-flex'>
-                            <span class='material-symbols-outlined'>delete</span>
-                            <button class='delete_btn' value="${user.id}">Delete</button>
-                        </li>
-                    </ul>
-                </td>
-            </tr>`;
-            }
+            eachRows += await eachRowData(count , user , month);
+           
         };
         document.getElementById("table-body").innerHTML = eachRows;
-
-    })
-
+        addCLickEvent();
+        editemployees();
+    });
+    
 
 }
 
