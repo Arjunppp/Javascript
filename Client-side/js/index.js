@@ -90,11 +90,6 @@ async function pageNationButton(pages) {
     });
     document.getElementById('chvrn_right').addEventListener('click', () => {
 
-        // let pageButtons = document.getElementsByClassName('button_page');
-
-
-        // state.page = parseInt(pageButtons[pageButtons.length - 1].value);
-        // displayPagination();
 
         let currentPage = state.page;
         let nextPage = currentPage +1;
@@ -707,11 +702,12 @@ async function getcurrentmonth(monthnum) {
 async function search_user() {
     let users = await fetchUser('all');
     let search_value = document.getElementById('sub-search');
-    let searchValue = ''
+    let searchValue = '';
+   
     search_value.addEventListener('keydown', async function (e) {
 
         let eachRows = '';
-        let count = 1;
+        
         if (e.key !== 'Backspace' && e.key !== 'Alt' && e.key !== 'Shift' && e.key !== 'Control') {
             searchValue += e.key;
         }
@@ -738,7 +734,9 @@ async function search_user() {
 
 
         console.log(search_result);
+        let count=0;
         for (let user of search_result) {
+            count++;
             let month = await getcurrentmonth(parseInt(user.dob.split('-')[1]));
             eachRows += await eachRowData(count , user , month);
            
