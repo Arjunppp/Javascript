@@ -76,18 +76,33 @@ async function pageNationButton(pages) {
     buttonDiv.innerHTML = buttonHtml;
     document.getElementById('chvrn_left').addEventListener('click', () => {
 
-        let pageButtons = document.getElementsByClassName('button_page');
+        
 
-        state.page = parseInt(pageButtons[0].value);
+        let currentPage = state.page;
+        let nextPage = currentPage -1;
+        if(nextPage <1)
+            {
+                nextPage =1;
+            }
+        state.page = nextPage;
         displayPagination();
 
     });
     document.getElementById('chvrn_right').addEventListener('click', () => {
 
-        let pageButtons = document.getElementsByClassName('button_page');
+        // let pageButtons = document.getElementsByClassName('button_page');
 
 
-        state.page = parseInt(pageButtons[pageButtons.length - 1].value);
+        // state.page = parseInt(pageButtons[pageButtons.length - 1].value);
+        // displayPagination();
+
+        let currentPage = state.page;
+        let nextPage = currentPage +1;
+      if(nextPage > pages)
+        {
+            nextPage =pages;
+        }
+        state.page = nextPage;
         displayPagination();
 
     });
