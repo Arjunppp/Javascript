@@ -397,10 +397,15 @@ async function handlingFormSubmission(event) {
 
 
         let image = await document.getElementById('edit_image').files[0];
-        let img_url = `${server_url}/${user}/avatar`;
-        let image_object = new FormData();
-        image_object.append('avatar', image);
-        await uploadOrUpdateImage(img_url, image_object);
+        if(image)
+            {
+                let img_url = `${server_url}/${user}/avatar`;
+                let image_object = new FormData();
+                image_object.append('avatar', image);
+                await uploadOrUpdateImage(img_url, image_object);
+
+            }
+       
 
     }
 }
