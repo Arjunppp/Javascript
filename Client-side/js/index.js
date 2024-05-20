@@ -22,8 +22,8 @@ employeesInRow.addEventListener('change', handleRowValueChnage);
 
 let state = {
     page: 1,
-    rows: 6,
-    window: 3
+    rows: 10,
+    window: 4
 };
 //default value to show in the front end
 document.getElementById('employee-row').value = state.rows;
@@ -31,6 +31,7 @@ document.getElementById('employee-row').value = state.rows;
 
 async function pageNationsetUp() {
     let allUsers = await fetchUser('all');
+    allUsers = allUsers.reverse();
     let currentPage = state.page;
     let noOfRows = state.rows;
 
@@ -52,7 +53,11 @@ async function pageNationsetUp() {
 //Pagenation button functionalities
 async function pageNationButton(pages) {
     const buttonDiv = document.getElementById('page-button-wrapper');
-    let buttonHtml = '<button id="chvrn_left" class="btn  btn-lg  btn-info"><span class="material-symbols-outlined"> chevron_left </span> </button>';
+    let buttonHtml = `<button id='firstPageButton' class="btn btn-info"><span class="material-symbols-outlined">
+    keyboard_double_arrow_left
+    </span></button>`;
+
+    buttonHtml += '<button id="chvrn_left" class="btn  btn-lg  btn-info"><span class="material-symbols-outlined"> chevron_left </span> </button>';
 
     let maxLeft = (state.page - Math.floor(state.window / 2));
     let maxRight = (state.page + Math.floor(state.window / 2));
@@ -73,17 +78,30 @@ async function pageNationButton(pages) {
     }
 
     buttonHtml += '<button id ="chvrn_right" class="btn  btn-lg  btn-info"><span class="material-symbols-outlined"> chevron_right </span> </button>';
+    buttonHtml += `<button id='lastPageButton' class="btn "><span class="material-symbols-outlined">
+    keyboard_double_arrow_right
+    </span> </button>`
     buttonDiv.innerHTML = buttonHtml;
+    document.getElementById('firstPageButton').addEventListener('click', () => {
+        state.page = 1;
+        displayPagination();
+
+    });
+    document.getElementById('lastPageButton').addEventListener('click', () => {
+        state.page = pages;
+        displayPagination();
+
+    });
+
     document.getElementById('chvrn_left').addEventListener('click', () => {
 
-        
+
 
         let currentPage = state.page;
-        let nextPage = currentPage -1;
-        if(nextPage <1)
-            {
-                nextPage =1;
-            }
+        let nextPage = currentPage - 1;
+        if (nextPage < 1) {
+            nextPage = 1;
+        }
         state.page = nextPage;
         displayPagination();
 
@@ -92,10 +110,9 @@ async function pageNationButton(pages) {
 
 
         let currentPage = state.page;
-        let nextPage = currentPage +1;
-      if(nextPage > pages)
-        {
-            nextPage =pages;
+        let nextPage = currentPage + 1;
+        if (nextPage > pages) {
+            nextPage = pages;
         }
         state.page = nextPage;
         displayPagination();
@@ -103,13 +120,13 @@ async function pageNationButton(pages) {
     });
     const pageNationButtons = document.getElementsByClassName('button_page');
     Array.from(pageNationButtons).forEach((eachPageBtn) => {
-        eachPageBtn.addEventListener('click', async() => {
-            
+        eachPageBtn.addEventListener('click', async () => {
+
             state.page = parseInt(eachPageBtn.value);
             await displayPagination();
-            
-           
-            
+
+
+
         });
     });
 
@@ -187,14 +204,12 @@ async function displayPagination() {
     addCLickEvent();
     editemployees();
     search_user();
-     let pageButtons = document.getElementsByClassName('button_page');
-     console.log(pageButtons);
-     Array.from(pageButtons).forEach((eachBtn) => 
-    {
-        if(eachBtn.value == state.page)
-            {
-                eachBtn.classList.add('btn_onchange');
-            }
+    let pageButtons = document.getElementsByClassName('button_page');
+
+    Array.from(pageButtons).forEach((eachBtn) => {
+        if (eachBtn.value == state.page) {
+            eachBtn.classList.add('btn_onchange');
+        }
     })
 }
 
@@ -279,6 +294,7 @@ document.getElementById('form').addEventListener('submit', handlingFormSubmissio
 
 //function to add or update employee
 async function addOrSaveEmployee(URL, method, value) {
+   try{
     let response = await fetch(URL, {
         method: `${method}`, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(value)
     });
@@ -319,6 +335,11 @@ async function addOrSaveEmployee(URL, method, value) {
             return (data.id)
         }
     }
+   }
+   catch(err)
+   {
+    console.error(`chehck URL : ${err}` )
+   }
 
 
 
@@ -407,15 +428,14 @@ async function handlingFormSubmission(event) {
 
 
         let image = await document.getElementById('edit_image').files[0];
-        if(image)
-            {
-                let img_url = `${server_url}/${user}/avatar`;
-                let image_object = new FormData();
-                image_object.append('avatar', image);
-                await uploadOrUpdateImage(img_url, image_object);
+        if (image) {
+            let img_url = `${server_url}/${user}/avatar`;
+            let image_object = new FormData();
+            image_object.append('avatar', image);
+            await uploadOrUpdateImage(img_url, image_object);
 
-            }
-       
+        }
+
 
     }
 }
@@ -432,7 +452,7 @@ async function edit_employee(btn) {
         document.getElementById('overlay').style.display = 'block';
         document.getElementsByClassName("label_upld")[0].style.display = 'none';
         document.getElementsByClassName("btn-add")[0].innerHTML = 'Save Changes';
-        document.getElementsByClassName('edit_image_div')[0].style.display = 'block';
+        document.getElementsByClassName('edit_image_div')[0].style.display = 'flex';
         document.getElementsByClassName('edit-details')[0].style.display = 'none';
         await clearFormEntries();
 
@@ -476,6 +496,8 @@ async function view_employee(btn) {
         document.getElementsByClassName('details')[0].style.display = 'flex';
         document.getElementsByClassName('table-main')[0].style.display = 'none';
         document.getElementsByClassName('table')[0].style.display = 'none';
+        document.getElementById('page-title').innerText = `Dashboard/Employee/Employee Details`;
+        document.getElementById('page-subtitle').innerText = `Employee Details`;
         document.getElementsByClassName('edit-details')[0].style.display = 'none';
 
         fetch(server_url + '/' + btn.value).then((res) => {
@@ -487,7 +509,6 @@ async function view_employee(btn) {
             }
         }).then(async (data) => {
 
-            console.log(data);
             let currentyear = new Date().getFullYear();
 
             let age = currentyear - data.dob.slice(6, 10);
@@ -703,11 +724,11 @@ async function search_user() {
     let users = await fetchUser('all');
     let search_value = document.getElementById('sub-search');
     let searchValue = '';
-   
+
     search_value.addEventListener('keydown', async function (e) {
 
         let eachRows = '';
-        
+
         if (e.key !== 'Backspace' && e.key !== 'Alt' && e.key !== 'Shift' && e.key !== 'Control') {
             searchValue += e.key;
         }
@@ -733,19 +754,19 @@ async function search_user() {
         });
 
 
-        console.log(search_result);
-        let count=0;
+
+        let count = 0;
         for (let user of search_result) {
             count++;
             let month = await getcurrentmonth(parseInt(user.dob.split('-')[1]));
-            eachRows += await eachRowData(count , user , month);
-           
+            eachRows += await eachRowData(count, user, month);
+
         };
         document.getElementById("table-body").innerHTML = eachRows;
         addCLickEvent();
         editemployees();
     });
-    
+
 
 }
 
@@ -781,9 +802,13 @@ document.getElementById('edit_image').addEventListener('change', () => {
 
 document.getElementById('file').addEventListener('change', () => {
     let file = document.getElementById('file').files[0];
-    document.getElementsByClassName('edit_image_div')[0].style.display = 'block';
-    document.getElementsByClassName('label_upld')[0].style.flex = '0 0 75%';
-    document.querySelector(`label[for="file"] h5`).innerHTML = 'Change image';
+    let editImageDiv = document.getElementsByClassName('edit_image_div')[0];
+
+    editImageDiv.style.display = 'flex';
+    
+
+    document.getElementsByClassName('label_upld')[0].style.display = 'none';
+
     document.getElementsByClassName('edit-image')[0].src = URL.createObjectURL(file);
 })
 

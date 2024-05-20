@@ -28,14 +28,15 @@
 <body>
     <div class="container-fluid">
         <div id='overlay'></div>
-        <div class="row">
+        <div class="row" style="height: 100vh">
 
             <div class="col-2 p-0 side-bar d-flex flex-column justify-content-between">
-                <div class="d-flex flex-column p-3 ">
-                    <h2 class="d-flex flex-column fw-normal"><span class="fw-bolder">Employee</span>Management</h2>
+                <div class="d-flex flex-column  ">
+                    <h2 class="d-flex flex-column fw-normal p-3 py-4"><span class="fw-bolder">Employee</span>Management
+                    </h2>
 
-                    <hr>
-                    <ul class="nav nav-pills flex-column mb-auto d-flex flex-column gap-3">
+                    <hr class="mt-0">
+                    <ul class="nav nav-pills mt-3 flex-column mb-auto d-flex flex-column gap-3">
                         <li class="nav-item ">
                             <a href="#" class="nav-link side-bar-clr  d-flex align-center gap-2">
                                 <span class="material-symbols-outlined">
@@ -44,7 +45,7 @@
                                 Dashboard
                             </a>
                         </li>
-                        <li>
+                        <li class="nav-item ">
                             <a href="#" class="nav-link side-bar-clr d-flex align-center gap-2">
                                 <span class="material-symbols-outlined">
                                     bar_chart
@@ -52,7 +53,7 @@
                                 Employees
                             </a>
                         </li>
-                        <li>
+                        <li class="nav-item ">
                             <a href="#" class="nav-link side-bar-clr  d-flex align-center gap-2">
                                 <span class="material-symbols-outlined">
                                     person
@@ -60,7 +61,7 @@
                                 My Profile
                             </a>
                         </li>
-                        <li>
+                        <li class="nav-item ">
                             <a href="#" class="nav-link side-bar-clr  d-flex align-center gap-2">
                                 <span class="material-symbols-outlined">
                                     lock
@@ -80,12 +81,12 @@
 
             </div>
             <div class="col-10 p-0 main-page">
-                <div class="row p-3 m-0">
+                <div class="row p-3 m-0 d-flex align-items-center">
                     <div class="col ">
-                        <h4 class="row" id="page-title">
+                        <h4 class="row m-0" id="page-title">
                             Dashboard/Employees
                         </h4>
-                        <h2 class="row" id="page-subtitle">
+                        <h2 class="row m-0" id="page-subtitle">
                             Employees
                         </h2>
                     </div>
@@ -100,7 +101,7 @@
                         <span class="material-symbols-outlined bell-icn">
                             notifications
                         </span>
-                        <img src="./image/Avatar.png" alt="">
+                        <img src="./image/Avatar.png" alt="user-img" style="width: 34px;">
 
                     </div>
                 </div>
@@ -123,8 +124,10 @@
                                         <option value="6">6</option>
                                         <option value="7">7</option>
                                         <option value="8">8</option>
+                                        <option value="9">9</option>
+                                        <option value="10">10</option>
                                     </select>
-                                    <p class="m-0 px-3 text-secondary page-option">of 10</p>
+                                    <p class="m-0 px-3 page-option ">of 10</p>
                                 </div>
                             </div>
                             <table class="table">
@@ -157,7 +160,7 @@
                 </div>
 
                 <div class=" row details p-5 m-0 gap-3">
-                   
+
                     <div class="col-12  d-flex justify-content-center p-5">
                         <img src="image/Background.png" alt="Background" style="width: 100%;">
                     </div>
@@ -246,7 +249,9 @@
                                             style="height: 115px; width: 115px; border:2px dashed grey">
                                     </label>
                                     <input type="file" id="edit_image">
-                                    <button class="btn change_btn d-flex justify-content-center" type="button">change</button>
+                                    <button class="btn change_btn d-flex justify-content-center"
+                                        type="button">change</button>
+                                   
                                 </div>
                                 <div class="col label_upld">
                                     <label for="file"
