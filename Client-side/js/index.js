@@ -2,6 +2,8 @@
 let server_url = 'http://localhost:3000/employees';
 
 
+
+
 //=======================pagenation=============================================================================//
 
 //the dom element corresponding to employee row value is fetched.
@@ -12,7 +14,7 @@ function handleRowValueChnage(event) {
     let newRowCount = event.target.value;
     state.rows = parseInt(newRowCount);
     state.page = 1;
-    displayPagination();
+    displayPagination(1);
 }
 
 
@@ -23,15 +25,16 @@ employeesInRow.addEventListener('change', handleRowValueChnage);
 let state = {
     page: 1,
     rows: 10,
-    window: 4
+    window: 4,
+    users: []
 };
 //default value to show in the front end
 document.getElementById('employee-row').value = state.rows;
 
 
 async function pageNationsetUp() {
-    let allUsers = await fetchUser('all');
-    allUsers = allUsers.reverse();
+    let allUsers = state.users;
+    
     let currentPage = state.page;
     let noOfRows = state.rows;
 
@@ -84,12 +87,12 @@ async function pageNationButton(pages) {
     buttonDiv.innerHTML = buttonHtml;
     document.getElementById('firstPageButton').addEventListener('click', () => {
         state.page = 1;
-        displayPagination();
+        displayPagination(1);
 
     });
     document.getElementById('lastPageButton').addEventListener('click', () => {
         state.page = pages;
-        displayPagination();
+        displayPagination(1);
 
     });
 
@@ -103,7 +106,7 @@ async function pageNationButton(pages) {
             nextPage = 1;
         }
         state.page = nextPage;
-        displayPagination();
+        displayPagination(1);
 
     });
     document.getElementById('chvrn_right').addEventListener('click', () => {
@@ -115,7 +118,7 @@ async function pageNationButton(pages) {
             nextPage = pages;
         }
         state.page = nextPage;
-        displayPagination();
+        displayPagination(1);
 
     });
     const pageNationButtons = document.getElementsByClassName('button_page');
@@ -123,7 +126,7 @@ async function pageNationButton(pages) {
         eachPageBtn.addEventListener('click', async () => {
 
             state.page = parseInt(eachPageBtn.value);
-            await displayPagination();
+            await displayPagination(1);
 
 
 
@@ -177,30 +180,62 @@ async function eachRowData(start_value, user, month) {
 
 
 //function to call all related pagenation functions in order
-async function displayPagination() {
+async function displayPagination(a) {
+    if (a == 0) {
+        let allUsers = await fetchUser('all');
 
-    const pageNationSetUpData = await pageNationsetUp();
+        state.users = allUsers;
+        const pageNationSetUpData = await pageNationsetUp();
 
-    const trimedUserData = pageNationSetUpData.trimedUserData;
+        const trimedUserData = pageNationSetUpData.trimedUserData;
 
-    let start_value = (parseInt(state.page) - 1) * parseInt(state.rows) + 1;
+        let start_value = (parseInt(state.page) - 1) * parseInt(state.rows) + 1;
 
-    let eachRows = '';
-
-
-    for (let user of trimedUserData) {
-
-        let month = await getcurrentmonth(parseInt(user.dob.split('-')[1]));
-
-        eachRows += await eachRowData(start_value, user, month);
-        start_value++;
-    };
+        let eachRows = '';
 
 
-    document.getElementById("table-body").innerHTML = eachRows;
+        for (let user of trimedUserData) {
+
+            let month = await getcurrentmonth(parseInt(user.dob.split('-')[1]));
+
+            eachRows += await eachRowData(start_value, user, month);
+            start_value++;
+        };
 
 
-    pageNationButton(pageNationSetUpData.pages);
+        document.getElementById("table-body").innerHTML = eachRows;
+        pageNationButton(pageNationSetUpData.pages);
+    }
+    else {
+
+
+        const pageNationSetUpData = await pageNationsetUp();
+
+        const trimedUserData = pageNationSetUpData.trimedUserData;
+
+        let start_value = (parseInt(state.page) - 1) * parseInt(state.rows) + 1;
+
+        let eachRows = '';
+
+
+        for (let user of trimedUserData) {
+
+            let month = await getcurrentmonth(parseInt(user.dob.split('-')[1]));
+
+            eachRows += await eachRowData(start_value, user, month);
+            start_value++;
+        };
+
+
+        document.getElementById("table-body").innerHTML = eachRows;
+        pageNationButton(pageNationSetUpData.pages);
+    }
+
+
+
+
+
+
     addCLickEvent();
     editemployees();
     search_user();
@@ -214,7 +249,7 @@ async function displayPagination() {
 }
 
 //Poulate data for the first time
-displayPagination();
+displayPagination(0);
 
 //=================================ENd of Pagenation==========================================================================//
 
@@ -294,52 +329,51 @@ document.getElementById('form').addEventListener('submit', handlingFormSubmissio
 
 //function to add or update employee
 async function addOrSaveEmployee(URL, method, value) {
-   try{
-    let response = await fetch(URL, {
-        method: `${method}`, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(value)
-    });
-    let data = await response.json();
-    for (let eachdata in data) {
-        if (eachdata == 'errors') {
-            let errors = data[eachdata];
-            let All_error = document.getElementsByClassName('err');
-            //Not giving any data if there is no error
-            for (let each of All_error) {
-                each.innerHTML = '';
-            }
-            //displaying errors if there is error
-            for (let eacherror of errors) {
-                let lower_err = eacherror.split(' ')[0].toLowerCase();
-
-                if (lower_err != 'invalid') {
-                    document.getElementById(`${lower_err}` + '_err').innerText = eacherror;
+    try {
+        let response = await fetch(URL, {
+            method: `${method}`, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(value)
+        });
+        let data = await response.json();
+        for (let eachdata in data) {
+            if (eachdata == 'errors') {
+                let errors = data[eachdata];
+                let All_error = document.getElementsByClassName('err');
+                //Not giving any data if there is no error
+                for (let each of All_error) {
+                    each.innerHTML = '';
                 }
-                if (lower_err === 'invalid') {
-                    let lower_err = eacherror.split(' ')[1].toLowerCase();
-                    document.getElementById(`${lower_err}` + '_err').innerText = eacherror;
+                //displaying errors if there is error
+                for (let eacherror of errors) {
+                    let lower_err = eacherror.split(' ')[0].toLowerCase();
+
+                    if (lower_err != 'invalid') {
+                        document.getElementById(`${lower_err}` + '_err').innerText = eacherror;
+                    }
+                    if (lower_err === 'invalid') {
+                        let lower_err = eacherror.split(' ')[1].toLowerCase();
+                        document.getElementById(`${lower_err}` + '_err').innerText = eacherror;
+                    }
                 }
+                return ('error');
             }
-            return ('error');
-        }
-        else {
+            else {
 
-            document.getElementsByClassName('card')[0].style.display = 'none';
-            document.querySelector('.add-emp-cnfrmation h5').innerText = data['message'];
-            document.getElementsByClassName('add-emp-cnfrmation')[0].style.display = 'flex';
-            document.getElementsByClassName('employee-add-btn')[0].addEventListener('click', () => {
-                document.getElementsByClassName('add-emp-cnfrmation')[0].style.display = 'none';
-                document.getElementById('overlay').style.display = 'none';
-                displayPagination();
+                document.getElementsByClassName('card')[0].style.display = 'none';
+                document.querySelector('.add-emp-cnfrmation h5').innerText = data['message'];
+                document.getElementsByClassName('add-emp-cnfrmation')[0].style.display = 'flex';
+                document.getElementsByClassName('employee-add-btn')[0].addEventListener('click', () => {
+                    document.getElementsByClassName('add-emp-cnfrmation')[0].style.display = 'none';
+                    document.getElementById('overlay').style.display = 'none';
+                    displayPagination(0);
 
-            })
-            return (data.id)
+                })
+                return (data.id)
+            }
         }
     }
-   }
-   catch(err)
-   {
-    console.error(`chehck URL : ${err}` )
-   }
+    catch (err) {
+        console.error(`chehck URL : ${err}`)
+    }
 
 
 
@@ -598,7 +632,7 @@ async function delete_employee(btn) {
 
                 document.querySelector('.delete').style.display = 'none';
                 document.getElementById('overlay').style.display = 'none';
-                displayPagination();
+                displayPagination(0);
 
 
             });
@@ -636,7 +670,7 @@ async function clearFormEntries() {
 function cancelAdding() {
     document.getElementsByClassName('card')[0].style.display = 'none';
     document.getElementById('overlay').style.display = 'none';
-    displayPagination();
+    displayPagination(0);
 }
 
 
@@ -723,54 +757,20 @@ async function getcurrentmonth(monthnum) {
 async function search_user() {
     let users = await fetchUser('all');
     let search_value = document.getElementById('sub-search');
-    let searchValue = '';
-
-    search_value.addEventListener('keydown', async function (e) {
-
-        let eachRows = '';
-
-        if (e.key !== 'Backspace' && e.key !== 'Alt' && e.key !== 'Shift' && e.key !== 'Control') {
-            searchValue += e.key;
-        }
-        else if (e.key == 'Backspace') {
-            searchValue = searchValue.slice(0, -1);
-        }
-
+    search_value.addEventListener('input', function () {
+        let searchValue = search_value.value.toLowerCase();
         let search_result = users.filter((user) => {
-            if (searchValue.length == 0) {
-
-                search_name = user.firstName.toLowerCase();
-
-                return search_name;
-            }
-            else {
-                let search_name = user.firstName.slice(0, searchValue.length);
-                if (search_name.toLowerCase() == searchValue) {
-                    return search_name.toLowerCase();
-                }
-
-            }
-
+            let search_name = user.firstName.toLowerCase();
+            return search_name.startsWith(searchValue);
         });
+       
+         state.users = search_result;
+        displayPagination(1);
 
-
-
-        let count = 0;
-        for (let user of search_result) {
-            count++;
-            let month = await getcurrentmonth(parseInt(user.dob.split('-')[1]));
-            eachRows += await eachRowData(count, user, month);
-
-        };
-        document.getElementById("table-body").innerHTML = eachRows;
-        addCLickEvent();
-        editemployees();
     });
-
+    
 
 }
-
-
 //footer dynamic year
 document.getElementById('present-year').innerHTML = new Date().getFullYear();
 
@@ -805,7 +805,7 @@ document.getElementById('file').addEventListener('change', () => {
     let editImageDiv = document.getElementsByClassName('edit_image_div')[0];
 
     editImageDiv.style.display = 'flex';
-    
+
 
     document.getElementsByClassName('label_upld')[0].style.display = 'none';
 
@@ -818,7 +818,7 @@ document.getElementsByClassName('cncl-symbl')[0].addEventListener('click', () =>
     document.getElementsByClassName('card')[0].style.display = 'none';
     document.getElementById('overlay').style.display = 'none';
 
-    displayPagination();
+    displayPagination(0);
 })
 
 //button to change image
@@ -837,7 +837,7 @@ document.getElementById('overlay').addEventListener('click', () => {
     document.getElementsByClassName('card')[0].style.display = 'none';
     document.getElementById('overlay').style.display = 'none';
     document.getElementsByClassName('delete')[0].style.display = 'none';
-    displayPagination();
+    displayPagination(0);
 });
 
 
