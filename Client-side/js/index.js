@@ -181,6 +181,7 @@ async function eachRowData(start_value, user, month) {
 
 //function to call all related pagenation functions in order
 async function displayPagination(a) {
+   
     if (a == 0) {
         let allUsers = await fetchUser('all');
 
@@ -231,7 +232,7 @@ async function displayPagination(a) {
         pageNationButton(pageNationSetUpData.pages);
     }
 
-
+    document.getElementsByClassName('page-option')[1].innerText = `of ${state.users.length}`;
 
 
 
@@ -364,7 +365,9 @@ async function addOrSaveEmployee(URL, method, value) {
                 document.getElementsByClassName('employee-add-btn')[0].addEventListener('click', () => {
                     document.getElementsByClassName('add-emp-cnfrmation')[0].style.display = 'none';
                     document.getElementById('overlay').style.display = 'none';
-                    displayPagination(0);
+                    displayPagination(1);
+                       
+                    
 
                 })
                 return (data.id)
@@ -478,9 +481,7 @@ async function handlingFormSubmission(event) {
 //function to edit employee
 async function edit_employee(btn) {
 
-
-
-    btn.addEventListener('click', async () => {
+btn.addEventListener('click', async () => {
 
         document.getElementsByClassName('card')[0].style.display = 'block';
         document.getElementById('overlay').style.display = 'block';
@@ -576,15 +577,19 @@ async function view_employee(btn) {
                 btn.value = data.id;
                 if (btn.classList.contains('edit_btn')) {
                     await edit_employee(btn);
+                   
                 }
                 if (btn.classList.contains('delete_btn')) {
 
                     await delete_employee(btn);
+                   
                 }
-            })
+            });
+
 
         })
     });
+   
 
 }
 
@@ -632,7 +637,8 @@ async function delete_employee(btn) {
 
                 document.querySelector('.delete').style.display = 'none';
                 document.getElementById('overlay').style.display = 'none';
-                displayPagination(0);
+                window.location.reload();
+                displayPagination(1);
 
 
             });
@@ -670,7 +676,7 @@ async function clearFormEntries() {
 function cancelAdding() {
     document.getElementsByClassName('card')[0].style.display = 'none';
     document.getElementById('overlay').style.display = 'none';
-    displayPagination(0);
+    displayPagination(1);
 }
 
 
@@ -818,7 +824,7 @@ document.getElementsByClassName('cncl-symbl')[0].addEventListener('click', () =>
     document.getElementsByClassName('card')[0].style.display = 'none';
     document.getElementById('overlay').style.display = 'none';
 
-    displayPagination(0);
+    displayPagination(1);
 })
 
 //button to change image
@@ -837,7 +843,7 @@ document.getElementById('overlay').addEventListener('click', () => {
     document.getElementsByClassName('card')[0].style.display = 'none';
     document.getElementById('overlay').style.display = 'none';
     document.getElementsByClassName('delete')[0].style.display = 'none';
-    displayPagination(0);
+    displayPagination(1);
 });
 
 
@@ -867,5 +873,8 @@ function hideContainer(event) {
 document.addEventListener('click', hideContainer);
 
 
-
+document.getElementsByClassName('employee-nav')[0].addEventListener('click' ,() => 
+{
+    window.location.reload();
+})
 
