@@ -24,7 +24,7 @@ employeesInRow.addEventListener('change', handleRowValueChnage);
 
 let state = {
     page: 1,
-    rows: 10,
+    rows: 3,
     window: 4,
     users: []
 };
@@ -34,7 +34,7 @@ document.getElementById('employee-row').value = state.rows;
 
 async function pageNationsetUp() {
     let allUsers = state.users;
-    
+
     let currentPage = state.page;
     let noOfRows = state.rows;
 
@@ -162,7 +162,7 @@ async function eachRowData(start_value, user, month) {
                     <ul class='edit-details'>
                         <li class='d-flex'>
                             <span class='material-symbols-outlined'>visibility</span>
-                            <button class='view_btn' value="${user.id}">View Details</button>
+                            <button class='view_btn' value="${user.id}" href="">View Details</button>
                         </li>
                         <li class='d-flex'>
                             <span class='material-symbols-outlined'>edit</span>
@@ -180,9 +180,9 @@ async function eachRowData(start_value, user, month) {
 
 
 //function to call all related pagenation functions in order
-async function displayPagination(a) {
-   
-    if (a == 0) {
+async function displayPagination(Option) {
+
+    if (Option == 0) {
         let allUsers = await fetchUser('all');
 
         state.users = allUsers;
@@ -318,65 +318,63 @@ async function addingEmployee() {
     for (let each of All_error) {
         each.innerHTML = '';
     }
+    //add event listner to form submision
+    document.getElementById('form').addEventListener('submit', handlingFormSubmission);
 }
 
 
 // add event listner to add EMployee button
 document.getElementById('add_employee').addEventListener('click', addingEmployee);
 
-//add event listner to form submision
-document.getElementById('form').addEventListener('submit', handlingFormSubmission);
+
 
 
 //function to add or update employee
 async function addOrSaveEmployee(URL, method, value) {
-    try {
-        let response = await fetch(URL, {
-            method: `${method}`, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(value)
-        });
-        let data = await response.json();
-        for (let eachdata in data) {
-            if (eachdata == 'errors') {
-                let errors = data[eachdata];
-                let All_error = document.getElementsByClassName('err');
-                //Not giving any data if there is no error
-                for (let each of All_error) {
-                    each.innerHTML = '';
-                }
-                //displaying errors if there is error
-                for (let eacherror of errors) {
-                    let lower_err = eacherror.split(' ')[0].toLowerCase();
 
-                    if (lower_err != 'invalid') {
-                        document.getElementById(`${lower_err}` + '_err').innerText = eacherror;
-                    }
-                    if (lower_err === 'invalid') {
-                        let lower_err = eacherror.split(' ')[1].toLowerCase();
-                        document.getElementById(`${lower_err}` + '_err').innerText = eacherror;
-                    }
-                }
-                return ('error');
-            }
-            else {
+    let errors = await validateEmployee(value);
+    let All_error = document.getElementsByClassName('err');
+    for (let each of All_error) {
+        each.innerHTML = '';
+    };
+    errors.map((each) => {
+        let eachError = each.split(' ')[0].toLocaleLowerCase();
+        console.log(eachError);
+        if (eachError != 'invalid') {
+            document.getElementById(`${eachError}` + '_err').innerText = each;
+        }
+        if (eachError == 'invalid') {
+            let eachError = each.split(' ')[1].toLocaleLowerCase();
+            document.getElementById(`${eachError}` + '_err').innerText = each;
+        }
+    });
 
-                document.getElementsByClassName('card')[0].style.display = 'none';
-                document.querySelector('.add-emp-cnfrmation h5').innerText = data['message'];
-                document.getElementsByClassName('add-emp-cnfrmation')[0].style.display = 'flex';
-                document.getElementsByClassName('employee-add-btn')[0].addEventListener('click', () => {
-                    document.getElementsByClassName('add-emp-cnfrmation')[0].style.display = 'none';
-                    document.getElementById('overlay').style.display = 'none';
-                    displayPagination(1);
-                       
-                    
 
-                })
-                return (data.id)
-            }
+    if (errors.length == 0) {
+        try {
+            let response = await fetch(URL, {
+                method: `${method}`, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(value)
+            });
+            let data = await response.json();
+
+            document.getElementsByClassName('card')[0].style.display = 'none';
+            document.querySelector('.add-emp-cnfrmation h5').innerText = data['message'];
+            document.getElementsByClassName('add-emp-cnfrmation')[0].style.display = 'flex';
+            document.getElementsByClassName('employee-add-btn')[0].addEventListener('click', () => {
+                document.getElementsByClassName('add-emp-cnfrmation')[0].style.display = 'none';
+                document.getElementById('overlay').style.display = 'none';
+                displayPagination(0);
+
+            })
+            return (data.id)
+
+
+        }
+        catch (err) {
+            console.error(`chehck URL : ${err}`)
         }
     }
-    catch (err) {
-        console.error(`chehck URL : ${err}`)
-    }
+
 
 
 
@@ -429,6 +427,11 @@ async function handlingFormSubmission(event) {
         "password": `${document.getElementById('password').value}`
 
     };
+
+
+
+
+
     if (addOrSave == 'add') {
         let URL = server_url;
         let method = 'POST';
@@ -473,15 +476,72 @@ async function handlingFormSubmission(event) {
 
         }
 
+        let data = await fetchUser(user);
+
+        let currentyear = new Date().getFullYear();
+
+        let age = currentyear - data.dob.slice(6, 10);
+
+        let month1 = parseInt(data.dob.split('-')[1]);
+
+
+        let month = await getcurrentmonth(month1);
+
+        if (data.hasOwnProperty('avatar')) {
+            console.log(`${server_url + '/' + data.id + '/avatar'}`);
+            document.getElementsByClassName('img_view')[0].innerHTML = `<img src="${server_url + '/' + data.id + '/avatar'}" alt="" >`;
+        }
+        else {
+            document.getElementsByClassName('img_view')[0].innerHTML = ` <div class='d-flex align-items-center justify-content-center'>${data.firstName[0].toUpperCase() + data.lastName[0].toUpperCase()}</div>`
+        }
+        document.getElementsByClassName('usr-dob')[0].innerHTML = `${data.dob.split('-')[0] + ' ' + month + ' ' + data.dob.split('-')[2]}`;
+        document.getElementsByClassName('usr-age')[0].innerHTML = `${age}`;
+        document.getElementsByClassName('full_name')[0].innerHTML = `<h5>${data.salutation} ${data.firstName} ${data.lastName}<h5>`;
+        document.getElementsByClassName('usr-email')[0].innerHTML = `<h5 class='view-details-box'>${data.email}</h5>`;
+        document.getElementsByClassName('usr-gndr')[0].innerHTML = `${data.gender}`;
+        document.getElementsByClassName('usr-mob')[0].innerHTML = `${data.phone}`;
+        document.getElementsByClassName('usr-qualifctn')[0].innerHTML = `${data.qualifications}`;
+        document.getElementsByClassName('usr-addrs')[0].innerHTML = `${data.address}`;
+        document.getElementsByClassName('usr-usrname')[0].innerHTML = `${data.username}`;
+
+
+
+
 
     }
 }
 
+async function validateEmployee(value) {
+    let userData = value;
+    let errorStack = [];
+    for (let data in userData) {
 
+        if (userData[data] == '' || userData[data] == '--') {
+            errorStack.push(`${data} is required`);
+        }
+        else if (data === 'phone') {
+            const regExpPhone = /^\d{10}$/;
+            let check = regExpPhone.test(userData[data]);
+            if (!check) {
+                errorStack.push(`invalid phone number`);
+
+            }
+        }
+        else if (data === 'email') {
+            const regExpEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            let check = regExpEmail.test(userData[data]);
+            if (!check) {
+                errorStack.push(`invalid email`);
+            }
+        }
+
+    }
+    return errorStack;
+}
 //function to edit employee
 async function edit_employee(btn) {
 
-btn.addEventListener('click', async () => {
+    btn.addEventListener('click', async () => {
 
         document.getElementsByClassName('card')[0].style.display = 'block';
         document.getElementById('overlay').style.display = 'block';
@@ -521,7 +581,10 @@ btn.addEventListener('click', async () => {
         document.getElementById('password').value = data.password;
         document.getElementsByClassName('btn-add')[0].value = btn.value;
 
+        //add event listner to form submision
+        document.getElementById('form').addEventListener('submit', handlingFormSubmission);
     });
+
 
 }
 
@@ -577,19 +640,20 @@ async function view_employee(btn) {
                 btn.value = data.id;
                 if (btn.classList.contains('edit_btn')) {
                     await edit_employee(btn);
-                   
+                    console.log('hello');
+
                 }
                 if (btn.classList.contains('delete_btn')) {
 
                     await delete_employee(btn);
-                   
+
                 }
             });
 
 
         })
     });
-   
+
 
 }
 
@@ -769,12 +833,13 @@ async function search_user() {
             let search_name = user.firstName.toLowerCase();
             return search_name.startsWith(searchValue);
         });
-       
-         state.users = search_result;
+
+        state.users = search_result;
+        state.page = 1;
         displayPagination(1);
 
     });
-    
+
 
 }
 //footer dynamic year
@@ -873,8 +938,109 @@ function hideContainer(event) {
 document.addEventListener('click', hideContainer);
 
 
-document.getElementsByClassName('employee-nav')[0].addEventListener('click' ,() => 
-{
+document.getElementsByClassName('employee-nav')[0].addEventListener('click', () => {
     window.location.reload();
 })
+
+
+
+//==========================================//
+
+
+
+document.getElementById(`salutation`).addEventListener('change' , () => 
+{
+
+    document.getElementById('salutation_err').innerText ='';
+});
+
+//first_name
+document.getElementById(`first_name`).addEventListener('change' , () => 
+    {
+    
+        document.getElementById('firstname_err').innerText ='';
+    });
+
+//last_name//lastname_err
+document.getElementById(`last_name`).addEventListener('change' , () => 
+    {
+    
+        document.getElementById('lastname_err').innerText ='';
+    });
+
+//email//email_err
+document.getElementById(`email`).addEventListener('change' , () => 
+    {
+    
+        document.getElementById('email_err').innerText ='';
+    });
+
+//mobile_number//phone_err
+
+document.getElementById(`mobile_number`).addEventListener('change' , () => 
+    {
+    
+        document.getElementById('phone_err').innerText ='';
+    });
+
+//date_of_birth//dob_err
+
+document.getElementById(`date_of_birth`).addEventListener('change' , () => 
+    {
+    
+        document.getElementById('dob_err').innerText ='';
+    });
+
+
+//address//address_err
+document.getElementById(`address`).addEventListener('change' , () => 
+    {
+    
+        document.getElementById('address_err').innerText ='';
+    });
+
+//country//country_err
+
+document.getElementById(`country`).addEventListener('change' , () => 
+    {
+    
+        document.getElementById('country_err').innerText ='';
+    });
+
+//state//state_err
+document.getElementById(`state`).addEventListener('change' , () => 
+    {
+    
+        document.getElementById('state_err').innerText ='';
+    });
+
+//city_err //city
+document.getElementById(`city`).addEventListener('change' , () => 
+    {
+    
+        document.getElementById('city_err').innerText ='';
+    });
+
+//qualification //qualifications_err
+document.getElementById(`qualification`).addEventListener('change' , () => 
+    {
+    
+        document.getElementById('qualifications_err').innerText ='';
+    });
+
+//username //username_err
+document.getElementById(`username`).addEventListener('change' , () => 
+    {
+    
+        document.getElementById('username_err').innerText ='';
+    });
+
+//password//password_err
+document.getElementById(`password`).addEventListener('change' , () => 
+    {
+    
+        document.getElementById('password_err').innerText ='';
+    });
+
+
 

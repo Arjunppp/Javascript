@@ -237,11 +237,14 @@ ul {
     color: red;
     font-size: 12px;
 }
-
+::-webkit-scrollbar {
+    display: none;
+}
 .card {
     display: none;
     width: 621px;
-
+    height: 95vh;
+    overflow-y: scroll;
     /* display: none; */
     /* position: absolute; */
     /* position: relative;
@@ -490,15 +493,13 @@ textarea::placeholder {
 .add-emp-cnfrmation {
 
     z-index: 3;
-    position: fixed;
+    position: absolute;
     display: none;
-    top: 50%;
-    left: 50%;
+    top: 55vh;
+    left: 50vw;
     border-radius: 22px;
-
-
-    width: 250px;
-    height: 200px;
+    width: 349px;
+    height: 250px;
     text-align: center;
     justify-content: center;
     align-items: center;
@@ -635,7 +636,7 @@ letter-spacing: -0.02em;
 {
     display: none;
     z-index: 2;
-    height: 320vh;
+    height:100vh;;
     background-color: rgba(20 18 18 /91%);
     cursor: pointer;
     position: absolute;
