@@ -1,7 +1,7 @@
 
 let server_url = 'http://localhost:3000/employees';
 
-
+displayPagination(0);
 
 
 //=======================pagenation=============================================================================//
@@ -25,7 +25,7 @@ employeesInRow.addEventListener('change', handleRowValueChnage);
 let state = {
     page: 1,
     rows: 3,
-    window: 4,
+    window: 3,
     users: []
 };
 //default value to show in the front end
@@ -251,7 +251,7 @@ async function displayPagination(Option) {
 }
 
 //Poulate data for the first time
-displayPagination(0);
+
 
 //=================================ENd of Pagenation==========================================================================//
 
@@ -333,6 +333,8 @@ document.getElementById('add_employee').addEventListener('click', addingEmployee
 //function to add or update employee
 async function addOrSaveEmployee(URL, method, value) {
 
+
+
     let errors = await validateEmployee(value);
     let All_error = document.getElementsByClassName('err');
     for (let each of All_error) {
@@ -357,6 +359,42 @@ async function addOrSaveEmployee(URL, method, value) {
                 method: `${method}`, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(value)
             });
             let data = await response.json();
+          
+            if (method == 'PUT') {
+               let idofEmp =  URL.split('/').pop();
+               value['id'] = idofEmp;
+              
+            }
+            if (value.hasOwnProperty('id')) {
+                console.log('yessss');
+                let users = state.users;
+                console.log(users);
+                let id = URL.split('/').pop();
+                let objectToRemove = users.filter((each) => {
+                    return each.id == id;
+                });
+
+                console.log(objectToRemove[0]);
+
+                
+                let newobject = value;
+
+                console.log(newobject);
+                let newArray = [
+                    newobject, ...state.users.filter(obj => obj !== objectToRemove[0]) // Filter out the object to remove
+                     // Add the new object
+                ];
+
+                state.users = [...newArray];
+
+            }
+            else {
+                value.id = data.id;
+                state.users = [...state.users, value];
+
+            }
+
+
 
             document.getElementsByClassName('card')[0].style.display = 'none';
             document.querySelector('.add-emp-cnfrmation h5').innerText = data['message'];
@@ -364,7 +402,11 @@ async function addOrSaveEmployee(URL, method, value) {
             document.getElementsByClassName('employee-add-btn')[0].addEventListener('click', () => {
                 document.getElementsByClassName('add-emp-cnfrmation')[0].style.display = 'none';
                 document.getElementById('overlay').style.display = 'none';
-                displayPagination(0);
+
+
+                displayPagination(1);
+
+                console.log(state.users);
 
             })
             return (data.id)
@@ -439,6 +481,8 @@ async function handlingFormSubmission(event) {
 
         let returnValue = await addOrSaveEmployee(URL, method, value);
 
+       
+
         if (returnValue == 'error') {
             console.log('There are some error while adding employee');
         }
@@ -462,11 +506,13 @@ async function handlingFormSubmission(event) {
     }
     else if (addOrSave == 'save') {
         let user = document.getElementsByClassName('btn-add')[0].value;
+
+
         let URL = server_url + '/' + user;
         let method = 'PUT';
         await addOrSaveEmployee(URL, method, value);
 
-
+        console.log(state.users);
 
         let image = await document.getElementById('edit_image').files[0];
         if (image) {
@@ -949,102 +995,98 @@ document.getElementsByClassName('employee-nav')[0].addEventListener('click', () 
 
 
 
-document.getElementById(`salutation`).addEventListener('change' , () => 
-{
+document.getElementById(`salutation`).addEventListener('change', () => {
 
-    document.getElementById('salutation_err').innerText ='';
+    document.getElementById('salutation_err').innerText = '';
 });
 
 //first_name
-document.getElementById(`first_name`).addEventListener('change' , () => 
-    {
-    
-        document.getElementById('firstname_err').innerText ='';
-    });
+document.getElementById(`first_name`).addEventListener('change', () => {
+
+    document.getElementById('firstname_err').innerText = '';
+});
 
 //last_name//lastname_err
-document.getElementById(`last_name`).addEventListener('change' , () => 
-    {
-    
-        document.getElementById('lastname_err').innerText ='';
-    });
+document.getElementById(`last_name`).addEventListener('change', () => {
+
+    document.getElementById('lastname_err').innerText = '';
+});
 
 //email//email_err
-document.getElementById(`email`).addEventListener('change' , () => 
-    {
-    
-        document.getElementById('email_err').innerText ='';
-    });
+document.getElementById(`email`).addEventListener('change', () => {
+
+    document.getElementById('email_err').innerText = '';
+});
 
 //mobile_number//phone_err
 
-document.getElementById(`mobile_number`).addEventListener('change' , () => 
-    {
-    
-        document.getElementById('phone_err').innerText ='';
-    });
+document.getElementById(`mobile_number`).addEventListener('change', () => {
+
+    document.getElementById('phone_err').innerText = '';
+});
 
 //date_of_birth//dob_err
 
-document.getElementById(`date_of_birth`).addEventListener('change' , () => 
-    {
-    
-        document.getElementById('dob_err').innerText ='';
-    });
+document.getElementById(`date_of_birth`).addEventListener('change', () => {
+
+    document.getElementById('dob_err').innerText = '';
+});
 
 
 //address//address_err
-document.getElementById(`address`).addEventListener('change' , () => 
-    {
-    
-        document.getElementById('address_err').innerText ='';
-    });
+document.getElementById(`address`).addEventListener('change', () => {
+
+    document.getElementById('address_err').innerText = '';
+});
 
 //country//country_err
 
-document.getElementById(`country`).addEventListener('change' , () => 
-    {
-    
-        document.getElementById('country_err').innerText ='';
-    });
+document.getElementById(`country`).addEventListener('change', () => {
+
+    document.getElementById('country_err').innerText = '';
+});
 
 //state//state_err
-document.getElementById(`state`).addEventListener('change' , () => 
-    {
-    
-        document.getElementById('state_err').innerText ='';
-    });
+document.getElementById(`state`).addEventListener('change', () => {
+
+    document.getElementById('state_err').innerText = '';
+});
 
 //city_err //city
-document.getElementById(`city`).addEventListener('change' , () => 
-    {
-    
-        document.getElementById('city_err').innerText ='';
-    });
+document.getElementById(`city`).addEventListener('change', () => {
+
+    document.getElementById('city_err').innerText = '';
+});
 
 //qualification //qualifications_err
-document.getElementById(`qualification`).addEventListener('change' , () => 
-    {
-    
-        document.getElementById('qualifications_err').innerText ='';
-    });
+document.getElementById(`qualification`).addEventListener('change', () => {
+
+    document.getElementById('qualifications_err').innerText = '';
+});
 
 //username //username_err
-document.getElementById(`username`).addEventListener('change' , () => 
-    {
-    
-        document.getElementById('username_err').innerText ='';
-    });
+document.getElementById(`username`).addEventListener('change', () => {
+
+    document.getElementById('username_err').innerText = '';
+});
 
 //password//password_err
-document.getElementById(`password`).addEventListener('change' , () => 
-    {
-    
-        document.getElementById('password_err').innerText ='';
-    });
+document.getElementById(`password`).addEventListener('change', () => {
+
+    document.getElementById('password_err').innerText = '';
+});
 
 
 
 
 
-  
+window.addEventListener('pageshow', function (event) {
+    if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
+        // If the page is loaded from the cache, reload it
+        window.location.reload();
+    }
+});
+
+
+
+

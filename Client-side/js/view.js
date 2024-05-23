@@ -136,7 +136,7 @@ async function edit_employee(btn) {
     btn.addEventListener('click', async () => {
 
         document.getElementsByClassName('card')[0].style.display = 'block';
-        document.getElementById('overlay').style.display = 'block';
+        document.getElementById('overlay_new').style.display = 'block';
         document.getElementsByClassName("label_upld")[0].style.display = 'none';
         document.getElementsByClassName("btn-add")[0].innerHTML = 'Save Changes';
         document.getElementsByClassName('edit_image_div')[0].style.display = 'flex';
@@ -292,7 +292,7 @@ async function addOrSaveEmployee(URL, method, value) {
             document.getElementsByClassName('add-emp-cnfrmation')[0].style.display = 'flex';
             document.getElementsByClassName('employee-add-btn')[0].addEventListener('click', () => {
                 document.getElementsByClassName('add-emp-cnfrmation')[0].style.display = 'none';
-                document.getElementById('overlay').style.display = 'none';
+                document.getElementById('overlay_new').style.display = 'none';
              
 
             })
@@ -363,7 +363,7 @@ async function delete_employee(btn) {
 
     btn.addEventListener('click', () => {
 
-        document.getElementById('overlay').style.display = 'block';
+        document.getElementById('overlay_new').style.display = 'block';
         document.getElementsByClassName('delete')[0].style.display = 'flex';
        
         let delete_items = `<h4>Delete Employees</h4>
@@ -379,7 +379,7 @@ async function delete_employee(btn) {
 
             document.querySelector('.delete').style.display = 'none';
          
-            document.getElementById('overlay').style.display = 'none';
+            document.getElementById('overlay_new').style.display = 'none';
 
         });
 
@@ -400,7 +400,7 @@ async function delete_employee(btn) {
             }).then((data) => {
 
                 document.querySelector('.delete').style.display = 'none';
-                document.getElementById('overlay').style.display = 'none';
+                document.getElementById('overlay_new').style.display = 'none';
                 window.location.href = 'index.html';
                 
 
@@ -453,7 +453,7 @@ let cncl_cls = document.getElementsByClassName('cncl-symbl');
 
 document.getElementsByClassName('cncl-symbl')[0].addEventListener('click', () => {
     document.getElementsByClassName('card')[0].style.display = 'none';
-    document.getElementById('overlay').style.display = 'none';
+    document.getElementById('overlay_new').style.display = 'none';
 
     displayPagination(1);
 })
@@ -470,9 +470,9 @@ change_btn.addEventListener('click', () => {
 
 
 
-document.getElementById('overlay').addEventListener('click', () => {
+document.getElementById('overlay_new').addEventListener('click', () => {
     document.getElementsByClassName('card')[0].style.display = 'none';
-    document.getElementById('overlay').style.display = 'none';
+    document.getElementById('overlay_new').style.display = 'none';
     document.getElementsByClassName('delete')[0].style.display = 'none';
     displayPagination(1);
 });
@@ -503,7 +503,7 @@ function hideContainer(event) {
 
 function cancelAdding() {
     document.getElementsByClassName('card')[0].style.display = 'none';
-    document.getElementById('overlay').style.display = 'none';
+    document.getElementById('overlay_new').style.display = 'none';
     displayPagination(1);
 }
 

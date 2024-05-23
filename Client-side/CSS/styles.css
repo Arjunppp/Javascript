@@ -257,7 +257,12 @@ ul {
     border-radius: 20px;
     overflow-x: scroll;
 }
-
+.view_btn
+{
+    list-style: none;
+    text-decoration: none;
+    color: -webkit-link;
+}
 
 .details {
     background-color: #fff;
@@ -639,6 +644,21 @@ letter-spacing: -0.02em;
     left: 0;
     right: 0;
     bottom: 0;
+}
+
+#overlay_new
+{
+    display: none;
+    z-index: 2;
+    height:250vh;;
+    background-color: rgba(20 18 18 /91%);
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
 }
 
 .change_btn
