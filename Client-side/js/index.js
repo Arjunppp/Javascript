@@ -162,7 +162,8 @@ async function eachRowData(start_value, user, month) {
                     <ul class='edit-details'>
                         <li class='d-flex'>
                             <span class='material-symbols-outlined'>visibility</span>
-                            <button class='view_btn' value="${user.id}" href="">View Details</button>
+                            <a class='view_btn' value="${user.id}" href="view.html?id=${user.id}">View Details</a>
+                           
                         </li>
                         <li class='d-flex'>
                             <span class='material-symbols-outlined'>edit</span>
@@ -1044,3 +1045,6 @@ document.getElementById(`password`).addEventListener('change' , () =>
 
 
 
+
+
+  
