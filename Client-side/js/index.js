@@ -359,14 +359,20 @@ async function addOrSaveEmployee(URL, method, value) {
                 method: `${method}`, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(value)
             });
             let data = await response.json();
-          
+
             if (method == 'PUT') {
-               let idofEmp =  URL.split('/').pop();
-               value['id'] = idofEmp;
-              
+                let idofEmp = URL.split('/').pop();
+                value['id'] = idofEmp;
+                let src = document.getElementsByClassName('edit-image')[0].src;
+                let defaultOrAvaatar = src.split('/').pop().split('.').shift();
+
+                if (defaultOrAvaatar != 'default') {
+                    value['avatar'] = `${idofEmp}.jpg`;
+                }
+
             }
             if (value.hasOwnProperty('id')) {
-                console.log('yessss');
+
                 let users = state.users;
                 console.log(users);
                 let id = URL.split('/').pop();
@@ -374,23 +380,29 @@ async function addOrSaveEmployee(URL, method, value) {
                     return each.id == id;
                 });
 
-                console.log(objectToRemove[0]);
 
-                
+
+
                 let newobject = value;
 
                 console.log(newobject);
                 let newArray = [
                     newobject, ...state.users.filter(obj => obj !== objectToRemove[0]) // Filter out the object to remove
-                     // Add the new object
+                    // Add the new object
                 ];
 
                 state.users = [...newArray];
 
             }
             else {
+                let src = document.getElementsByClassName('edit-image')[0].src;
+                let defaultOrAvaatar = src.split('/').pop().split('.').shift();
+
+                if (defaultOrAvaatar != 'default') {
+                    value['avatar'] = `${data.id}.jpg`;
+                }
                 value.id = data.id;
-                state.users = [...state.users, value];
+                state.users = [value, ...state.users];
 
             }
 
@@ -447,6 +459,7 @@ async function uploadOrUpdateImage(img_url, image_object) {
 //this function will be triggered when the submit event triggered
 async function handlingFormSubmission(event) {
     event.preventDefault();
+
     let btnnInnerHTML = document.getElementsByClassName('btn-add')[0].innerHTML;
 
     let addOrSave = btnnInnerHTML.split(' ')[0].toLocaleLowerCase();
@@ -475,13 +488,14 @@ async function handlingFormSubmission(event) {
 
 
 
+
     if (addOrSave == 'add') {
         let URL = server_url;
         let method = 'POST';
 
         let returnValue = await addOrSaveEmployee(URL, method, value);
 
-       
+
 
         if (returnValue == 'error') {
             console.log('There are some error while adding employee');
@@ -489,6 +503,7 @@ async function handlingFormSubmission(event) {
         else {
 
             let image = await document.getElementById('file').files[0];
+            console.log(image);
 
             if (image) {
                 let img_url = `${server_url}/${returnValue}/avatar`;
@@ -522,36 +537,6 @@ async function handlingFormSubmission(event) {
             await uploadOrUpdateImage(img_url, image_object);
 
         }
-
-        let data = await fetchUser(user);
-
-        let currentyear = new Date().getFullYear();
-
-        let age = currentyear - data.dob.slice(6, 10);
-
-        let month1 = parseInt(data.dob.split('-')[1]);
-
-
-        let month = await getcurrentmonth(month1);
-
-        if (data.hasOwnProperty('avatar')) {
-            console.log(`${server_url + '/' + data.id + '/avatar'}`);
-            document.getElementsByClassName('img_view')[0].innerHTML = `<img src="${server_url + '/' + data.id + '/avatar'}" alt="" >`;
-        }
-        else {
-            document.getElementsByClassName('img_view')[0].innerHTML = ` <div class='d-flex align-items-center justify-content-center'>${data.firstName[0].toUpperCase() + data.lastName[0].toUpperCase()}</div>`
-        }
-        document.getElementsByClassName('usr-dob')[0].innerHTML = `${data.dob.split('-')[0] + ' ' + month + ' ' + data.dob.split('-')[2]}`;
-        document.getElementsByClassName('usr-age')[0].innerHTML = `${age}`;
-        document.getElementsByClassName('full_name')[0].innerHTML = `<h5>${data.salutation} ${data.firstName} ${data.lastName}<h5>`;
-        document.getElementsByClassName('usr-email')[0].innerHTML = `<h5 class='view-details-box'>${data.email}</h5>`;
-        document.getElementsByClassName('usr-gndr')[0].innerHTML = `${data.gender}`;
-        document.getElementsByClassName('usr-mob')[0].innerHTML = `${data.phone}`;
-        document.getElementsByClassName('usr-qualifctn')[0].innerHTML = `${data.qualifications}`;
-        document.getElementsByClassName('usr-addrs')[0].innerHTML = `${data.address}`;
-        document.getElementsByClassName('usr-usrname')[0].innerHTML = `${data.username}`;
-
-
 
 
 
@@ -605,14 +590,21 @@ async function edit_employee(btn) {
         }
         image = document.getElementById('edit_image').files[0];
         let data = await fetchUser(btn.value);
+
+        console.log(data);
         let date = data.dob.split('-').reverse().join('-');
 
         if (data.gender == 'male') {
             document.getElementById('male').checked = true;
         }
 
+        if (data.hasOwnProperty('avatar')) {
+            document.getElementsByClassName('edit-image')[0].src = `${server_url + '/' + btn.value + '/avatar'}`;
+        }
+        else {
+            document.getElementsByClassName('edit-image')[0].src = `image/default.png`;
+        }
 
-        document.getElementsByClassName('edit-image')[0].src = `${server_url + '/' + btn.value + '/avatar'}`;
         document.getElementById('salutation').value = data.salutation;
         document.getElementById('first_name').value = data.firstName;
         document.getElementById('last_name').value = data.lastName;
@@ -872,7 +864,7 @@ async function getcurrentmonth(monthnum) {
 
 
 async function search_user() {
-    let users = await fetchUser('all');
+    //let users = await fetchUser('all');
     let search_value = document.getElementById('sub-search');
     search_value.addEventListener('input', function () {
         let searchValue = search_value.value.toLowerCase();
