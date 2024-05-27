@@ -1,13 +1,27 @@
 
 let server_url = 'http://localhost:3000/employees';
 
+
+//To set the initial state
 displayPagination(0);
 
 
 //=======================pagenation=============================================================================//
 
+
+//The state 
+let state = {
+    page: 1,
+    rows: 3,
+    window: 3,
+    users: []
+};
+
 //the dom element corresponding to employee row value is fetched.
 let employeesInRow = document.getElementById('employee-row');
+
+//adding an event-listner change to the element ,whenever the value changes the function triggers
+employeesInRow.addEventListener('change', handleRowValueChnage);
 
 //function to handle the value change in the element
 function handleRowValueChnage(event) {
@@ -18,16 +32,10 @@ function handleRowValueChnage(event) {
 }
 
 
-//adding an event-listner change to the element ,whenever the value changes the function triggers
-employeesInRow.addEventListener('change', handleRowValueChnage);
 
 
-let state = {
-    page: 1,
-    rows: 3,
-    window: 3,
-    users: []
-};
+
+
 //default value to show in the front end
 document.getElementById('employee-row').value = state.rows;
 
@@ -240,7 +248,7 @@ async function displayPagination(Option) {
 
     addCLickEvent();
     editemployees();
-    search_user();
+
     let pageButtons = document.getElementsByClassName('button_page');
 
     Array.from(pageButtons).forEach((eachBtn) => {
@@ -589,7 +597,14 @@ async function edit_employee(btn) {
             each.innerHTML = '';
         }
         image = document.getElementById('edit_image').files[0];
-        let data = await fetchUser(btn.value);
+
+        let currentUser = state.users.filter((each) => {
+            return each.id == btn.value;
+        });
+
+
+
+        let data = currentUser[0];
 
         console.log(data);
         let date = data.dob.split('-').reverse().join('-');
@@ -861,23 +876,22 @@ async function getcurrentmonth(monthnum) {
 }
 
 
+let search_value = document.getElementById('sub-search');
+search_value.addEventListener('input',  search_user );
 
 
 async function search_user() {
-    //let users = await fetchUser('all');
-    let search_value = document.getElementById('sub-search');
-    search_value.addEventListener('input', function () {
-        let searchValue = search_value.value.toLowerCase();
-        let search_result = users.filter((user) => {
-            let search_name = user.firstName.toLowerCase();
-            return search_name.startsWith(searchValue);
-        });
-
-        state.users = search_result;
-        state.page = 1;
-        displayPagination(1);
-
+    let users = await fetchUser('all');
+    let searchValue = search_value.value.toLowerCase();
+    let search_result = users.filter((user) => {
+        let search_name = user.firstName.toLowerCase();
+        return search_name.startsWith(searchValue);
     });
+
+    state.users = search_result;
+    state.page = 1;
+    displayPagination(1);
+
 
 
 }

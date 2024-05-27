@@ -510,3 +510,7 @@ function cancelAdding() {
 document.getElementsByClassName('btn-cncl')[0].addEventListener('click', cancelAdding);
 
 document.addEventListener('click', hideContainer);
+
+
+
+
