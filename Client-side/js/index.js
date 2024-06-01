@@ -1,8 +1,7 @@
-
 let server_url = 'http://localhost:3000/employees';
 
 
-//To set the initial state
+//To set the initial state --  and populate the data for the first time
 displayPagination(0);
 
 
@@ -23,21 +22,17 @@ let employeesInRow = document.getElementById('employee-row');
 //adding an event-listner change to the element ,whenever the value changes the function triggers
 employeesInRow.addEventListener('change', handleRowValueChnage);
 
+
 //function to handle the value change in the element
 function handleRowValueChnage(event) {
-    let newRowCount = event.target.value;
-    state.rows = parseInt(newRowCount);
+    state.rows = parseInt(event.target.value);
     state.page = 1;
     displayPagination(1);
 }
 
-
-
-
-
-
 //default value to show in the front end
 document.getElementById('employee-row').value = state.rows;
+
 
 
 async function pageNationsetUp() {
@@ -258,7 +253,7 @@ async function displayPagination(Option) {
     })
 }
 
-//Poulate data for the first time
+
 
 
 //=================================ENd of Pagenation==========================================================================//
@@ -267,6 +262,8 @@ async function displayPagination(Option) {
 
 
 //Adding Click events to each of the user
+
+
 async function addCLickEvent() {
 
     let selectDotsElements = document.getElementsByClassName('select-dots');
@@ -382,7 +379,6 @@ async function addOrSaveEmployee(URL, method, value) {
             if (value.hasOwnProperty('id')) {
 
                 let users = state.users;
-                console.log(users);
                 let id = URL.split('/').pop();
                 let objectToRemove = users.filter((each) => {
                     return each.id == id;
@@ -393,10 +389,9 @@ async function addOrSaveEmployee(URL, method, value) {
 
                 let newobject = value;
 
-                console.log(newobject);
+                //Used spread operator to remove the old elemeent and addd the new elemeent
                 let newArray = [
-                    newobject, ...state.users.filter(obj => obj !== objectToRemove[0]) // Filter out the object to remove
-                    // Add the new object
+                    newobject, ...state.users.filter(obj => obj !== objectToRemove[0])
                 ];
 
                 state.users = [...newArray];
@@ -426,9 +421,9 @@ async function addOrSaveEmployee(URL, method, value) {
 
                 displayPagination(1);
 
-                console.log(state.users);
 
-            })
+
+            });
             return (data.id)
 
 
@@ -492,11 +487,6 @@ async function handlingFormSubmission(event) {
 
     };
 
-
-
-
-
-
     if (addOrSave == 'add') {
         let URL = server_url;
         let method = 'POST';
@@ -529,14 +519,9 @@ async function handlingFormSubmission(event) {
     }
     else if (addOrSave == 'save') {
         let user = document.getElementsByClassName('btn-add')[0].value;
-
-
         let URL = server_url + '/' + user;
         let method = 'PUT';
         await addOrSaveEmployee(URL, method, value);
-
-        console.log(state.users);
-
         let image = await document.getElementById('edit_image').files[0];
         if (image) {
             let img_url = `${server_url}/${user}/avatar`;
@@ -877,7 +862,10 @@ async function getcurrentmonth(monthnum) {
 
 
 let search_value = document.getElementById('sub-search');
-search_value.addEventListener('input',  search_user );
+
+//according to the search value the function will be triggered/.
+
+search_value.addEventListener('input', search_user);
 
 
 async function search_user() {
@@ -889,6 +877,15 @@ async function search_user() {
     });
 
     state.users = search_result;
+   
+    if (search_result.length > 10  ) {
+        let optionElement = document.createElement('option');
+        optionElement.value = search_result.length;
+        optionElement.innerText = search_result.length;
+        document.getElementById('employee-row').appendChild(optionElement);
+
+    };
+    document.getElementById('employee-row').value = search_result.length;
     state.page = 1;
     displayPagination(1);
 

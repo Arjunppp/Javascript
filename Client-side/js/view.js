@@ -511,6 +511,7 @@ document.getElementsByClassName('btn-cncl')[0].addEventListener('click', cancelA
 
 document.addEventListener('click', hideContainer);
 
-
+//footer dynamic year
+document.getElementById('present-year').innerHTML = new Date().getFullYear();
 
 

@@ -176,6 +176,7 @@ td,
 
 .edit {
     position: relative;
+    cursor: pointer;
 }
 
 .edit-details {
